@@ -21,15 +21,8 @@ class LoginController extends Controller
                 return redirect('/login')->withErrors(['email' => 'Invalid credentials.'])->withInput();
             }
 
-            $user = Auth::user();
-
-            // Optional: create a token if you're using Sanctum
-            $token = $user->createToken($user->email)->plainTextToken;
-
-            // Store token in session if needed
-            session(['auth_token' => $token]);
-
-            return redirect('/')->with('message', 'Logged in successfully');
+            return redirect()->intended()->with('message', 'Logged in successfully');
+            // return redirect('/')->with('message', 'Logged in successfully');
         } catch (Error $e) {
             return redirect('/login')->with('error', 'Could not create token. Please try again.');
 

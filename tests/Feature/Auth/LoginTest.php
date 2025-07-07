@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -13,6 +14,7 @@ class LoginTest extends TestCase
     public function test_user_can_login_with_correct_credentials(): void
     {
         $user = User::factory()->create([
+            'role' => UserRole::STUDENT,
             'password' => bcrypt('password123'),
         ]);
 
@@ -32,6 +34,7 @@ class LoginTest extends TestCase
     public function test_user_cannot_login_with_invalid_credentials(): void
     {
         $user = User::factory()->create([
+            'role' => UserRole::STUDENT,
             'password' => bcrypt('password123'),
         ]);
 

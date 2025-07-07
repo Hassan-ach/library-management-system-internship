@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -13,7 +14,10 @@ class LogoutTest extends TestCase
     public function test_authenticated_user_can_logout(): void
     {
         // Create and log in user
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'role' => UserRole::STUDENT,
+            'password' => bcrypt('password123'),
+        ]);
 
         $response = $this->actingAs($user)->get('/logout');
 
@@ -24,19 +28,14 @@ class LogoutTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_non_authenticated_user_can_logout(): void
+    public function test_non_authenticated_user_cannot_access_logout(): void
     {
-        // Create and log in user
-        $user = User::factory()->create();
-
         $response = $this->get('/logout');
 
-        // Assert redirection to login
-        $response->assertRedirect('/login');
+        // Laravel's default behavior: guest redirected to login
+        $response->assertRedirect('/login-page');
 
-        $response->assertSessionHasErrors();
-
-        //  Assert the user is logged out
+        // Optional: assert no authenticated user
         $this->assertGuest();
     }
 }
