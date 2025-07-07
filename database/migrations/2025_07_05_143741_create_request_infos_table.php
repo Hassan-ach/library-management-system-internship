@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users','id');
             $table->foreignId('book_request_id')->constrained(indexName:'request_id');
-            $table->enums('status', ['pending','approved','rejected','borrowed','returned','overdue','canceled']);
+            $table->enum('status', ['pending','approved','rejected','borrowed','returned','overdue','canceled']);
             $table->timestamps();
         });
     }
