@@ -1,24 +1,25 @@
 <?php
+
+namespace App\Enums;
+
 enum RequestStatus: string
 {
-case PENDING = 'pending';
+    case PENDING = 'pending';
 
-case APPROVED = 'approved';
+    case APPROVED = 'approved';
 
-case REJECTED = 'rejected';
+    case REJECTED = 'rejected';
 
-case BORROWED = 'borrowed';
+    case BORROWED = 'borrowed';
 
-case RETURNED = 'returned';
+    case RETURNED = 'returned';
 
-case OVERDUE = 'overdue';
+    case OVERDUE = 'overdue';
 
-case CANCELED = 'canceled';
+    case CANCELED = 'canceled';
 
     public static function caseArray(): array
     {
         return array_column(RequestStatus::cases(), 'value');
     }
-
 }
-
