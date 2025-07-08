@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use function App\Http\Controllers\Student\utils\get_auth_user;
-
 class ProfileController extends Controller
 {
     //
@@ -19,6 +17,8 @@ class ProfileController extends Controller
         }
 
         $requests = $user->bookRequests;
+
+        return view('profile-page', compact('user', 'requests'));
 
     }
 }

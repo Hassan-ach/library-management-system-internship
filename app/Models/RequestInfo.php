@@ -14,14 +14,14 @@ class RequestInfo extends Model
      */
     protected $fillable = [
         'user_id',
-        'book_request_id',
+        'request_id',
         'status',
     ];
 
     // Relationships
     public function bookRequest()
     {
-        return $this->belongsTo(BookRequest::class, 'book_request_id');
+        return $this->belongsTo(BookRequest::class, 'request_id');
     }
 
     public function librarians()

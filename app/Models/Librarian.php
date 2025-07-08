@@ -7,7 +7,8 @@ use App\Enums\UserRole;
 
 class Librarian extends User
 {
-    //
+    protected $table = 'users';
+
     protected static function booted()
     {
         static::addGlobalScope('student', function ($query) {

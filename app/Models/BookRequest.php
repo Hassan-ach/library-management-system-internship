@@ -18,17 +18,17 @@ class BookRequest extends Model
 
     public function requestInfo()
     {
-        return $this->hasMany(RequestInfo::class, 'book_request_id');
+        return $this->hasMany(RequestInfo::class, 'request_id');
     }
 
     public function student()
     {
-        return $this->belongsTo(Book::class.'book_id');
+        return $this->belongsTo(Book::class.'user_id');
 
     }
 
     public function book()
     {
-        return $this->hasOne(Book::class, 'book_id');
+        return $this->belongsTo(Book::class, 'book_id');
     }
 }
