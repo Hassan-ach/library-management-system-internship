@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('request_infos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users','id');
-            $table->foreignId('book_request_id')->constrained(indexName:'request_id');
+            $table->foreignId('request_id')->constrained('book_requests','id');
             $table->enum('status', ['pending','approved','rejected','borrowed','returned','overdue','canceled']);
             $table->timestamps();
         });
