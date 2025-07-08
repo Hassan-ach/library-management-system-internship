@@ -11,5 +11,6 @@ class ProfileController extends Controller
     public function index(Request $req)
     {
         //
+
     }
 }

@@ -27,8 +27,8 @@ class BookRequest extends Model
 
     }
 
-    public function librarian()
+    public function book()
     {
-        return $this->belongsTo(Librarian::class, 'user_id');
+        return $this->hasOne(Book::class, 'book_id');
     }
 }

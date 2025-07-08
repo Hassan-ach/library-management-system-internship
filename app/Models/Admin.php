@@ -6,7 +6,7 @@ namespace App\Models;
 
 use App\Enums\UserRole;
 
-class Student extends User
+class Admin extends User
 {
     //
     protected static function booted()
