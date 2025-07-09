@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\ProfileController;
+use App\Http\Controllers\Book\SearchController;
 use App\Http\Controllers\Student\BookRequestController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,8 +17,9 @@ Route::middleware(['auth:web'])->group(function () {
 
 });
 
-Route::middleware(['auth:web', 'role:student'])->prefix('request')->group(function () {
+Route::middleware(['auth:web', 'role:student'])->group(function () {
     Route::post('request/book/{id}', [BookRequestController::class, 'add'])->name('student.requests.add');
     Route::get('request/{id}', [BookRequestController::class, 'show'])->name('student.requests.show');
     Route::patch('request/{id}', [BookRequestController::class, 'cancel'])->name('student.requests.cancel');
+    Route::get('/books/search', [SearchController::class, 'index'])->name('student.books.search');
 });
