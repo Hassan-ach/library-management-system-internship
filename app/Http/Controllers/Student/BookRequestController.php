@@ -15,9 +15,10 @@ use Illuminate\Support\Facades\Request;
 class BookRequestController extends Controller
 {
     //
-    public function add(Request $req, Book $book)
+    public function add(Request $req, $bookId)
     {
         $user = Auth::user();
+        $book = Book::findOrFail($bookId);
 
         if (! Gate::allows('borrow_books', $book)) {
             return back()->with(['error' => 'You\'re not allowed to borrow this book']);
@@ -45,7 +46,9 @@ class BookRequestController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            return back()->with(['error' => 'Error while submitting request']);
+            return back()
+                ->with(['error' => 'Error while submitting request'])
+                ->setStatusCode(422);
         }
     }
 
