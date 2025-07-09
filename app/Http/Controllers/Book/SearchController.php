@@ -13,7 +13,11 @@ class SearchController extends Controller
     {
         //
         $query = $req->input('query') ?? $req->input('q');
-        $books = Book::where('title', 'like', "%{$query}%")->get();
+        if (! $query) {
+            $books = Book::latest()->paginate(1);
+        } else {
+            $books = Book::where('title', 'like', "%{$query}%")->get();
+        }
 
         return view('books.search', compact('books', 'query'));
 

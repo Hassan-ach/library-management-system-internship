@@ -1,5 +1,5 @@
 <form action="{{ route('student.books.search') }}" method="GET">
-    <input type="text" name="query" placeholder="Search books..." value="{{ request('query') ?? request('q')   }}">
+    <input type="text" name="query" placeholder="Search books..." value="{{ request('query') ?? request('q')  }}">
     <button type="submit">Search</button>
 </form>
 
