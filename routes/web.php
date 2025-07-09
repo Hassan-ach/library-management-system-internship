@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\ProfileController;
+use App\Http\Controllers\Student\BookRequestController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/login', 'login-page')->name('login');
@@ -17,4 +18,7 @@ Route::middleware(['auth:web'])->group(function () {
 
 Route::middleware(['auth:web', 'role:student'])->group(function () {
     //
+    Route::post('/request/book/{id}', [BookRequestController::class, 'add']);
+    Route::get('/request/{id}', [BookRequestController::class, 'show']);
+    Route::patch('/request/{id}', [BookRequestController::class, 'cancel']);
 });
