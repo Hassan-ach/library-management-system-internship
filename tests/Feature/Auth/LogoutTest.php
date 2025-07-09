@@ -22,7 +22,7 @@ class LogoutTest extends TestCase
         $response = $this->actingAs($user)->get('/logout');
 
         // Assert redirection after logout
-        $response->assertRedirect('/login-page');
+        $response->assertRedirect('/login');
 
         //  Assert the user is logged out
         $this->assertGuest();
@@ -33,7 +33,7 @@ class LogoutTest extends TestCase
         $response = $this->get('/logout');
 
         // Laravel's default behavior: guest redirected to login
-        $response->assertRedirect('/login-page');
+        $response->assertRedirect('/login');
 
         // Optional: assert no authenticated user
         $this->assertGuest();
