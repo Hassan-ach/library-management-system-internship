@@ -55,6 +55,29 @@ class BookRequestController extends Controller
     public function cancel(Request $req, $reqId)
     {
         //
+        $bookReq = BookRequest::findOrFail($reqId);
+        $user = Auth::user();
+
+        if (! Gate::allows('cancel_req', $bookReq)) {
+            return back()->with(['error' => 'You\'re not allowed to cancel this book request']);
+        }
+
+        try {
+            RequestInfo::create([
+                'user_id' => $user->id,
+                'request_id' => $bookReq->id,
+                'status' => RequestStatus::CANCELED,
+            ]);
+
+            return back()->with(['success' => 'Request canceled successfully']);
+
+        } catch (\Throwable $th) {
+            // throw $th;
+
+            return back()
+                ->with(['error' => 'Error while canceling request'])
+                ->setStatusCode(422);
+        }
     }
 
     public function show(Request $req, $reqId)

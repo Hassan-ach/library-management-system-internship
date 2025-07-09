@@ -2,6 +2,7 @@
 
 use App\Enums\RequestStatus;
 use App\Models\Book;
+use App\Models\BookRequest;
 use App\Models\RequestInfo;
 
 if (! function_exists('get_borrowed_copies')) {
@@ -15,5 +16,16 @@ if (! function_exists('get_borrowed_copies')) {
             ->whereIn('status', [RequestStatus::BORROWED, RequestStatus::APPROVED])
             ->latest()
             ->count();
+    }
+}
+
+if (! function_exists('get_latest_status')) {
+    function get_latest_status(BookRequest $req): ?RequestStatus
+    {
+        $latestInfo = RequestInfo::where('request_id', $req->id)
+            ->latest()
+            ->first();
+
+        return $latestInfo ? $latestInfo->status : null;
     }
 }
