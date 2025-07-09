@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class BookRequest extends Model
@@ -11,6 +12,8 @@ class BookRequest extends Model
      *
      * @var list<string>
      */
+    use HasFactory;
+
     protected $fillable = [
         'user_id',
         'book_id',
@@ -21,10 +24,9 @@ class BookRequest extends Model
         return $this->hasMany(RequestInfo::class, 'request_id');
     }
 
-    public function student()
+    public function user()
     {
-        return $this->belongsTo(Book::class.'user_id');
-
+        return $this->belongsTo(User::class.'user_id');
     }
 
     public function book()

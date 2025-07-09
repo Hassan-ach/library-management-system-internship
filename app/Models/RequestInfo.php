@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\RequestStatus;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class RequestInfo extends Model
@@ -12,6 +13,8 @@ class RequestInfo extends Model
      *
      * @var list<string>
      */
+    use HasFactory;
+
     protected $fillable = [
         'user_id',
         'request_id',
@@ -24,9 +27,9 @@ class RequestInfo extends Model
         return $this->belongsTo(BookRequest::class, 'request_id');
     }
 
-    public function librarians()
+    public function user()
     {
-        return $this->belongsTo(Librarian::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     protected function casts()

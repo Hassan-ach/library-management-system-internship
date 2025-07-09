@@ -22,7 +22,6 @@ class addTest extends TestCase
         $user = User::factory()->create([
             'role' => UserRole::STUDENT,
             'is_active' => true,
-            'password' => bcrypt('password'),
         ]);
 
         // Create a book with available copies

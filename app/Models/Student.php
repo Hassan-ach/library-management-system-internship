@@ -20,4 +20,9 @@ class Student extends User
     {
         return $this->hasMany(BookRequest::class, 'user_id');
     }
+
+    public function requestInfo()
+    {
+        return $this->hasMany(RequestInfo::class, 'user_id');
+    }
 }
