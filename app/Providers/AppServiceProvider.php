@@ -31,7 +31,12 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Gate::define('cancel_req', function (User $user, BookRequest $req) {
-            return $user->is_active && $user->id == $req->user_id && get_latest_status($req) == RequestStatus::PENDING;
+            return $user->is_active && $user->id == $req->user_id && get_latest_info($req->id)->status == RequestStatus::PENDING;
+        });
+
+        Gate::define('show_req', function (User $user, BookRequest $req) {
+
+            return $user->is_active && $user->id == $req->user_id;
         });
     }
 }

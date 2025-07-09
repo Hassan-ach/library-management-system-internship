@@ -16,9 +16,8 @@ Route::middleware(['auth:web'])->group(function () {
 
 });
 
-Route::middleware(['auth:web', 'role:student'])->group(function () {
-    //
-    Route::post('/request/book/{id}', [BookRequestController::class, 'add']);
-    Route::get('/request/{id}', [BookRequestController::class, 'show']);
-    Route::patch('/request/{id}', [BookRequestController::class, 'cancel']);
+Route::middleware(['auth:web', 'role:student'])->prefix('request')->group(function () {
+    Route::post('request/book/{id}', [BookRequestController::class, 'add'])->name('student.requests.add');
+    Route::get('request/{id}', [BookRequestController::class, 'show'])->name('student.requests.show');
+    Route::patch('request/{id}', [BookRequestController::class, 'cancel'])->name('student.requests.cancel');
 });

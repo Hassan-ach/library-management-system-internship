@@ -30,7 +30,7 @@ class addTest extends TestCase
         ]);
 
         // Act as the user and send the POST request
-        $resp = $this->actingAs($user)->post("/request/book/{$book->id}");
+        $resp = $this->actingAs($user)->post(route('student.requests.add', $book->id));
 
         // Assert redirection
         $resp->assertRedirect();
@@ -66,7 +66,7 @@ class addTest extends TestCase
         ]);
 
         // Act as the user and send the POST request
-        $resp = $this->actingAs($user)->post("/request/book/{$book->id}");
+        $resp = $this->actingAs($user)->post(route('student.requests.add', $book->id));
 
         // Assert redirection
         $resp->assertRedirect();
@@ -90,7 +90,7 @@ class addTest extends TestCase
         ]);
 
         // Act as the user and send the POST request
-        $resp = $this->actingAs($user)->post("/request/book/{$book->id}");
+        $resp = $this->actingAs($user)->post(route('student.requests.add', $book->id));
 
         // Assert redirection
         $resp->assertRedirect();

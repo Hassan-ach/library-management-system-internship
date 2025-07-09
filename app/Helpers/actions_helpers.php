@@ -2,7 +2,6 @@
 
 use App\Enums\RequestStatus;
 use App\Models\Book;
-use App\Models\BookRequest;
 use App\Models\RequestInfo;
 
 if (! function_exists('get_borrowed_copies')) {
@@ -19,13 +18,13 @@ if (! function_exists('get_borrowed_copies')) {
     }
 }
 
-if (! function_exists('get_latest_status')) {
-    function get_latest_status(BookRequest $req): ?RequestStatus
+if (! function_exists('get_latest_info')) {
+    function get_latest_info($reqId): ?RequestInfo
     {
-        $latestInfo = RequestInfo::where('request_id', $req->id)
+        $latestInfo = RequestInfo::where('request_id', $reqId)
             ->latest()
             ->first();
 
-        return $latestInfo ? $latestInfo->status : null;
+        return $latestInfo;
     }
 }

@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\BookRequest;
 use App\Models\RequestInfo;
+use App\Models\Student;
+use Error;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -17,7 +19,8 @@ class BookRequestController extends Controller
     //
     public function add(Request $req, $bookId)
     {
-        $user = Auth::user();
+        $user = Student::findOrFail(Auth::user()->id);
+        // $user = Auth::user();
         $book = Book::findOrFail($bookId);
 
         if (! Gate::allows('borrow_books', $book)) {
@@ -56,7 +59,8 @@ class BookRequestController extends Controller
     {
         //
         $bookReq = BookRequest::findOrFail($reqId);
-        $user = Auth::user();
+        $user = Student::findOrFail(Auth::user()->id);
+        // $user = Auth::user();
 
         if (! Gate::allows('cancel_req', $bookReq)) {
             return back()->with(['error' => 'You\'re not allowed to cancel this book request']);
@@ -83,5 +87,27 @@ class BookRequestController extends Controller
     public function show(Request $req, $reqId)
     {
         //
+        $user = Student::findOrFail(Auth::user()->id);
+        $bookReq = BookRequest::findOrFail($reqId);
+
+        if (! Gate::allows('show_req', $bookReq)) {
+            //
+            return back()->with(['error' => 'You\'re not allowed to see this book request']);
+        }
+
+        try {
+            $reqInfo = get_latest_info($reqId);
+            if ($reqInfo == null) {
+                throw new Error('request info not found');
+            }
+
+            return view('student.show-req-page', compact('bookReq', 'reqInfo'));
+
+        } catch (\Throwable $th) {
+            return back()
+                ->with(['error' => 'Error while querying request'])
+                ->setStatusCode(422);
+        }
+
     }
 }
