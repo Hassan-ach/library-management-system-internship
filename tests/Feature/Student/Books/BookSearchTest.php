@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class searchTest extends TestCase
+class BookSearchTest extends TestCase
 {
     /**
      * A basic feature test example.
@@ -32,7 +32,7 @@ class searchTest extends TestCase
         $response = $this->actingAs($user)->get(route('student.books.search', [
             'query' => 'Laravel',
         ]));
-
+        $response->assertViewHas('books');
         $response->assertStatus(200);
         $response->assertSee('Laravel Guide');
         $response->assertDontSee('Vue.js Basics');
