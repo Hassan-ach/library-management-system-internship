@@ -20,4 +20,27 @@ class AuthorService
         return $author;
     }
 
+    public function createSetOfAuthors( array $data): array{ 
+        // passed array should be formated as $data = [['first_name','last_name'], ....] 
+        $authors = [];
+        foreach( $data as $item){
+            [ $first_name, $last_name] = $item; 
+            $author = $this->createAuthor( $first_name, $last_name);
+            
+            array_push( $authors, $author);
+        }
+        
+        return $authors;
+    }
+
+    public function getSetOfAuthors( array $ids): array{
+        $authors = [];
+        foreach( $ids as $id){
+            $author = $this->getAuthor( $id);
+            array_push( $authors, $author);
+        }
+
+        return $authors;
+    }
+
 }

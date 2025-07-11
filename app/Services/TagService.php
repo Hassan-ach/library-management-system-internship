@@ -19,4 +19,23 @@ class TagService
         return $tag;
     }
 
+    public function createSetOfTags( array $labels): array{ 
+        $tags = [];
+        foreach( $labels as $label){
+            $tag = $this->createTag( $label);
+            array_push( $tags, $tag);
+        }
+        
+        return $tags;
+    }
+
+    public function getSetOfTags( array $ids): array{
+        $tags = [];
+        foreach( $ids as $id){
+            $tag = $this->getTag( $id);
+            array_push( $tags, $tag);
+        }
+
+        return $tags;
+    }
 }

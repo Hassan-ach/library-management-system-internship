@@ -21,9 +21,24 @@ class PublisherService
         return $publisher;
     }
 
-}
+    public function createSetOfPublishers( array $names): array{ 
+        $publishers = [];
+        foreach( $names as $name){
+            $publisher = $this->createPublisher( $name);
+            
+            array_push( $publishers, $publisher);
+        }
+        
+        return $publishers;
+    }
 
-/*$main = new PublisherService();
-$pub = $main->createPublisher("chark_edition");
-$pub2 = PublisherService::getPublisher(1);
-echo $pub2->name;*/
+    public function getSetOfPublishers( array $ids): array{
+        $publishers = [];
+        foreach( $ids as $id){
+            $publisher = $this->getPublisher( $id);
+            array_push( $publishers, $publisher);
+        }
+
+        return $publishers;
+    }
+}
