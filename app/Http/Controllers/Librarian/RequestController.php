@@ -32,11 +32,11 @@ class RequestController extends Controller
             RequestInfo::create([
                 'user_id' => Auth::user()->id,
                 'request_id' => $reqId,
-                'status' => $status,
+                'status' => $status['status'],
             ]);
 
-            return back()
-                ->with(['message' => 'status updated successfully']);
+            return back()->with(['message' => 'status updated successfully']);
+
         } catch (\Throwable $th) {
             return back()
                 ->with(['error' => 'Error while updating request']);
