@@ -15,6 +15,10 @@ class Student extends User
         });
     }
 
+    protected $attributes = [
+        'role' => UserRole::STUDENT,
+    ];
+
     // Relatioships
     public function bookRequests()
     {

@@ -15,6 +15,9 @@ class Librarian extends User
         });
     }
 
+    protected $attributes = [
+        'role' => UserRole::LIBRARIAN,
+    ];
     // Relatioships
     public function requestsInfo()
     {

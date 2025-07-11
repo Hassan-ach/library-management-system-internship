@@ -24,15 +24,6 @@ class Book extends Model
         'total_copies',
     ];
 
-    protected $attributes=[
-        'title' => 'book_name',
-        'isbn'=> '1122',
-        'description'=>'descr',
-        'publication_date'=> '2025-07-09',
-        'number_of_pages' => 10,
-        'total_copies' => 20
-    ];
-
     protected $dates = ['publication_date'];
 
     public function bookRequests()
@@ -40,23 +31,23 @@ class Book extends Model
         return $this->hasMany(BookRequest::class, 'book_id');
     }
 
-    public function categories():BelongsToMany
+    public function categories(): BelongsToMany
     {
-        return $this->belongsToMany( Category::class, 'book_categories', 'book_id', 'category_id');
+        return $this->belongsToMany(Category::class, 'book_categories', 'book_id', 'category_id');
     }
 
-       public function tags():BelongsToMany
+    public function tags(): BelongsToMany
     {
-        return $this->belongsToMany( Tag::class, 'book_tags', 'book_id', 'tag_id');
+        return $this->belongsToMany(Tag::class, 'book_tags', 'book_id', 'tag_id');
     }
 
-       public function authors():BelongsToMany
+    public function authors(): BelongsToMany
     {
-        return $this->belongsToMany( Author::class, 'book_authors', 'book_id', 'author_id');
+        return $this->belongsToMany(Author::class, 'book_authors', 'book_id', 'author_id');
     }
 
-       public function publishers():BelongsToMany
+    public function publishers(): BelongsToMany
     {
-        return $this->belongsToMany( Publisher::class, 'book_publishers', 'book_id', 'publisher_id');
+        return $this->belongsToMany(Publisher::class, 'book_publishers', 'book_id', 'publisher_id');
     }
 }

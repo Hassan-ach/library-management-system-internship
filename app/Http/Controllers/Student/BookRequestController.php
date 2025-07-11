@@ -25,7 +25,6 @@ class BookRequestController extends Controller
 
         if (! Gate::allows('borrow_books', $book)) {
             return back()->with(['error' => 'You\'re not allowed to borrow this book']);
-
         }
 
         DB::beginTransaction();

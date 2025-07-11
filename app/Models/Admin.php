@@ -16,5 +16,9 @@ class Admin extends User
         });
     }
 
+    protected $attributes = [
+        'role' => UserRole::ADMIN,
+    ];
+
     // Relatioships
 }
