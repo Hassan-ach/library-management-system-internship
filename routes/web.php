@@ -31,4 +31,5 @@ Route::middleware(['auth:web', 'role:librarian'])->group(function () {
     Route::get('/student/{id}', [StudentInfoController::class, 'show'])->name('student.profile.show');
     Route::post('/request/info/{id}', [RequestController::class, 'processe'])->name('request.process');
     Route::get('/requests', [RequestController::class, 'index'])->name('requests.all');
+    Route::get('/requests/{id}', [RequestController::class, 'show'])->name('requests.single');
 });

@@ -59,4 +59,17 @@ class RequestController extends Controller
 
         }
     }
+
+    public function show(Request $req, $reqId)
+    {
+        try {
+            $request = BookRequest::with('requestInfo.user', 'user', 'book')
+                ->findOrFail($reqId);
+
+            return view('librarian.viewSingleRequest', compact('request'));
+
+        } catch (\Throwable $th) {
+            return back()->with(['error' => 'Error while fetching the request information']);
+        }
+    }
 }
