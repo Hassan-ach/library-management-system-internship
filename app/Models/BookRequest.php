@@ -24,6 +24,11 @@ class BookRequest extends Model
         return $this->hasMany(RequestInfo::class, 'request_id');
     }
 
+    public function latestRequestInfo()
+    {
+        return $this->hasOne(RequestInfo::class, 'request_id')->latestOfMany();
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

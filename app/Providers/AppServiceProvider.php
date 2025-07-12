@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Enums\RequestStatus;
+use App\Enums\UserRole;
 use App\Models\Book;
 use App\Models\BookRequest;
 use App\Models\User;
@@ -35,6 +36,10 @@ class AppServiceProvider extends ServiceProvider
 
         Gate::define('show_req', function (User $user, BookRequest $req) {
             return $user->is_active && $user->id == $req->user_id;
+        });
+
+        Gate::define('processe_req', function (User $user) {
+            return $user->is_active && $user->role == UserRole::LIBRARIAN;
         });
     }
 }

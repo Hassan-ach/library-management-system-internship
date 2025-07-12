@@ -24,9 +24,7 @@ class BookController extends Controller
 
     public function search(Request $req)
     {
-        //
         try {
-            //
             $query = $req->input('query') ?? $req->input('q');
             if (! $query) {
                 $books = Book::latest()->paginate(1);
