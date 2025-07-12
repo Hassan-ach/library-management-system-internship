@@ -27,5 +27,11 @@ class BookService
         return $book;
     }
 
+    public function attachBook( Book $book, array $tags, array $categories, array $authors, array $publishers): void{
+        $book->tags()->attach( $tags);
+        $book->categories()->attach( $categories);
+        $book->authors()->attach( $authors);
+        $book->publishers()->attach( $publishers);
+    }
 
 }
