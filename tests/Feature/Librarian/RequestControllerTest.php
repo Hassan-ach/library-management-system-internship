@@ -40,4 +40,24 @@ class RequestControllerTest extends TestCase
             'status' => RequestStatus::APPROVED->value,
         ]);
     }
+
+    public function test_librarian_can_view_paginated_book_requests()
+    {
+        $librarian = User::factory()->create([
+            'role' => 'librarian',
+        ]);
+
+        BookRequest::factory()
+            ->count(15)
+            ->hasLatestRequestInfo()
+            ->create();
+
+        $response = $this->actingAs($librarian)->get(route('requests.all'));
+
+        $response->assertStatus(200);
+        $response->assertViewIs('librarian.viewAllRequests');
+        $response->assertViewHas('requests');
+
+        $this->assertTrue($response->original->getData()['requests']->count() <= 10); // paginated
+    }
 }

@@ -43,4 +43,20 @@ class RequestController extends Controller
         }
 
     }
+
+    public function index(Request $req)
+    {
+        //
+        try {
+            $requests = BookRequest::with('latestRequestInfo')
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
+
+            return view('librarian.viewAllRequests', compact('requests'));
+
+        } catch (\Throwable $th) {
+            return back()->with(['error' => 'Error while fetching requests']);
+
+        }
+    }
 }

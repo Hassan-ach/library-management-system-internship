@@ -21,7 +21,7 @@ class StudentInfoController extends Controller
         } catch (\Throwable $th) {
             // throw $th;
             return back()
-                ->with(['error' => 'Error while querying Strudent profile']);
+                ->with(['error' => 'Error while querying Student profile']);
         }
 
     }
