@@ -20,6 +20,10 @@ class CategoryService
         return $category;
     }
 
+    public function deleteCategory( Category $category){
+        $category->delete();
+    }
+
     public function createSetOfCategories( array $data): array{ 
         // passed array should be formated as $data = [['label_1','desc_1'], ....] 
         $categories = [];
@@ -43,5 +47,13 @@ class CategoryService
         return $categories;
     }
    
-
+    public function deleteSetOfCategories( array $categories){
+        try{
+            foreach( $categories as $Category){
+                $this->deleteCategory( $Category);
+            }
+        }catch(\Exception $e){
+            echo 'This Category cann\'t be deleted, it is maybe attached to another object';
+        }       
+    }
 }

@@ -19,6 +19,10 @@ class TagService
         return $tag;
     }
 
+    public function deleteTag( Tag $tag){
+        $tag->delete();
+    }
+
     public function createSetOfTags( array $labels): array{ 
         $tags = [];
         foreach( $labels as $label){
@@ -37,5 +41,15 @@ class TagService
         }
 
         return $tags;
+    }
+
+    public function deleteSetOfTags( array $tags){
+        try{
+            foreach( $tags as $tag){
+                $this->deleteTag( $tag);
+            }
+        }catch(\Exception $e){
+            echo 'This tag cann\'t be deleted, it is maybe attached to another object';
+        }       
     }
 }

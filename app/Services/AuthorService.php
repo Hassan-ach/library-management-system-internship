@@ -20,6 +20,10 @@ class AuthorService
         return $author;
     }
 
+    public function deleteAuthor( Author $author){
+        $author->delete();
+    }
+
     public function createSetOfAuthors( array $data): array{ 
         // passed array should be formated as $data = [['first_name','last_name'], ....] 
         $authors = [];
@@ -43,4 +47,13 @@ class AuthorService
         return $authors;
     }
 
+    public function deleteSetOfAuthors( array $authors){
+        try{
+            foreach( $authors as $author){
+                $this->deleteAuthor( $author);
+            }
+        }catch(\Exception $e){
+            echo 'This Author cann\'t be deleted, it is maybe attached to another object';
+        }       
+    }
 }

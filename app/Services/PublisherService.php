@@ -21,6 +21,10 @@ class PublisherService
         return $publisher;
     }
 
+    public function deletePublisher( Publisher $publisher){
+        $publisher->delete();
+    }
+
     public function createSetOfPublishers( array $names): array{ 
         $publishers = [];
         foreach( $names as $name){
@@ -40,5 +44,17 @@ class PublisherService
         }
 
         return $publishers;
+    }
+
+        public function deleteSetOfPublishers( array $publishers): bool{
+        try{
+            foreach( $publishers as $publisher){
+                $this->deletePublisher( $publisher);
+            }
+            return true;
+        }catch(\Exception $e){
+            echo 'This publisher cann\'t be deleted, it is maybe attached to another object';
+            return false;
+        }       
     }
 }
