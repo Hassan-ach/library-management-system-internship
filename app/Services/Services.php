@@ -74,5 +74,51 @@ class Services
         }
     }
 
+    public function updateBook(array $data){
+        DB::beginTransaction();
+        try{
+            $book = $this->book_service->updateBook(
+                $data['book_id'],
+                $data['title'],
+                $data['isbn'],
+                $data['description'],
+                $data['publication_date'],
+                $data['number_of_pages'],
+                $data['total_copies']
+            );
+
+            $tags = array_merge(
+                $this->tag_service->createSetOfTags( $data['tags']['new']),
+                $this->tag_service->getSetOfTags( $data['tags']['old'])
+            );
+
+            $publishers = array_merge(
+                $this->publisher_service->createSetOfPublishers( $data['publishers']['new']),
+                $this->publisher_service->getSetOfPublishers( $data['publishers']['old'])
+            );
+
+            $categories = array_merge(
+                $this->category_service->createSetOfCategories( $data['categories']['new']),
+                $this->category_service->getSetOfCategories( $data['categories']['old'])
+            );
+            
+            $authors = array_merge(
+                $this->author_service->createSetOfAuthors( $data['authors']['new']),
+                $this->author_service->getSetOfAuthors( $data['authors']['old'])
+            );
+
+            $this->book_service->syncBook( $book, $tags, $categories, 
+                                                    $authors, $publishers);
+
+            DB::commit();
+
+            return $book;
+        }catch(\Exception $e){
+            DB::rollBack();
+            throw $e;
+        }
+
+    }
+
 
 }
