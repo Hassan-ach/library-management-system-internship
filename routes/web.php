@@ -27,3 +27,4 @@ Route::middleware(['auth:web', 'role:student'])->group(function () {
 
 // I didn't add a middleware yet
 Route::post('/books/add', [BookController::class, 'add'])->name('librarian.add'); 
+Route::post('/books/update', [BookController::class, 'update'])->name('librarian.update'); 
