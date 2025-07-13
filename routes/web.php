@@ -24,3 +24,6 @@ Route::middleware(['auth:web', 'role:student'])->group(function () {
     Route::get('/books/search', [BookController::class, 'search'])->name('student.books.search');
     Route::get('/books', [BookController::class, 'index'])->name('student.books.list');
 });
+
+// I didn't add a middleware yet
+Route::post('/books/add', [BookController::class, 'add'])->name('librarian.add'); 
