@@ -13,6 +13,7 @@ class LoginTest extends TestCase
 
     public function test_user_can_login_with_correct_credentials(): void
     {
+
         $user = User::factory()->create([
             'role' => UserRole::STUDENT,
             'password' => bcrypt('password123'),
