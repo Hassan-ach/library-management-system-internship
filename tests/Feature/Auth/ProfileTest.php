@@ -20,10 +20,10 @@ class ProfileTest extends TestCase
             'role' => UserRole::STUDENT->value,
             'password' => bcrypt('password'),
         ]);
-        $response = $this->actingAs($user)->get('/profile');
+        $response = $this->actingAs($user)->get('/student/profile');
         $response->assertStatus(200);
 
-        $response->assertViewIs('profile-page');
+        $response->assertViewIs('student.profile.show');
 
         $response->assertViewHasAll([
             'user', 'requests',
@@ -35,7 +35,7 @@ class ProfileTest extends TestCase
     public function test_unauthenticated_user_cannot_view_profile(): void
     {
         //
-        $response = $this->get('/profile');
+        $response = $this->get('/student/profile');
 
         $response->assertRedirect('/login');
         $this->assertGuest();

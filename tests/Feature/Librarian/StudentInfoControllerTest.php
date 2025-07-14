@@ -34,10 +34,10 @@ class StudentInfoControllerTest extends TestCase
             'status' => RequestStatus::PENDING,
         ]);
 
-        $response = $this->actingAs($librarian)->get("/student/{$student->id}");
+        $response = $this->actingAs($librarian)->get("/librarian/students/{$student->id}");
 
         $response->assertStatus(200);
-        $response->assertViewIs('student.profile');
+        $response->assertViewIs('librarian.statistics.index');
         $response->assertViewHas('student');
     }
 }

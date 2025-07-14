@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class ProfileController extends Controller
 {
     //
-    public function profile(Request $req)
+    public function show(Request $req)
     {
         $user = get_auth_user();
 
@@ -18,7 +18,7 @@ class ProfileController extends Controller
 
         $requests = $user->bookRequests;
 
-        return view('profile-page', compact('user', 'requests'));
+        return view('student.profile.show', compact('user', 'requests'));
 
     }
 }

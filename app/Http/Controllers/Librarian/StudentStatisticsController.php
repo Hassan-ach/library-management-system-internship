@@ -6,17 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
-class StudentController extends Controller
+class StudentStatisticsController extends Controller
 {
     //
-    public function info(Request $req, $studentId)
+    public function index(Request $req, $studentId)
     {
         //
         try {
             $student = Student::with('bookRequests.latestRequestInfo')
                 ->findOrFail($studentId);
 
-            return view('student.profile', compact('student'));
+            return view('librarian.statistics.index', compact('student'));
 
         } catch (\Throwable $th) {
             // throw $th;

@@ -19,7 +19,7 @@ class BooksListTest extends TestCase
         ]);
         Book::factory()->count(15)->create();
 
-        $response = $this->actingAs($user)->get(route('student.books.list'));
+        $response = $this->actingAs($user)->get(route('student.books.index'));
 
         $response->assertViewHas('books');
 
@@ -33,8 +33,8 @@ class BooksListTest extends TestCase
         $user = User::factory()->create([
             'role' => UserRole::STUDENT,
         ]);
-        $response = $this->actingAs($user)->get(route('student.books.list'));
-
-        $response->assertSee('No books found.');
+        $response = $this->actingAs($user)->get(route('student.books.index'));
+        $books = $response->viewData('books');
+        $this->assertEquals(0, $books->count());
     }
 }

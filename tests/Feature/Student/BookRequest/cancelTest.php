@@ -44,7 +44,7 @@ class cancelTest extends TestCase
             'status' => RequestStatus::PENDING,
         ]);
 
-        $resp = $this->actingAs($user)->patch(route('student.requests.cancel', $bookReq->id));
+        $resp = $this->actingAs($user)->get(route('student.requests.cancel', $bookReq->id));
 
         $resp->assertRedirect();
 
@@ -88,7 +88,7 @@ class cancelTest extends TestCase
             'status' => RequestStatus::PENDING,
         ]);
 
-        $resp = $this->actingAs($user2)->patch(route('student.requests.cancel', $bookReq->id));
+        $resp = $this->actingAs($user2)->get(route('student.requests.cancel', $bookReq->id));
 
         $resp->assertRedirect();
 

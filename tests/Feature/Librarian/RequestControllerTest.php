@@ -31,7 +31,7 @@ class RequestControllerTest extends TestCase
             'status' => RequestStatus::APPROVED->value,
         ];
 
-        $response = $this->actingAs($librarian)->post("/request/info/{$bookRequest->id}", $data);
+        $response = $this->actingAs($librarian)->post("/librarian/requests/{$bookRequest->id}", $data);
 
         $response->assertRedirect();
         $response->assertSessionHas('message', 'status updated successfully');
@@ -53,10 +53,10 @@ class RequestControllerTest extends TestCase
             ->hasLatestRequestInfo()
             ->create();
 
-        $response = $this->actingAs($librarian)->get(route('requests.all'));
+        $response = $this->actingAs($librarian)->get(route('librarian.requests.index'));
 
         $response->assertStatus(200);
-        $response->assertViewIs('librarian.viewAllRequests');
+        $response->assertViewIs('librarian.requests.index');
         $response->assertViewHas('requests');
 
         $this->assertTrue($response->original->getData()['requests']->count() <= 10); // paginated
@@ -80,10 +80,10 @@ class RequestControllerTest extends TestCase
             ->create();
 
         $response = $this->actingAs($librarian)
-            ->get(route('requests.single', $bookRequest->id));
+            ->get(route('librarian.requests.show', $bookRequest->id));
 
         $response->assertStatus(200);
-        $response->assertViewIs('librarian.viewSingleRequest');
+        $response->assertViewIs('librarian.requests.show');
         $response->assertViewHas('request', function ($r) use ($bookRequest) {
             return $r->id === $bookRequest->id;
         });
@@ -94,7 +94,7 @@ class RequestControllerTest extends TestCase
         $librarian = User::factory()->create(['role' => 'librarian']);
 
         $response = $this->actingAs($librarian)
-            ->get(route('requests.single', 999));
+            ->get(route('librarian.requests.show', 999));
 
         $response->assertRedirect();
         $response->assertSessionHas('error', 'Error while fetching the request information');

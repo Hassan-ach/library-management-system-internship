@@ -4,11 +4,13 @@ use App\Enums\UserRole;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Librarian\BookController as LibrarianBookController;
 use App\Http\Controllers\Librarian\RequestController as LibrarianRequestController;
-use App\Http\Controllers\Librarian\StudentController;
+use App\Http\Controllers\Librarian\StudentStatisticsController;
 use App\Http\Controllers\Student\BookController as StudentBookController;
 use App\Http\Controllers\Student\BookSearchController;
+use App\Http\Controllers\Student\ProfileController;
 use App\Http\Controllers\Student\RequestController as StudentRequestController;
 use App\Http\Controllers\Student\StudentDashboardController;
 use Illuminate\Support\Facades\Auth;
@@ -30,15 +32,16 @@ Route::get('/', function () {
 
 Route::middleware('guest')->group(function () {
     Route::post('/login', [LoginController::class, 'login']);
-    Route::view('/login', 'login-page')->name('login');
+    Route::view('/login', 'auth.login')->name('login');
 });
 
 Route::middleware('auth:web')->group(function () {
-    Route::get('/logout', [LoginController::class, 'logout']);
+    Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
 
     Route::prefix('student')->name('student.')->middleware('role:student')->group(function () {
+        Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
         Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('dashboard');
-        Route::get('/books', [StudentBookController::class, 'index'])->name('books.all');
+        Route::get('/books', [StudentBookController::class, 'index'])->name('books.index');
         Route::get('/books/search', [BookSearchController::class, 'search'])->name('books.search');
         Route::get('/requests/{id}', [StudentRequestController::class, 'show'])->name('requests.show');
         Route::post('/reqests/book/{id}', [StudentRequestController::class, 'create'])->name('requests.create');
@@ -50,7 +53,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/requests', [LibrarianRequestController::class, 'index'])->name('requests.index');
         Route::get('/requests/{id}', [LibrarianRequestController::class, 'show'])->name('requests.show');
         Route::post('/requests/{id}', [LibrarianRequestController::class, 'process'])->name('requests.process');
-        Route::get('/students/{id}', [StudentController::class, 'info'])->name('students.info');
+        Route::get('/students/{id}', [StudentStatisticsController::class, 'index'])->name('students.statistics');
         Route::post('/books', [LibrarianBookController::class, 'create'])->name('books.create');
         Route::patch('/books/{id}', [LibrarianBookController::class, 'update'])->name('books.update');
         Route::delete('/books/{id}', [LibrarianBookController::class, 'delete'])->name('books.delete');

@@ -19,10 +19,10 @@ class BookSearchController extends Controller
                 $books = Book::where('title', 'like', "%{$query}%")->paginate(10);
             }
 
-            return view('books.search', compact('books', 'query'));
+            return view('student.books.search', compact('books', 'query'));
         } catch (\Throwable $th) {
             // throw $th;
-            return view('books.search')->with('error', 'Unable to load books at the moment. Please try again later.');
+            return view('student.books.search')->with('error', 'Unable to load books at the moment. Please try again later.');
 
         }
     }

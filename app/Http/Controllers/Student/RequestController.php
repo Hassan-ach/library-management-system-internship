@@ -100,7 +100,7 @@ class RequestController extends Controller
                 throw new Error('request info not found');
             }
 
-            return view('student.show-req-page', compact('bookReq', 'reqInfo'));
+            return view('student.requests.show', compact('bookReq', 'reqInfo'));
 
         } catch (\Throwable $th) {
             return back()

@@ -52,7 +52,7 @@ class RequestController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->paginate(10);
 
-            return view('librarian.viewAllRequests', compact('requests'));
+            return view('librarian.requests.index', compact('requests'));
 
         } catch (\Throwable $th) {
             return back()->with(['error' => 'Error while fetching requests']);
@@ -66,7 +66,7 @@ class RequestController extends Controller
             $request = BookRequest::with('requestInfo.user', 'user', 'book')
                 ->findOrFail($reqId);
 
-            return view('librarian.viewSingleRequest', compact('request'));
+            return view('librarian.requests.show', compact('request'));
 
         } catch (\Throwable $th) {
             return back()->with(['error' => 'Error while fetching the request information']);

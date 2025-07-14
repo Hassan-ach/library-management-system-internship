@@ -9,7 +9,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class addTest extends TestCase
+class createTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -30,7 +30,7 @@ class addTest extends TestCase
         ]);
 
         // Act as the user and send the POST request
-        $resp = $this->actingAs($user)->post(route('student.requests.add', $book->id));
+        $resp = $this->actingAs($user)->post(route('student.requests.create', $book->id));
 
         // Assert redirection
         $resp->assertRedirect();
@@ -66,7 +66,7 @@ class addTest extends TestCase
         ]);
 
         // Act as the user and send the POST request
-        $resp = $this->actingAs($user)->post(route('student.requests.add', $book->id));
+        $resp = $this->actingAs($user)->post(route('student.requests.create', $book->id));
 
         // Assert redirection
         $resp->assertRedirect();
@@ -90,7 +90,7 @@ class addTest extends TestCase
         ]);
 
         // Act as the user and send the POST request
-        $resp = $this->actingAs($user)->post(route('student.requests.add', $book->id));
+        $resp = $this->actingAs($user)->post(route('student.requests.create', $book->id));
 
         // Assert redirection
         $resp->assertRedirect();

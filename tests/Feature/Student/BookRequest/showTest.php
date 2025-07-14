@@ -32,7 +32,7 @@ class showTest extends TestCase
         // Act: Visit the route as the correct user
         $response = $this->actingAs($user)->get(route('student.requests.show', $bookRequest->id));
 
-        $response->assertViewIs('student.show-req-page');
+        $response->assertViewIs('student.requests.show');
         $response->assertViewHas(['bookReq', 'reqInfo']);
     }
 

@@ -34,7 +34,8 @@ class BookSearchTest extends TestCase
         ]));
         $response->assertViewHas('books');
         $response->assertStatus(200);
-        $response->assertSee('Laravel Guide');
-        $response->assertDontSee('Vue.js Basics');
+        $books = $response->viewData('books');
+        $this->assertTrue($books->contains('title', 'Laravel Guide'));
+        $this->assertFalse($books->contains('title', 'Vue.js Basics'));
     }
 }
