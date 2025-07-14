@@ -41,5 +41,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('processe_req', function (User $user) {
             return $user->is_active && $user->role == UserRole::LIBRARIAN;
         });
+
     }
 }

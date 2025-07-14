@@ -14,7 +14,7 @@ use Illuminate\Validation\Rules\Enum;
 class RequestController extends Controller
 {
     //
-    public function processe(Request $req, $reqId)
+    public function process(Request $req, $reqId)
     {
         if (! Gate::allows('processe_req')) {
             return back()

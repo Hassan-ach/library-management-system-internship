@@ -23,7 +23,7 @@ if (! function_exists('get_auth_user')) {
 
 function get_student(int $id): Student
 {
-    return Student::with('bookRequests', 'bookRequests.requestInfo', 'bookRequests.book')->findOrFail($id);
+    return Student::with('bookRequests', 'bookRequests.latestRequestInfo', 'bookRequests.book')->findOrFail($id);
 }
 
 function get_admin(int $id): Admin
