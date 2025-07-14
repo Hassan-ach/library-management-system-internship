@@ -24,7 +24,7 @@ class Book extends Model
         'total_copies',
     ];
 
-    protected $dates = ['publication_date'];
+    protected $casts = ['publication_date' => 'date'];
 
     public function bookRequests()
     {

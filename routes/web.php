@@ -28,6 +28,11 @@ Route::middleware(['auth:web', 'role:student'])->group(function () {
     Route::get('/books', [BookController::class, 'index'])->name('student.books.list');
 });
 
+
+// I didn't add a middleware yet
+Route::post('/books/add', [BookController::class, 'add'])->name('librarian.add'); 
+Route::post('/books/update', [BookController::class, 'update'])->name('librarian.update'); 
+
 Route::middleware(['auth:web', 'role:librarian'])->group(function () {
     Route::get('/student/{id}', [StudentInfoController::class, 'show'])->name('student.profile.show');
     Route::post('/request/info/{id}', [RequestController::class, 'processe'])->name('request.process');
