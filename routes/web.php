@@ -5,6 +5,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Book\BookController;
+use App\Http\Controllers\Librarian\RequestController;
+use App\Http\Controllers\Librarian\StudentInfoController;
 use App\Http\Controllers\Student\BookRequestController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,9 +28,15 @@ Route::middleware(['auth:web', 'role:student'])->group(function () {
     Route::get('/books', [BookController::class, 'index'])->name('student.books.list');
 });
 
+Route::middleware(['auth:web', 'role:librarian'])->group(function () {
+    Route::get('/student/{id}', [StudentInfoController::class, 'show'])->name('student.profile.show');
+    Route::post('/request/info/{id}', [RequestController::class, 'processe'])->name('request.process');
+    Route::get('/requests', [RequestController::class, 'index'])->name('requests.all');
+    Route::get('/requests/{id}', [RequestController::class, 'show'])->name('requests.single');
+});
 // <<<<<<<<<<<<<<<<<<<<<<<<<<< admin Routes
 
-Route::middleware(['auth:web','verified', 'role:student'])
+Route::middleware(['auth:web', 'role:student'])
     ->group(function () {
         
 
