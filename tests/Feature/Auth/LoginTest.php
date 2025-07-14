@@ -21,7 +21,6 @@ class LoginTest extends TestCase
 
         // Simulate login request
         $response = $this->post('/login', [
-            '_token' => csrf_token(),
             'email' => $user->email,
             'password' => 'password123',
         ]);
@@ -41,7 +40,6 @@ class LoginTest extends TestCase
         ]);
 
         $response = $this->post('/login', [
-            '_token' => csrf_token(),
             'email' => $user->email,
             'password' => 'wrongpassword',
         ]);
