@@ -17,7 +17,8 @@ class Services
     private  $publisher_service;
     
     public function __construct(BookService $book_service, CategoryService $category_service, TagService $tag_service,
-                                AuthorService $author_service, PublisherService $publisher_service){
+                                AuthorService $author_service, PublisherService $publisher_service)
+    {
         $this->book_service = $book_service;
         $this->category_service = $category_service;
         $this->tag_service = $tag_service;
@@ -120,5 +121,22 @@ class Services
 
     }
 
+    public function deleteBook(array $data)
+    {
+        DB::beginTransaction();
+        try{
+            $book = $this->book_service->getBook( $data['book_id']);
+            
+            $this->book_service->detachBook( $book);
+            
+            $this->book_service->deleteBook( $book);
+
+            DB::commit();
+
+        }catch(\Exception $e){
+            DB::rollBack();
+            throw $e;
+        }
+    }
 
 }

@@ -46,6 +46,10 @@ class BookService
         return $book;
     }
 
+    public function deleteBook( Book $book){
+        $book->delete();
+    }
+    
     public function attachBook( Book $book, array $tags, array $categories, array $authors, array $publishers): void{
         $book->tags()->attach( $tags);
         $book->categories()->attach( $categories);
@@ -54,9 +58,17 @@ class BookService
     }
 
     public function syncBook( Book $book, array $tags, array $categories, array $authors, array $publishers): void{
+        // this function update elts attached to the book , it keeps just the elements given as argument 
         $book->tags()->sync( $tags);
         $book->categories()->sync( $categories);
         $book->authors()->sync( $authors);
         $book->publishers()->sync( $publishers);
+    }
+
+    public function detachBook( Book $book): void{
+        $book->tags()->detach();
+        $book->categories()->detach();
+        $book->authors()->detach();
+        $book->publishers()->detach();
     }
 }
