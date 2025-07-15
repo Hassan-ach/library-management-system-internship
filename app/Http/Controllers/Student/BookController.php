@@ -21,4 +21,22 @@ class BookController extends Controller
             return view('student.books.index')->with('error', 'Unable to load books at the moment. Please try again later.');
         }
     }
+
+    public function search(Request $req)
+    {
+        try {
+            $query = $req->input('query') ?? $req->input('q');
+            if (! $query) {
+                $books = Book::latest()->paginate(1);
+            } else {
+                $books = Book::where('title', 'like', "%{$query}%")->paginate(10);
+            }
+
+            return view('student.books.search', compact('books', 'query'));
+        } catch (\Throwable $th) {
+            // throw $th;
+            return view('student.books.search')->with('error', 'Unable to load books at the moment. Please try again later.');
+
+        }
+    }
 }

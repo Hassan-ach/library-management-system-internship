@@ -3,13 +3,11 @@
 use App\Enums\UserRole;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Librarian\BookController as LibrarianBookController;
 use App\Http\Controllers\Librarian\RequestController as LibrarianRequestController;
 use App\Http\Controllers\Librarian\StudentStatisticsController;
 use App\Http\Controllers\Student\BookController as StudentBookController;
-use App\Http\Controllers\Student\BookSearchController;
 use App\Http\Controllers\Student\ProfileController;
 use App\Http\Controllers\Student\RequestController as StudentRequestController;
 use App\Http\Controllers\Student\StudentDashboardController;
@@ -31,18 +29,18 @@ Route::get('/', function () {
 });
 
 Route::middleware('guest')->group(function () {
-    Route::post('/login', [LoginController::class, 'login']);
+    Route::post('/login', [AuthController::class, 'login']);
     Route::view('/login', 'auth.login')->name('login');
 });
 
 Route::middleware('auth:web')->group(function () {
-    Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::prefix('student')->name('student.')->middleware('role:student')->group(function () {
         Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
         Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('dashboard');
         Route::get('/books', [StudentBookController::class, 'index'])->name('books.index');
-        Route::get('/books/search', [BookSearchController::class, 'search'])->name('books.search');
+        Route::get('/books/search', [StudentBookController::class, 'search'])->name('books.search');
         Route::get('/requests/{id}', [StudentRequestController::class, 'show'])->name('requests.show');
         Route::post('/reqests/book/{id}', [StudentRequestController::class, 'create'])->name('requests.create');
         Route::get('/requests/cancel/{id}', [StudentRequestController::class, 'cancel'])->name('requests.cancel');

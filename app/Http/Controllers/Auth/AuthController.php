@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class LoginController extends Controller
+class AuthController extends Controller
 {
     //
     public function login(Request $req)
@@ -25,5 +25,14 @@ class LoginController extends Controller
         $req->session()->regenerate();
 
         return redirect()->intended('/')->with('message', 'Logged in successfully');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/login')->with('message', 'Logged out successfully');
     }
 }

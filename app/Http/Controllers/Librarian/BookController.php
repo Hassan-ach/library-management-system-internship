@@ -59,7 +59,7 @@ class BookController extends Controller
         $Service->createBook($validated);
 
         // return a View showed that the book was created
-        return view('books.created');
+        return view('librarian.books.create');
     }
 
     public function update(Request $request)
@@ -90,17 +90,13 @@ class BookController extends Controller
 
         $Serice->updateBook($validated);
 
-        return view('books.updated');
+        return view('librarian.books.edit');
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request, $bookId)
     {
-        $validated = $request->validate([
-            'book_id' => 'int| required| exists:books,id'
-        ]);
+        $Service = App::make(Services::class);
 
-        $Service = App::make( Services::class);
-
-        $Service->deleteBook( $validated);
+        $Service->deleteBook($bookId);
     }
 }
