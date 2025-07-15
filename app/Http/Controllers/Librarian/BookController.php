@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\App;
 class BookController extends Controller
 {
     /*
-        From there, you will find the implementation of the four operations: create(), update(), delete()
         Any external or reusable logic will be placed in Services .
     */
 
@@ -96,6 +95,12 @@ class BookController extends Controller
 
     public function delete(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'book_id' => 'int| required| exists:books,id'
+        ]);
+
+        $Service = App::make( Services::class);
+
+        $Service->deleteBook( $validated);
     }
 }
