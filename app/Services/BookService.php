@@ -22,7 +22,7 @@ class BookService
 
     public function getBook(int $id): Book{
 
-        $book = Book::find( $id);
+        $book = Book::findOrFail( $id);
         
         return $book;
     }

@@ -15,7 +15,7 @@ class AuthorService
 
     public function getAuthor(int $id): Author{
 
-        $author = Author::find( $id);
+        $author = Author::findOrFail( $id);
         
         return $author;
     }

@@ -15,7 +15,7 @@ class CategoryService
 
     public function getCategory(int $id): Category{
 
-        $category = Category::find( $id);
+        $category = Category::findOrFail( $id);
         
         return $category;
     }

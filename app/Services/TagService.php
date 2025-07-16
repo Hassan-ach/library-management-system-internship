@@ -14,7 +14,7 @@ class TagService
 
     public function getTag(int $id): Tag{
 
-        $tag = Tag::find( $id);
+        $tag = Tag::findOrFail( $id);
         
         return $tag;
     }

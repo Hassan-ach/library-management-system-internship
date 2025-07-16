@@ -16,7 +16,7 @@ class PublisherService
 
     public function getPublisher( int $id){
 
-        $publisher = Publisher::find( $id);
+        $publisher = Publisher::findOrFail( $id);
 
         return $publisher;
     }
