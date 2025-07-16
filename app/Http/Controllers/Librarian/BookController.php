@@ -109,10 +109,20 @@ class BookController extends Controller
     }
     }
 
-    public function delete(Request $request, $bookId)
-    {
-        $Service = App::make(Services::class);
+    public function delete(int $bookId)
+    {   
+        try{
+            $Service = App::make(Services::class);
 
-        $Service->deleteBook($bookId);
+            $Service->deleteBook($bookId);
+
+            return view('librarian.books.delete'); //temporary
+        }catch(ValidationException $e){
+            return view('errors.dataValidation');
+        }
+        catch(Exception $e){
+            return view('errors.databaseException');
+        }
+
     }
 }
