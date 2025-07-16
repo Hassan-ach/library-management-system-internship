@@ -75,11 +75,11 @@ class Services
         }
     }
 
-    public function updateBook(array $data){
+    public function updateBook(int $id, array $data){
         DB::beginTransaction();
         try{
             $book = $this->book_service->updateBook(
-                $data['book_id'],
+                $id,
                 $data['title'],
                 $data['isbn'],
                 $data['description'],

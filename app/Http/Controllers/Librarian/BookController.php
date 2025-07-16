@@ -62,16 +62,15 @@ class BookController extends Controller
         return view('librarian.books.create');
     }
 
-    public function update(Request $request)
-    {
+    public function update(Request $request, $id)
+    {   
         $validated = $request->validate([
-            'book_id' => 'int | required',
-            'title' => 'required | string',
-            'isbn' => 'required',
+            'title' => 'string',
+            'isbn' => 'string',
             'description' => 'string',
             'publication_date' => 'date',
             'number_of_pages' => 'integer',
-            'total_copies' => 'required | integer',
+            'total_copies' => 'integer',
             'tags' => 'required',
             'tags.old' => 'array ',
             'tags.new' => 'array',
@@ -83,12 +82,12 @@ class BookController extends Controller
             'authors.new' => 'array',
             'publishers' => 'required',
             'publihsers.old' => 'array',
-            'publishers.new' => 'array',
+            'publishers.new' => 'array'
         ]);
 
         $Serice = App::make(Services::class);
 
-        $Serice->updateBook($validated);
+        $Serice->updateBook($id, $validated);
 
         return view('librarian.books.edit');
     }

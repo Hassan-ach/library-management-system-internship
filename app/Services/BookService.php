@@ -30,7 +30,7 @@ class BookService
     public function updateBook( int $id, string $title, string $isbn, string $description, string $publication_date, 
                                 int $pages, int $total_copies): Book{
         // fetch the book from database by its ID
-        $book = Book::find( $id);
+        $book = Book::findOrFail( $id);
 
         // update the book informations
         $book->title = $title;
