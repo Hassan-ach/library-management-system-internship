@@ -4,6 +4,7 @@ use App\Enums\UserRole;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Librarian\BookController as LibrarianBookController;
 use App\Http\Controllers\Librarian\RequestController as LibrarianRequestController;
 use App\Http\Controllers\Librarian\StudentStatisticsController;
@@ -31,6 +32,11 @@ Route::get('/', function () {
 Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::view('/login', 'auth.login')->name('login');
+    Route::get('/forgot-password', [PasswordController::class, 'forget_form'])->name('password.request');
+    Route::post('/forgot-password', [PasswordController::class, 'send'])->name('password.email');
+    Route::get('/reset-password/{token}', [PasswordController::class, 'reset_form'])->name('password.reset');
+    Route::post('/reset-password', [PasswordController::class, 'reset'])->name('password.update');
+
 });
 
 Route::middleware('auth:web')->group(function () {
