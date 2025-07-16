@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Librarian;
 use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Services\Services;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Validation\ValidationException;
+
 
 class BookController extends Controller
 {
@@ -64,6 +67,7 @@ class BookController extends Controller
 
     public function update(Request $request, $id)
     {   
+    try{
         $validated = $request->validate([
             'title' => 'string',
             'isbn' => 'string',
@@ -84,12 +88,19 @@ class BookController extends Controller
             'publihsers.old' => 'array',
             'publishers.new' => 'array'
         ]);
-
         $Serice = App::make(Services::class);
-
+        
         $Serice->updateBook($id, $validated);
-
+        
         return view('librarian.books.edit');
+
+    }catch (ValidationException $e)
+    {
+        return view('errors.dataValidation');
+    }
+    catch(Exception $e){
+        return view('errors.databaseException');
+    }
     }
 
     public function delete(Request $request, $bookId)
