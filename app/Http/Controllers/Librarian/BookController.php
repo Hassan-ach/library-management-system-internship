@@ -19,23 +19,22 @@ class BookController extends Controller
 
     public function create(Request $request)
     {
-        /*  Request structure:
-            $req = {
-                title: ***,
-                ...
-                description: ***,
-                tags : {
-                    new : {labels of new tags to be create}
-                    old : {ids of old tags}
-                },
-                categories:{},
-                publishers:{},
-                authors:{}
-            }
-        */
-
+    /*  Request structure:
+        $req = {
+            title: ***,
+            ...
+            description: ***,
+            tags : {
+                new : {labels of new tags to be create}
+                old : {ids of old tags}
+            },
+            categories:{},
+            publishers:{},
+            authors:{}
+        }
+    */
+    try{
         // validate request's values
-
         $validated = $request->validate([
             'title' => 'required | string',
             'isbn' => 'bail | required | unique:books', /* the validation process should be stopped if isbn not valide */
@@ -63,6 +62,13 @@ class BookController extends Controller
 
         // return a View showed that the book was created
         return view('librarian.books.create');
+    }
+    catch(ValidationException $e){
+        return view('errors.dataValidation');
+    }
+    catch(Exception $e){
+        return view('errors.databaseException');
+    }
     }
 
     public function update(Request $request, $id)
