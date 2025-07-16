@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Librarian\BookController as LibrarianBookController;
+use App\Http\Controllers\Librarian\GoogleApiService\GoogleApiServiceController;
 use App\Http\Controllers\Librarian\RequestController as LibrarianRequestController;
 use App\Http\Controllers\Librarian\StudentStatisticsController;
 use App\Http\Controllers\Student\BookController as StudentBookController;
@@ -59,6 +60,8 @@ Route::middleware('auth:web')->group(function () {
         Route::post('/requests/{id}', [LibrarianRequestController::class, 'process'])->name('requests.process');
         Route::get('/students/{id}', [StudentStatisticsController::class, 'index'])->name('students.statistics');
         Route::post('/books', [LibrarianBookController::class, 'create'])->name('books.create');
+        Route::get('/books/add', [LibrarianBookController::class, 'isbnForm'])->name('books.isbnForm');
+        Route::post('/books/add', [GoogleApiServiceController::class, 'getBookInfo'])->name('books.isbn.getInfo');
         Route::patch('/books/{id}', [LibrarianBookController::class, 'update'])->name('books.update');
         Route::delete('/books/{id}', [LibrarianBookController::class, 'delete'])->name('books.delete');
     });

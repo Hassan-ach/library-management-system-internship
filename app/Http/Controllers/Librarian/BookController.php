@@ -13,6 +13,10 @@ class BookController extends Controller
     /*
         Any external or reusable logic will be placed in Services .
     */
+    public function isbnForm()
+    {
+        return view('librarian.books.isbnForm');
+    }
 
     public function create(Request $request)
     {
@@ -59,6 +63,7 @@ class BookController extends Controller
         $Service->createBook($validated);
 
         // return a View showed that the book was created
+        // should change to books.show if successe and return back if fail
         return view('librarian.books.create');
     }
 
