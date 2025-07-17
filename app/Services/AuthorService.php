@@ -4,10 +4,9 @@ use App\Models\Author;
 
 class AuthorService
 {
-    public function createAuthor(string $first_name, string $last_name): Author{
+    public function createAuthor(string $name): Author{
         $author = Author::create([
-            'first_name' => $first_name,
-            'last_name' => $last_name
+            'name' => $name
         ]);
 
         return $author;
@@ -20,16 +19,22 @@ class AuthorService
         return $author;
     }
 
-    public function deleteAuthor( Author $author){
+    public function updateAuthor(int $id, string $name) {
+        $author = $this->getAuthor( $id);
+        $author->name = $name;
+        $author->save();
+    }
+
+    public function deleteAuthor( int $id){
+        $author = $this->getAuthor( $id);
         $author->delete();
     }
 
-    public function createSetOfAuthors( array $data): array{ 
-        // passed array should be formated as $data = [['first_name','last_name'], ....] 
+    public function createSetOfAuthors( array $names): array{ 
+        // passed array should be formated as $names = ['publisher1_name', 'publisher2_name', ....] 
         $authors = [];
-        foreach( $data as $item){
-            [ $first_name, $last_name] = $item; 
-            $author = $this->createAuthor( $first_name, $last_name);
+        foreach( $names as $name){
+            $author = $this->createAuthor( $name);
             
             array_push( $authors, $author);
         }
@@ -47,6 +52,7 @@ class AuthorService
         return $authors;
     }
 
+    
     public function deleteSetOfAuthors( array $authors){
         try{
             foreach( $authors as $author){
@@ -55,5 +61,15 @@ class AuthorService
         }catch(\Exception $e){
             echo 'This Author cann\'t be deleted, it is maybe attached to another object';
         }       
+    }
+    
+    public function paginateAuthors(int $num = 10){
+        $authors = Author::latest()->paginate( $num);
+        return $authors;
+    }
+
+    public function searchAuthors( $query, int $num = 10){
+        $authors = Author::where('name', 'like', "%{$query}%")->paginate($num);
+        return $authors;
     }
 }
