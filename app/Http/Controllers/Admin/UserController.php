@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\UserRole;
+use App\Exports\UsersExport;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -50,14 +52,15 @@ class UserController extends Controller
     // <<<<<<<<<<<< Read user(s) method
     public function index(Request $request)
     {
-        try {
+        // try {
             $users = User::latest()->paginate(25);
 
-            return view('admin.users.index', compact('users'));
-        } catch (\Exception $e) {
-            return redirect()->route('admin.users.index')
-                ->with('error', 'Unable to load users: '.$e->getMessage());
-        }
+            return view('/admin/users/index', compact('users'));
+        // }
+        //  catch (\Exception $e) {
+        //     return redirect()->route('admin.users.index')
+        //         ->with('error', 'Unable to load users: '.$e->getMessage());
+        // }
     }
 
     // <<<<<<<<<<<<<<<<<<<< search user
@@ -152,5 +155,10 @@ class UserController extends Controller
 
         return redirect()->route('admin.users.index')
             ->with('success', 'User with id: {$user->id} deleted successfully');
+    }
+
+    public function exportExcel(){
+        $users = User::all();
+        return Excel::download( new UsersExport($users),'users.xlsx');
     }
 }

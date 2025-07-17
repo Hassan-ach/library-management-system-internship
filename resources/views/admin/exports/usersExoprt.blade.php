@@ -1,10 +1,5 @@
-<head>
-    {{-- <link rel="stylesheet" href="{{ asset('css/admin/users/index.css') }}"> --}}
-    {{-- @vite(['resources/css/admin/users/index.css']) --}}
-</head>
 <body>
     <div class="container">
-        <h1>Users</h1>
         
         <table class="table">
             <thead>

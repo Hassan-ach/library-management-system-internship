@@ -1,7 +1,3 @@
-<head>
-    {{-- <link rel="stylesheet" href="{{ asset('css/admin/users/index.css') }}"> --}}
-    {{-- @vite(['resources/css/admin/users/index.css']) --}}
-</head>
 <body>
     <div class="container">
         <h1>Users</h1>
@@ -29,7 +25,7 @@
             </tbody>
         </table>
         <div class="importBtn">
-            <a href="{{ route('admin.statistics.users.export') }}" class="btn btn-primary">Export Users</a>
+            <a href="{{ route('admin.excel.export') }}" class="btn btn-primary">Export Users</a>
             
         </div>
     </div>

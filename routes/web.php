@@ -1,7 +1,9 @@
 <?php
 
 use App\Enums\UserRole;
+use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Librarian\BookController as LibrarianBookController;
@@ -59,13 +61,24 @@ Route::middleware('auth:web')->group(function () {
     // admin
     Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function () {
         //
+
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
         Route::get('/settings', [SettingsController::class, 'index'])->name('settings.get');
         Route::patch('/settings', [SettingsController::class, 'update'])->name('settings.update');
 
         Route::post('/users', [UserController::class, 'create'])->name('users.create');
-        Route::get('/users', [UserController::class, 'index'])->name('users.all');
+        Route::get('/users/index', [UserController::class, 'index'])->name('users.all');
         Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
         Route::patch('/users/{id}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/users/{id}', [UserController::class, 'delete'])->name('users.delete');
+
+        
+
+        Route::prefix('statistics')->name('statistics.')->group(function () {
+            Route::get('/users', [StatisticsController::class,'exportUsers'])->name('users.export');
+            Route::get('/requests', [UserController::class,'exportExcel'])->name('requests.export');
+            Route::get('/books', [UserController::class,'exportExcel'])->name('books.export');
+        });
     });
 });
