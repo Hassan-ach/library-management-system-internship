@@ -4,6 +4,10 @@ use App\Enums\UserRole;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Librarian\AuthorController;
+use App\Http\Controllers\Librarian\CategoryController;
+use App\Http\Controllers\Librarian\PublisherController;
+use App\Http\Controllers\Librarian\TagController;
 use App\Http\Controllers\Librarian\BookController as LibrarianBookController;
 use App\Http\Controllers\Librarian\RequestController as LibrarianRequestController;
 use App\Http\Controllers\Librarian\StudentStatisticsController;
@@ -52,9 +56,34 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/requests/{id}', [LibrarianRequestController::class, 'show'])->name('requests.show');
         Route::post('/requests/{id}', [LibrarianRequestController::class, 'process'])->name('requests.process');
         Route::get('/students/{id}', [StudentStatisticsController::class, 'index'])->name('students.statistics');
+        // Book Routes: 
         Route::post('/books', [LibrarianBookController::class, 'create'])->name('books.create');
         Route::patch('/books/{id}', [LibrarianBookController::class, 'update'])->name('books.update');
         Route::delete('/books/{id}', [LibrarianBookController::class, 'delete'])->name('books.delete');
+        // Author Routes:
+        Route::get('/authors', [AuthorController::class, 'index'])->name('authors.index');
+        Route::get('/authors/search', [AuthorController::class, 'search'])->name('authors.search');
+        Route::post('/authors', [AuthorController::class, 'create'])->name( 'authors.create');
+        Route::patch('/authors/{id}', [AuthorController::class, 'update'])->name( 'authors.update');
+        Route::delete('/authors/{id}', action: [AuthorController::class, 'delete'])->name( 'authors.delete');
+        // Category Routes:
+        Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
+        Route::get('/category/search', [CategoryController::class, 'search'])->name('category.search');
+        Route::post('/category', [CategoryController::class, 'create'])->name( 'category.create');
+        Route::patch('/category/{id}', [CategoryController::class, 'update'])->name( 'category.update');
+        Route::delete('/category/{id}',  [CategoryController::class, 'delete'])->name( 'category.delete');
+        // Publisher Routes:
+        Route::get('/publishers', [PublisherController::class, 'index'])->name('publishers.index');
+        Route::get('/publishers/search', [PublisherController::class, 'search'])->name('publishers.search');
+        Route::post('/publishers', [PublisherController::class, 'create'])->name( 'publishers.create');
+        Route::patch('/publishers/{id}', [PublisherController::class, 'update'])->name( 'publishers.update');
+        Route::delete('/publishers/{id}',  [PublisherController::class, 'delete'])->name( 'publishers.delete');
+        //Tag Routes:
+        Route::get('/tags', [TagController::class, 'index'])->name('tags.index');
+        Route::get('/tags/search', [TagController::class, 'search'])->name('tags.search');
+        Route::post('/tags', [TagController::class, 'create'])->name( 'tags.create');
+        Route::patch('/tags/{id}', [TagController::class, 'update'])->name( 'tags.update');
+        Route::delete('/tags/{id}',  [TagController::class, 'delete'])->name( 'tags.delete');
     });
     // admin
     Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function () {
