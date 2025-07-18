@@ -1,0 +1,20 @@
+.container{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.table{
+    width: 100%;
+    border-collapse: collapse;
+    
+}
+
+.table tr, .table tr {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.table tr:nth-child(even) {
+    background-color: #aaa;
+}
