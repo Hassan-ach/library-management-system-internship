@@ -16,6 +16,10 @@ class BookController extends Controller
     /*
         Any external or reusable logic will be placed in Services .
     */
+    private Services $services;
+    public function __construct(Services $services){
+        $this->services = $services;
+    }
 
     public function create(Request $request)
     {
@@ -56,9 +60,9 @@ class BookController extends Controller
             'publishers.new' => 'array',
         ]);
 
-        // handle the validated data using book services
-        $Service = App::make(Services::class);
-        $Service->createBook($validated);
+        // handle the validated data using services class
+        //$Service = App::make(Services::class);
+        $this->services->createBook($validated);
 
         // return a View showed that the book was created
         return view('librarian.books.create');
@@ -94,9 +98,8 @@ class BookController extends Controller
             'publihsers.old' => 'array',
             'publishers.new' => 'array'
         ]);
-        $Serice = App::make(Services::class);
-        
-        $Serice->updateBook($id, $validated);
+        //$Serice = App::make(Services::class);
+        $this->services->updateBook($id, $validated);
         
         return view('librarian.books.edit');
 
@@ -112,9 +115,8 @@ class BookController extends Controller
     public function delete(int $bookId)
     {   
         try{
-            $Service = App::make(Services::class);
-
-            $Service->deleteBook($bookId);
+            //$Service = App::make(Services::class);
+            $this->services->deleteBook($bookId);
 
             return view('librarian.books.delete'); //temporary
         }catch(ValidationException $e){
