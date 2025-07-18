@@ -24,21 +24,6 @@ class UsersExport implements FromView
         $this->users = $users;
     }
 
-    // public function view():View 
-    // {
-    //     $users = User::all();
-    //     return view('users.export', [
-    //         'users'=> $users
-    //     ]);
-    // }
-
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-
-    // public function collection(){
-    //     return User::all();
-    // }
 
     public function view():View{
         return view("/admin/exports/usersExoprt",

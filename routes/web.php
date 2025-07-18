@@ -62,23 +62,32 @@ Route::middleware('auth:web')->group(function () {
     Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function () {
         //
 
-        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-
-        Route::get('/settings', [SettingsController::class, 'index'])->name('settings.get');
-        Route::patch('/settings', [SettingsController::class, 'update'])->name('settings.update');
-
-        Route::post('/users', [UserController::class, 'create'])->name('users.create');
-        Route::get('/users/index', [UserController::class, 'index'])->name('users.all');
-        Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
-        Route::patch('/users/{id}', [UserController::class, 'update'])->name('users.update');
-        Route::delete('/users/{id}', [UserController::class, 'delete'])->name('users.delete');
+        Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
         
-
+        Route::get('/settings', [SettingsController::class, 'index'])->name('settings.get');
+        Route::patch('/settings', [SettingsController::class, 'update'])->name('settings.update');
+        
+        Route::get('/users', [UserController::class, 'create_page'])->name('users.create');
+        Route::post('/users', [UserController::class, 'create'])->name('create');
+        Route::get('/users/index', [UserController::class, 'index'])->name('users.all');
+        Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
+        Route::get('/users/{id}', [UserController::class, 'update_page'])->name('users.update');
+        Route::patch('/users/{id}', [UserController::class, 'update'])->name('users.update.submit');
+        Route::delete('/users/{id}', [UserController::class, 'delete'])->name('users.delete');
+        
+        
+        
+        Route::get('/statistics', [StatisticsController::class, 'dashboard'])->name('statistics.dashboard');
         Route::prefix('statistics')->name('statistics.')->group(function () {
-            Route::get('/users', [StatisticsController::class,'exportUsers'])->name('users.export');
-            Route::get('/requests', [UserController::class,'exportExcel'])->name('requests.export');
-            Route::get('/books', [UserController::class,'exportExcel'])->name('books.export');
+            Route::get('/users', [StatisticsController::class,'users_stat'])->name('users');
+            Route::get('/users/export', [StatisticsController::class,'exportUsers'])->name('users.export');
+
+            Route::get('/requests', [LibrarianRequestController::class,'requests_stat'])->name('requests');
+            Route::get('/requests/export', [LibrarianRequestController::class,'exportRequests'])->name('requests.export');
+
+            Route::get('/books', [LibrarianBookController::class,'books_stat'])->name('books');
+            Route::get('/books/export', [LibrarianBookController::class,'exportBooks'])->name('books.export');
         });
     });
 });
