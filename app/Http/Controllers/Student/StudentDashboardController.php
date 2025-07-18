@@ -57,11 +57,7 @@ class StudentDashboardController extends Controller
         });
 
         // Recent borrowings (limit to 5 most recent)
-        $recent = $bookRequests->filter(fn ($req) => $req->latestRequestInfo && in_array($req->latestRequestInfo->status, [
-            RequestStatus::BORROWED,
-            RequestStatus::APPROVED,
-        ])
-        )->take(5);
+        $recent = $bookRequests->take(5);
 
         return view('student.dashboard', compact(
             'student',

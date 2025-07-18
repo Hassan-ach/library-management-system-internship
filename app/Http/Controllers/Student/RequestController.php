@@ -17,6 +17,19 @@ use Illuminate\Support\Facades\Request;
 class RequestController extends Controller
 {
     //
+    public function index()
+    {
+        $user = Student::findOrFail(Auth::user()->id);
+
+        // Get all book requests for the current student with their latest status
+        $bookRequests = BookRequest::with(['book', 'latestRequestInfo'])
+            ->where('user_id', $user->id)
+            ->orderByDesc('created_at')
+            ->paginate(10);
+
+        return view('student.requests.index', compact('bookRequests'));
+    }
+
     public function create(Request $req, $bookId)
     {
         $user = Student::findOrFail(Auth::user()->id);

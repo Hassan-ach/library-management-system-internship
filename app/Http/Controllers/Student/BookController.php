@@ -22,6 +22,41 @@ class BookController extends Controller
         }
     }
 
+    public function show(Request $request, $bookId)
+    {
+        try {
+            $book = Book::with('categories', 'tags', 'authors', 'publishers')->findOrFail($bookId);
+
+            // Return to a view with book data
+            return view('student.books.show', compact('book'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Something went wrong.');
+        }
+    }
+
+    public function showDetails(Book $book)
+    {
+        try {
+            // Load all necessary relationships for the modal display
+            $book->load(['authors', 'categories', 'publishers', 'tags']);
+
+            // Add available_copies as a dynamic attribute for the JSON response
+            $book->setAttribute('available_copies', $book->available_copies());
+
+            return response()->json([
+                'success' => true,
+                'book' => $book,
+            ]);
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Impossible de charger les détails du livre.',
+                'error' => $e->getMessage(), // Include error message for debugging, remove in production
+            ], 500);
+        }
+    }
+
     public function search(Request $req)
     {
         try {

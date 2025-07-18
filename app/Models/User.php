@@ -57,4 +57,39 @@ class User extends Authenticatable
     {
         $this->notify(new ResetPasswordNotification($token));
     }
+
+    /**
+     * Get the URL for the user's profile in the AdminLTE sidebar.
+     * This method is called by jeroennoten/laravel-adminlte when usermenu_profile_url is true.
+     *
+     * @return string
+     */
+    public function adminlte_profile_url()
+    {
+        return route('profile.show');
+    }
+
+    /**
+     * Get the URL for the user's avatar in the AdminLTE sidebar.
+     * This method is called by jeroennoten/laravel-adminlte when usermenu_image is true.
+     *
+     * @return string
+     */
+    public function adminlte_image()
+    {
+        // Return the path to the user's avatar, or a default image
+        return $this->avatar ? asset('storage/'.$this->avatar) : asset('images/user2-160x160.jpg');
+    }
+
+    /**
+     * Get the description for the user in the AdminLTE sidebar.
+     * This method is called by jeroennoten/laravel-adminlte when usermenu_desc is true.
+     *
+     * @return string
+     */
+    public function adminlte_desc()
+    {
+        // Return the user's role name
+        return $this->role ?? 'Utilisateur';
+    }
 }

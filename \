@@ -67,32 +67,6 @@ return [
     'usermenu_image' => true,
     'usermenu_desc' => true,
     'usermenu_post_desc' => null,
-    /*
-    |--------------------------------------------------------------------------
-    | Preloader Animation
-    |--------------------------------------------------------------------------
-    |
-    | Here you can change the preloader animation configuration. Currently, two
-    | modes are supported: 'fullscreen' for a fullscreen preloader animation
-    | and 'cwrapper' to attach the preloader animation into the content-wrapper
-    | element and avoid overlapping it with the sidebars and the top navbar.
-    |
-    | For detailed instructions you can look the preloader section here:
-    | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Basic-Configuration
-    |
-    */
-
-    'preloader' => [
-        'enabled' => false,
-        'mode' => 'fullscreen',
-        'img' => [
-            'path' => 'images/ensup-logo.png',
-            'alt' => 'ENSUP Library Loading',
-            'effect' => 'animation__shake',
-            'width' => 60,
-            'height' => 60,
-        ],
-    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -188,7 +162,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => '/', // This will be dynamically redirected by your root_redirection
+    'dashboard_url' => 'home', // This will be dynamically redirected by your root_redirection
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -213,6 +187,7 @@ return [
             'text' => 'Mon profil',
             'url' => 'profile', // This will be handled by your role-based profile route
             'icon' => 'fas fa-fw fa-user',
+            'can' => 'view-profile', // Example gate, adjust as per your ACL
         ],
         ['header' => 'NAVIGATION PRINCIPALE'],
 
@@ -630,7 +605,7 @@ return [
         'vendor/fontawesome-free/css/all.min.css',
         'vendor/overlayScrollbars/css/OverlayScrollbars.min.css',
         'vendor/adminlte/dist/css/adminlte.min.css',
-        'css/ensup-custom.css', // Your custom CSS file
+        'resources/css/ensup-custom.css', // Your custom CSS file
     ],
 
     'js' => [
