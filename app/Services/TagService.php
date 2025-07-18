@@ -19,8 +19,17 @@ class TagService
         return $tag;
     }
 
-    public function deleteTag( Tag $tag){
-        $tag->delete();
+    public function updateTag( int $id, $validated){
+        $tag = $this->getTag( $id);
+        $tag->updateOrFail(
+            $validated
+        );
+        $tag->save();
+    }
+
+    public function deleteTag( int $id){
+        $tag = $this->getTag( $id);
+        $tag->deleteOrFail();
     }
 
     public function createSetOfTags( array $labels): array{ 
@@ -43,13 +52,13 @@ class TagService
         return $tags;
     }
 
-    public function deleteSetOfTags( array $tags){
-        try{
-            foreach( $tags as $tag){
-                $this->deleteTag( $tag);
-            }
-        }catch(\Exception $e){
-            echo 'This tag cann\'t be deleted, it is maybe attached to another object';
-        }       
+    public function paginateTags(int $num = 10){
+        $tags = Tag::latest()->paginate( $num);
+        return $tags;
+    }
+
+    public function searchTags( $query, int $num = 10){
+        $tags = Tag::where('label', 'like', "%{$query}%")->paginate($num);
+        return $tags;
     }
 }

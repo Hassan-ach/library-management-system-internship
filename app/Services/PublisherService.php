@@ -21,8 +21,17 @@ class PublisherService
         return $publisher;
     }
 
-    public function deletePublisher( Publisher $publisher){
-        $publisher->delete();
+    public function updatePublisher( int $id, array $validated){
+        $publisher = $this->getPublisher( $id);
+        $publisher->updateOrFail(
+            $validated
+        );
+        $publisher->save();
+    }
+
+    public function deletePublisher( int $id){
+        $publisher = $this->getPublisher( $id);
+        $publisher->deleteOrFail();
     }
 
     public function createSetOfPublishers( array $names): array{ 
@@ -46,15 +55,13 @@ class PublisherService
         return $publishers;
     }
 
-        public function deleteSetOfPublishers( array $publishers): bool{
-        try{
-            foreach( $publishers as $publisher){
-                $this->deletePublisher( $publisher);
-            }
-            return true;
-        }catch(\Exception $e){
-            echo 'This publisher cann\'t be deleted, it is maybe attached to another object';
-            return false;
-        }       
+    public function paginatePublishers(int $num = 10){
+        $publishers = Publisher::latest()->paginate( $num);
+        return $publishers;
+    }
+
+    public function searchPublishers( $query, int $num = 10){
+        $publishers = Publisher::where('name', 'like', "%{$query}%")->paginate($num);
+        return $publishers;
     }
 }

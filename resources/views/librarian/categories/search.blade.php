@@ -1,9 +1,7 @@
 <div class="container">
-    <ul>
     @foreach ($categories as $cat)
-        <li>{{ $cat->label }} : {{ $cat->description }}</li>
+        {{ $cat->label }}
     @endforeach
-    </ul>
 </div>
  
 {{ $categories->links() }}
