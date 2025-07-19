@@ -63,6 +63,7 @@ Route::middleware('auth:web')->group(function () {
         //
 
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/profile', [AdminDashboardController::class,'profile'])->name('profile');
 
         
         Route::get('/settings', [SettingsController::class, 'index'])->name('settings.get');

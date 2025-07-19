@@ -62,6 +62,34 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+
+                            <!-- Current Password (only required when changing password) -->
+                            <div class="mb-3">
+                                <label for="current_password" class="form-label">Current Password (only if changing password)</label>
+                                <input type="password" class="form-control @error('current_password') is-invalid @enderror" 
+                                    id="current_password" name="current_password">
+                                @error('current_password')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- New Password (optional) -->
+                            <div class="mb-3">
+                                <label for="password" class="form-label">New Password (leave blank to keep current)</label>
+                                <input type="password" class="form-control @error('password') is-invalid @enderror" 
+                                    id="password" name="password">
+                                <div class="form-text">If changing, must be at least 8 characters with numbers and mixed case</div>
+                                @error('password')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Confirm New Password (only required if password is provided) -->
+                            <div class="mb-3">
+                                <label for="password_confirmation" class="form-label">Confirm New Password</label>
+                                <input type="password" class="form-control" 
+                                    id="password_confirmation" name="password_confirmation">
+                            </div>
                             
                             
                             <div class="mb-3 form-check">
@@ -72,12 +100,12 @@
                             </div>
                             
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                <a href="{{ route('admin.users.all') }}" class="btn btn-secondary me-md-2">Cancel</a>
+                                <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary me-md-2">Cancel</a>
                                 <button type="submit" class="btn btn-primary">Update User</button>
                             </div>
                         </form>
                     </div>
-                </div>
+                </div>users
             </div>
         </div>
     </div>

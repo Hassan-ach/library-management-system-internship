@@ -10,6 +10,9 @@
             <li><a href="{{ route('admin.users.create') }}" class="btn btn-primary">Create user</a></li>
         </ul>
         
+        /*         * search and filter
+         */
+
         <table class="table table-striped table-hover">
             <thead>
                 <tr>

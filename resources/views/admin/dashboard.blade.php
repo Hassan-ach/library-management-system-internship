@@ -44,6 +44,11 @@
                             <i class="fas fa-cog me-2"></i> Settings
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{ route('admin.profile') }}">
+                            <i class="fas fa-user me-2"></i> Profile
+                        </a>
+                    </li>
                 </ul>
             </div>
             
