@@ -4,6 +4,7 @@ use App\Enums\RequestStatus;
 use App\Models\Book;
 use App\Models\BookRequest;
 use App\Models\RequestInfo;
+use Illuminate\Support\Facades\Auth;
 
 if (! function_exists('get_borrowed_copies')) {
     function get_borrowed_copies(Book $book): int
@@ -54,5 +55,34 @@ if (! function_exists('count_total_books')) {
     {
         $count = Book::sum('total_copies');
         return $count;
+    }
+} 
+
+// Count the number of accepted/rejected requests and returned books in last 30 days
+if (! function_exists('get_requests_statics')) {
+    function get_requests_statics()
+    {
+        $librarian_id = Auth::user()->id;
+        
+        $statistics = RequestInfo::selectRaw('
+            COUNT(CASE WHEN status = "returned" THEN 1 END) as returned_books,
+            COUNT(CASE WHEN status = "approved" THEN 1 END) as approved_requests,
+            COUNT(CASE WHEN status = "rejected" THEN 1 END) as rejected_requests,
+            COUNT(CASE WHEN status = "overdue" THEN 1 END) as overdue_requests
+        ')->where('created_at', '>=', now()->subDays(30))
+        ->where('user_id', $librarian_id)
+        ->first();
+        /*
+        if (!$statistics) {
+            $statistics = (object) [
+                'returned_books' => 0,
+                'approved_requests' => 0,
+                'rejected_requests' => 0,
+                'overdue_requests' => 0,
+                'total_requests' => 0
+            ];
+        }
+        */
+        return $statistics;
     }
 } 

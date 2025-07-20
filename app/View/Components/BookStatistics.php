@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class BookStatics extends Component
+class BookStatistics extends Component
 {
     public function render(): View
     {   
@@ -14,7 +14,7 @@ class BookStatics extends Component
         $non_available_books = get_non_available_books();
         $available_books = $total_books - $non_available_books;
 
-        return view('librarian.components.book-statics',
+        return view('librarian.widgets.book-statics',
          compact(['total_books', 'non_available_books', 'available_books'])
         );
     }
