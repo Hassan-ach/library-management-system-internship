@@ -31,3 +31,28 @@ if (! function_exists('get_latest_info')) {
         return $latestInfo;
     }
 }
+
+// Count how many books aren't available
+if (! function_exists('get_non_available_books')) {
+    function get_non_available_books(): int
+    {
+        // To find non available books, we check just the BookRequest table
+        $book_requests = BookRequest::all();
+        $count = 0;
+        foreach( $book_requests as $request){
+            $book = Book::find( $request->book_id);
+            $count += get_borrowed_copies( $book);
+        }
+        
+        return $count;
+    }
+} 
+
+// Count how many books we have on our database
+if (! function_exists('count_total_books')) {
+    function count_total_books(): int
+    {
+        $count = Book::sum('total_copies');
+        return $count;
+    }
+} 
