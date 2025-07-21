@@ -90,7 +90,6 @@ class RequestController extends Controller
         $bookReq = BookRequest::findOrFail($reqId);
 
         if (! Gate::allows('show_req', $bookReq)) {
-            //
             return back()->with(['error' => 'You\'re not allowed to see this book request']);
         }
 

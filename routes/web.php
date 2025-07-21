@@ -4,11 +4,15 @@ use App\Enums\UserRole;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
+
 use App\Http\Controllers\Librarian\AuthorController;
 use App\Http\Controllers\Librarian\CategoryController;
 use App\Http\Controllers\Librarian\PublisherController;
 use App\Http\Controllers\Librarian\TagController;
+
+use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Librarian\BookController as LibrarianBookController;
+use App\Http\Controllers\Librarian\GoogleApiService\GoogleApiServiceController;
 use App\Http\Controllers\Librarian\RequestController as LibrarianRequestController;
 use App\Http\Controllers\Librarian\StudentStatisticsController;
 use App\Http\Controllers\Student\BookController as StudentBookController;
@@ -35,6 +39,11 @@ Route::get('/', function () {
 Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::view('/login', 'auth.login')->name('login');
+    Route::get('/forgot-password', [PasswordController::class, 'forget_form'])->name('password.request');
+    Route::post('/forgot-password', [PasswordController::class, 'send'])->name('password.email');
+    Route::get('/reset-password/{token}', [PasswordController::class, 'reset_form'])->name('password.reset');
+    Route::post('/reset-password', [PasswordController::class, 'reset'])->name('password.update');
+
 });
 
 Route::middleware('auth:web')->group(function () {
@@ -58,6 +67,8 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/students/{id}', [StudentStatisticsController::class, 'index'])->name('students.statistics');
         // Book Routes: 
         Route::post('/books', [LibrarianBookController::class, 'create'])->name('books.create');
+        Route::get('/books/add', [LibrarianBookController::class, 'isbnForm'])->name('books.isbnForm');
+        Route::post('/books/add', [GoogleApiServiceController::class, 'getBookInfo'])->name('books.isbn.getInfo');
         Route::patch('/books/{id}', [LibrarianBookController::class, 'update'])->name('books.update');
         Route::delete('/books/{id}', [LibrarianBookController::class, 'delete'])->name('books.delete');
         // Author Routes:
