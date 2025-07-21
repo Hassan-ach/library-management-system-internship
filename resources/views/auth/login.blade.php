@@ -90,7 +90,7 @@
 @section('auth_footer')
     <p class="my-3 text-center small text-muted">
         ENSUP Library Management System v{{ config('project.version', '1.0.0') }}<br>
-        &copy; {{ date('Y') }} <a href="https://www.ensup.ma" target="_blank">ENSUP</a>. Tous droits réservés.
+        &copy; {{ date('Y') }} <a href="#" target="_blank">ENSUP</a>. Tous droits réservés.
     </p>
 @stop
 

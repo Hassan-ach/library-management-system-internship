@@ -78,7 +78,7 @@
 @section('auth_footer')
     <p class="my-3 text-center">
         ENSUP Library Management System v{{ config('project.version', '1.0.0') }}<br>
-        Copyright © {{ date('Y') }} <a href="https://www.ensup.ma">ENSUP</a>. All rights reserved.
+        Copyright © {{ date('Y') }} <a href="#">ENSUP</a>. All rights reserved.
     </p>
 @stop
 

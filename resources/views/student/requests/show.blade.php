@@ -60,7 +60,7 @@
                                 <dd class="col-sm-8">{{ $bookReq->created_at->format('d/m/Y') }}</dd>
 
                                 <dt class="col-sm-4">Date de retrait souhaitée:</dt>
-                                <dd class="col-sm-8">{{ $bookReq->preferred_pickup_date ? $bookReq->preferred_pickup_date->format('d/m/Y') : 'Non spécifiée' }}</dd>
+                                <dd class="col-sm-8">{{ $bookReq->return_date() ? $bookReq->return_date()->format('d/m/Y') : 'Non spécifiée' }}</dd>
 
                                 <dt class="col-sm-4">Statut actuel:</dt>
                                 <dd class="col-sm-8">
@@ -69,17 +69,17 @@
 
                                 @if($reqInfo->status === 'borrowed' || $reqInfo->status === 'overdue')
                                     <dt class="col-sm-4">Date d'échéance:</dt>
-                                    <dd class="col-sm-8">{{ $reqInfo->due_date ? \Carbon\Carbon::parse($reqInfo->due_date)->format('d/m/Y') : 'N/A' }}</dd>
+                                    <dd class="col-sm-8">{{ $reqInfo->created_at ? \Carbon\Carbon::parse($reqInfo->created_at)->format('d/m/Y') : 'N/A' }}</dd>
                                 @endif
 
                                 @if($reqInfo->status === 'returned')
                                     <dt class="col-sm-4">Date de retour:</dt>
-                                    <dd class="col-sm-8">{{ $reqInfo->returned_at ? \Carbon\Carbon::parse($reqInfo->returned_at)->format('d/m/Y H:i') : 'N/A' }}</dd>
+                                    <dd class="col-sm-8">{{ $reqInfo->created_at ? \Carbon\Carbon::parse($reqInfo->created_at)->format('d/m/Y H:i') : 'N/A' }}</dd>
                                 @endif
 
                                 @if($reqInfo->created_at)
                                     <dt class="col-sm-4">Traitée le:</dt>
-                                    <dd class="col-sm-8">{{ \Carbon\Carbon::parse($reqInfo->processed_at)->format('d/m/Y H:i') }}</dd>
+                                    <dd class="col-sm-8">{{ \Carbon\Carbon::parse($reqInfo->created_at)->format('d/m/Y H:i') }}</dd>
                                 @endif
                             </dl>
                         </div>
@@ -88,13 +88,13 @@
                 </div>
 
                 <div class="card-footer text-right">
-                    @if($reqInfo->status === 'pending')
-                        <a href="{{ route('student.requests.cancel', $bookReq->id) }}" method="POST" class="d-inline cancel-request-form">
+                    @if($reqInfo->status->value === 'pending')
+                                                         <form action="{{ route('student.requests.cancel', $bookReq->id) }}" method="GET" class="d-inline cancel-request-form">
                             <button type="submit" class="btn btn-danger">
                                 <i class="fas fa-times"></i> Annuler la demande
                             </button>
-                        </a>
-                    @endif
+                                                    </form>
+               @endif
                     <a href="{{ route('student.requests.index') }}" class="btn btn-default">
                         <i class="fas fa-arrow-left"></i> Retour à mes demandes
                     </a>
@@ -106,9 +106,12 @@
 
 @section('js')
     @parent
+    {{-- Include SweetAlert2 JS --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         $(document).ready(function() {
-            // SweetAlert for Cancel Request confirmation (re-used from index view)
+            // SweetAlert for Cancel Request confirmation
             $('.cancel-request-form').on('submit', function(e) {
                 e.preventDefault(); // Prevent default form submission
                 var form = this;
@@ -127,6 +130,13 @@
                         form.submit(); // Submit the form if confirmed
                     }
                 });
+            });
+
+            // Optional: Show loading state while processing
+            $('.cancel-request-form').on('submit', function() {
+                var button = $(this).find('button[type="submit"]');
+                button.prop('disabled', true);
+                button.html('<i class="fas fa-spinner fa-spin"></i>');
             });
         });
     </script>

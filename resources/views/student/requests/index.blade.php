@@ -50,13 +50,25 @@
                                             <td>
                                                 <x-status-badge :status="$request->latestRequestInfo->status->value" />
                                             </td>
-                                            <td>
-                                                @if($request->latestRequestInfo && $request->latestRequestInfo->status === 'borrowed')
-                                                    {{ $request->latestRequestInfo->due_date ? \Carbon\Carbon::parse($request->latestRequestInfo->due_date)->format('d/m/Y') : 'N/A' }}
-                                                @else
-                                                    N/A
-                                                @endif
-                                            </td>
+                                <td>
+    @php
+        $returnDate = $request->return_date();
+        $today = \Carbon\Carbon::now();
+        $isOverdue = $returnDate && $returnDate->lt($today);
+    @endphp
+
+    @if($request->latestRequestInfo && $request->latestRequestInfo->status->value === 'borrowed')
+        <span @if($isOverdue) style="color: red; font-weight: bold;" @endif>
+            {{ $returnDate ? $returnDate->format('d/m/Y') : 'N/A' }}
+            @if($isOverdue)
+                <br><small>(Overdue)</small>
+            @endif
+        </span>
+    @else
+        N/A
+    @endif
+</td>
+
                                             <td>
                                                 <a href="{{ route('student.requests.show', $request->id) }}" class="btn btn-xs btn-info" title="Voir les détails">
                                                     <i class="fas fa-eye"></i>

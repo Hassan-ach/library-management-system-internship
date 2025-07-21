@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Student;
 use App\Enums\RequestStatus;
 use App\Http\Controllers\Controller;
 use App\Models\BookRequest;
-use App\Models\Setting;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,24 +35,25 @@ class StudentDashboardController extends Controller
 
         // overdue books
         // $overdue = $bookRequests->filter(fn ($req) => $req->latestRequestInfo && $req->latestRequestInfo->status === RequestStatus::OVERDUE);
-        $maxDuree = Setting::find(1)->DUREE_EMPRUNT_MAX ?? 4;
         $today = now();
 
-        $overdue = $bookRequests->filter(function ($req) use ($today, $maxDuree) {
+        $overdue = $bookRequests->filter(function ($req) use ($today) {
             $latestInfo = $req->latestRequestInfo;
 
-            if ($latestInfo === RequestStatus::OVERDUE) {
+            // If already marked as OVERDUE
+            if ($latestInfo && $latestInfo->status === RequestStatus::OVERDUE) {
                 return true;
             }
 
+            // If it's not currently borrowed, skip it
             if (! $latestInfo || $latestInfo->status !== RequestStatus::BORROWED) {
                 return false;
             }
 
-            $borrowedDate = $latestInfo->created_at;
-            $dueDate = $borrowedDate->copy()->addDays($maxDuree);
+            // Compare return date with today
+            $returnDate = $req->return_date();
 
-            return $dueDate->lt($today);
+            return $returnDate && $returnDate->lt($today);
         });
 
         // Recent borrowings (limit to 5 most recent)
