@@ -4,13 +4,6 @@
 
 @section('content_header')
     <h1 class="m-0 text-dark">Tableau de bord Étudiant</h1>
-    {{-- You can add breadcrumbs here if you have a breadcrumb component or logic --}}
-    {{-- Example:
-    <ol class="breadcrumb float-sm-right">
-        <li class="breadcrumb-item"><a href="#">Accueil</a></li>
-        <li class="breadcrumb-item active">Tableau de bord Étudiant</li>
-    </ol>
-    --}}
 @stop
 
 @section('content')
@@ -61,21 +54,7 @@
                                         <td>{{ $request->book->title ?? 'N/A' }}</td>
                                         <td>{{ $request->created_at->format('d/m/Y') }}</td>
                                         <td>
-                                            @php
-                                                $status = $request->latestRequestInfo->status->value ?? 'N/A';
-                                                $badgeClass = '';
-                                                switch ($status) {
-                                                    case 'pending': $badgeClass = 'badge-warning'; break;
-                                                    case 'approved': $badgeClass = 'badge-info'; break;
-                                                    case 'borrowed': $badgeClass = 'badge-primary'; break;
-                                                    case 'returned': $badgeClass = 'badge-success'; break;
-                                                    case 'rejected': $badgeClass = 'badge-danger'; break;
-                                                    case 'cancelled': $badgeClass = 'badge-secondary'; break;
-                                                    case 'overdue': $badgeClass = 'badge-danger'; break;
-                                                    default: $badgeClass = 'badge-secondary'; break;
-                                                }
-                                            @endphp
-                                            <span class="badge {{ $badgeClass }}">{{ ucfirst($status) }}</span>
+                                                <x-status-badge :status="$request->latestRequestInfo->status->value" />
                                         </td>
                                         <td>
                                             @if($request->latestRequestInfo && $request->latestRequestInfo->status === 'borrowed')
@@ -114,33 +93,9 @@
                     <a href="{{ route('profile.show') }}" class="list-group-item list-group-item-action d-flex align-items-center">
                         <i class="fas fa-user mr-2 text-secondary"></i> Gérer mon profil
                     </a>
-                    {{-- Add more quick actions as needed --}}
                 </div>
             </x-adminlte-card>
         </div>
     </div>
 @stop
 
-@section('css')
-    {{-- Add any specific CSS for this page if needed --}}
-@stop
-
-@section('js')
-    {{-- Add any specific JS for this page if needed --}}
-    {{-- Example for DataTables if you want to make the recent borrowings table sortable/searchable --}}
-    {{-- @push('js')
-        <script>
-            $(function() {
-                $('#recentBorrowingsTable').DataTable({
-                    "paging": true,
-                    "lengthChange": false,
-                    "searching": false,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": false,
-                    "responsive": true,
-                });
-            });
-        </script>
-    @endpush --}}
-@stop

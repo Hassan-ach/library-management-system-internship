@@ -49,7 +49,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/books', [StudentBookController::class, 'index'])->name('books.index');
         Route::get('/books/search', [StudentBookController::class, 'search'])->name('books.search');
         Route::get('/books/{id}', [StudentBookController::class, 'show'])->name('books.show');
-        Route::get('/books/{book}/details', [StudentBookController::class, 'showDetails'])->name('student.books.details');
+        Route::get('/books/{book}/details', [StudentBookController::class, 'showDetails'])->name('books.details');
 
         Route::get('/requests', [StudentRequestController::class, 'index'])->name('requests.index');
         Route::get('/requests/{id}', [StudentRequestController::class, 'show'])->name('requests.show');

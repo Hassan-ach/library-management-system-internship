@@ -62,7 +62,7 @@ class BookController extends Controller
         try {
             $query = $req->input('query') ?? $req->input('q');
             if (! $query) {
-                $books = Book::latest()->paginate(1);
+                $books = Book::latest()->paginate(10);
             } else {
                 $books = Book::where('title', 'like', "%{$query}%")->paginate(10);
             }

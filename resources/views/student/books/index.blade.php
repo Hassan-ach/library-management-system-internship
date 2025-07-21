@@ -21,7 +21,7 @@
                 </x-adminlte-alert>
             @endif
 
-            <x-adminlte-card title="Liste des livres disponibles" theme="primary" icon="fas fa-book" collapsible removable maximizable>
+            <x-adminlte-card title="Liste des livres disponibles" theme="primary" icon="fas fa-book" collapsible maximizable>
                 <div class="card-tools">
                     <a href="{{ route('student.books.search') }}" class="btn btn-tool btn-outline-secondary">
                         <i class="fas fa-search"></i> Rechercher un livre
@@ -39,7 +39,7 @@
                                         <th>Auteur(s)</th>
                                         <th>Catégorie(s)</th>
                                         <th>Copies disponibles</th>
-                                        <th>Actions</th>
+                                        <th >Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -47,28 +47,29 @@
                                         <tr>
                                             <td>{{ $book->title }}</td>
                                             <td>
-                                                @forelse($book->authors as $author)
+                                                @foreach($book->authors as $author)
                                                     {{ $author->name }}{{ !$loop->last ? ', ' : '' }}
-                                                @empty
-                                                    N/A
-                                                @endforelse
+                                                @endforeach
+                                                @if($book->authors->isEmpty()) N/A @endif
                                             </td>
                                             <td>
-                                                @forelse($book->categories as $category)
+                                                @foreach($book->categories as $category)
                                                     {{ $category->name }}{{ !$loop->last ? ', ' : '' }}
-                                                @empty
-                                                    N/A
-                                                @endforelse
+                                                @endforeach
+                                                @if($book->categories->isEmpty()) N/A @endif
                                             </td>
                                             <td>
-                                                @php $copies = is_callable([$book, 'available_copies']) ? $book->available_copies() : $book->available_copies; @endphp
-                                                <span class="badge badge-{{ $copies > 0 ? 'success' : 'danger' }}">{{ $copies }}</span>
+                                                @if($book->available_copies() > 0)
+                                                    <span class="badge badge-success">{{ $book->available_copies() }}</span>
+                                                @else
+                                                    <span class="badge badge-danger">0</span>
+                                                @endif
                                             </td>
                                             <td>
                                      <a href="{{route('student.books.show', $book->id)}}" class="btn btn-xs btn-info" title="Voir détails">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                @if($copies > 0)
+                                                @if($book->available_copies() > 0)
                                                     <button type="button" class="btn btn-xs btn-success request-book-btn"
                                                             data-toggle="modal" data-target="#bookDetailsModal"
                                                             data-book-id="{{ $book->id }}"
@@ -86,94 +87,16 @@
                                 </tbody>
                             </table>
                         </div>
-
-                        @if(method_exists($books, 'links'))
-                            <div class="d-flex justify-content-center mt-3">
-                                {{ $books->links('pagination::bootstrap-4') }}
-                            </div>
-                        @endif
+                        <div class="d-flex justify-content-center mt-3">
+                            {{ $books->links('pagination::bootstrap-4') }}
+                        </div>
                     @endif
                 </div>
             </x-adminlte-card>
         </div>
     </div>
 
+    {{-- Include the Book Details Modal Component --}}
     @include('components.book-details-modal')
-@stop
-
-@section('css')
-    {{-- Custom CSS here if needed --}}
-@stop
-
-@section('js')
-    @parent
-    <script>
-        const requestRouteBase = "{{ url('student/reqests/book') }}";
-        const defaultImage = "{{ asset('images/default-book.png') }}";
-
-        $(document).ready(function () {
-            $('#bookDetailsModal').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget);
-                var bookId = button.data('book-id');
-                var modal = $(this);
-
-                modal.find('.modal-title').text('Détails du livre');
-                modal.find('.modal-body').html('<p class="text-center"><i class="fas fa-spinner fa-spin"></i> Chargement des détails du livre...</p>');
-                modal.find('#confirmRequestBtn').prop('disabled', true);
-
-                $.ajax({
-                    url: '{{ url("student/books") }}/' + bookId + '/details',
-                    method: 'GET',
-                    success: function (response) {
-                        if (response.book) {
-                            var book = response.book;
-                            var authors = book.authors.map(a => a.name).join(', ') || 'N/A';
-                            var categories = book.categories.map(c => c.name).join(', ') || 'N/A';
-                            var publishers = book.publishers.map(p => p.name).join(', ') || 'N/A';
-                            var tags = book.tags.map(t => t.name).join(', ') || 'N/A';
-
-                            var modalBodyContent = `
-                                <div class="row">
-                                    <div class="col-md-4 text-center">
-                                        <img src="${book.image_link ?? defaultImage}" alt="${book.title}" class="img-fluid mb-3" style="max-height: 200px; border: 1px solid #ddd; padding: 5px;">
-                                    </div>
-                                    <div class="col-md-8">
-                                        <h4>${book.title}</h4>
-                                        <p><strong>Auteur(s):</strong> ${authors}</p>
-                                        <p><strong>Catégorie(s):</strong> ${categories}</p>
-                                        <p><strong>Éditeur(s):</strong> ${publishers}</p>
-                                        <p><strong>Tags:</strong> ${tags}</p>
-                                        <p><strong>Date de publication:</strong> ${book.publication_date ? new Date(book.publication_date).toLocaleDateString('fr-FR') : 'N/A'}</p>
-                                        <p><strong>Nombre de pages:</strong> ${book.number_of_pages ?? 'N/A'}</p>
-                                        <p><strong>Copies disponibles:</strong> <span class="badge ${book.available_copies > 0 ? 'badge-success' : 'badge-danger'}">${book.available_copies}</span></p>
-                                    </div>
-                                </div>
-                                <hr>
-                                <h5>Description:</h5>
-                                <p>${book.description || 'Aucune description disponible.'}</p>
-                                <hr>
-                                <form id="requestBookForm" action="${requestRouteBase}/${book.id}" method="POST">
-                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                </form>
-                            `;
-                            modal.find('.modal-body').html(modalBodyContent);
-                            modal.find('#confirmRequestBtn').prop('disabled', book.available_copies <= 0);
-                        } else {
-                            modal.find('.modal-body').html('<p class="text-center text-danger">Impossible de charger les détails du livre.</p>');
-                            modal.find('#confirmRequestBtn').prop('disabled', true);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        modal.find('.modal-body').html('<p class="text-center text-danger">Erreur: ' + (xhr.responseJSON?.message ?? error) + '</p>');
-                        modal.find('#confirmRequestBtn').prop('disabled', true);
-                    }
-                });
-            });
-
-            $('#confirmRequestBtn').on('click', function () {
-                $('#requestBookForm').submit();
-            });
-        });
-    </script>
 @stop
 

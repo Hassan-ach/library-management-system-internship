@@ -43,7 +43,7 @@ return [
     */
 
     'logo' => '<b>ENSUP</b>Library',
-    'logo_img' => 'images/ensup-logo.png',
+    'logo_img' => 'images/ensup-logo2.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_alt' => 'ENSUP Logo',
     'use_logo_image' => true,

@@ -69,10 +69,8 @@ class RequestController extends Controller
 
     public function cancel(Request $req, $reqId)
     {
-        //
         $bookReq = BookRequest::findOrFail($reqId);
         $user = Student::findOrFail(Auth::user()->id);
-        // $user = Auth::user();
 
         if (! Gate::allows('cancel_req', $bookReq)) {
             return back()->with(['error' => 'You\'re not allowed to cancel this book request']);
@@ -100,14 +98,14 @@ class RequestController extends Controller
     {
         //
         $user = Student::findOrFail(Auth::user()->id);
-        $bookReq = BookRequest::findOrFail($reqId);
+        $bookReq = BookRequest::with('latestRequestInfo')->findOrFail($reqId);
 
         if (! Gate::allows('show_req', $bookReq)) {
             return back()->with(['error' => 'You\'re not allowed to see this book request']);
         }
 
         try {
-            $reqInfo = get_latest_info($reqId);
+            $reqInfo = $bookReq->latestRequestInfo;
             if ($reqInfo == null) {
                 throw new Error('request info not found');
             }

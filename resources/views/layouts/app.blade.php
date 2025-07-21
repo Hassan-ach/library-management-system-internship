@@ -27,7 +27,7 @@
     <div class="float-right d-none d-sm-inline">
         ENSUP Library Management System v{{ config('adminlte.version') }}
     </div>
-    <strong>Copyright © {{ date('Y') }} <a href="https://www.ensup.ma">ENSUP</a>.</strong> All rights reserved.
+    <strong>Copyright © {{ date('Y') }} <a href="#">ENSUP</a>.</strong> All rights reserved.
 @stop
 
 @section('css')
