@@ -115,9 +115,11 @@
 
     function updateSelectedTagsDisplay() {
         const container = $('#selectedTagList');
-        
+        const form_container = $('#tags-display');
+
         if (oldTags.length === 0 && newTags.length === 0) {
             container.html('No item selected yet');
+            form_container.html('No tags selected');
             return;
         }
 
@@ -144,6 +146,7 @@
         });
         
         container.html(html);
+        form_container.html(html);
     }
 
     function saveSelectedTags() {

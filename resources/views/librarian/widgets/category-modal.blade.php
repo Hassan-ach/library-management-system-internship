@@ -193,9 +193,12 @@
 
     function updateSelectedCategoriesDisplay() {
         const container = $('#selectedCategoriesList');
+        const form_container = $('#categories-display');
 
         if (oldCategories.length === 0 && newCategories.length === 0) {
             container.html('No item selected yet');
+            form_container.html('No categories selected');
+
             return;
         }
 
@@ -222,6 +225,7 @@
         });
         
         container.html(html);
+        form_container.html(html);
     }
 
     function saveSelectedCategories() {

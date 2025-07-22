@@ -115,9 +115,11 @@
 
     function updateSelectedPublishersDisplay() {
         const container = $('#selectedPublisherList');
+        const form_container = $('#publishers-display');
 
         if (oldPublishers.length === 0 && newPublishers.length === 0) {
             container.html('No item selected yet');
+            form_container.html('No publishers selected');
             return;
         }
 
@@ -144,6 +146,7 @@
         });
         
         container.html(html);
+        form_container.html(html);
     }
 
     function saveSelectedPublishers() {

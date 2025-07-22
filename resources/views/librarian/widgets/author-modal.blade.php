@@ -115,9 +115,11 @@
 
     function updateSelectedAuthorsDisplay() {
         const container = $('#selectedAuthorList');
+        const form_container = $('#authors-display');
 
         if (oldAuthors.length === 0 && newAuthors.length === 0) {
             container.html('No item selected yet');
+            form_container.html('No authors selected');
             return;
         }
 
@@ -144,6 +146,7 @@
         });
         
         container.html(html);
+        form_container.html(html);
     }
 
     function saveSelectedAuthors() {
