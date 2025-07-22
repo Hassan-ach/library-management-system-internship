@@ -1,6 +1,6 @@
 <div class="container mt-5">
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{ $item }}sModal">
-        <i class="fas fa-{{ $Icon }}"></i> Manage Items
+        <i class="fas fa-{{ $Icon }}"></i> Manage {{ $Item }}s
     </button>
 </div>
 
@@ -44,7 +44,7 @@
                                 <span class="input-group-text"><i class="fas fa-{{ $icon }}"></i></span>
                             </div>
                             <input type="text" class="form-control" id="new{{ $Item }}Input" 
-                                    placeholder="Enter new {{ $item }} name...">
+                                    placeholder="Enter new {{ $item }} ...">
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="button" id="create{{ $Item }}Btn">
                                     <i class="fas fa-plus"></i> Create

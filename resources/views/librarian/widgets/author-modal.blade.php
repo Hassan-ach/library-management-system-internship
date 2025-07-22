@@ -68,16 +68,16 @@
         });
     }
     
-    function displayAuthorsResults(tags) {
+    function displayAuthorsResults(authors) {
         const container = $('#authorsResults');
         
-        if (tags.length === 0) {
+        if (authors.length === 0) {
             container.html('<div class="text-muted">No items found</div>');
             return;
         }
 
         let html = '';
-        tags.forEach(author => {
+        authors.forEach(author => {
             html += `
                 <div class="author-search-item p-2 border-bottom" data-author-id="${author.id}" data-author-name="${author.name}" style="cursor: pointer;">
                     <i class="fas fa-tag mr-2"></i>${author.name}
@@ -106,9 +106,9 @@
         addAuthorToSelection( '*', Name);
     }
 
-    function removeAuthorFromSelection(tagName) {
-        oldAuthors = oldAuthors.filter(tag => tag['name'] != tagName);
-        newAuthors = newAuthors.filter(tag => tag != tagName);
+    function removeAuthorFromSelection( Name) {
+        oldAuthors = oldAuthors.filter(author => author['name'] != Name);
+        newAuthors = newAuthors.filter(author => author != Name);
         updateSelectedAuthorsDisplay();
     }
 

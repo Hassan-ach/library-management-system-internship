@@ -3,8 +3,8 @@
 
 @section('content')
 <script>
-    let oldItems = [];      // Ids of old items - would be send with request 
-    let newItems = [];      // infos of new items - would be send with request
+    let oldTags = [];      // Ids of old items - would be send with request 
+    let newTags = [];      // infos of new items - would be send with request
     
     let oldCategories = [];      // Ids of old categories - would be send with request 
     let newCategories = [];      // infos of new categories - would be send with request
@@ -65,7 +65,8 @@
     </div>
     
     @include('librarian.widgets.tag-modal')
-    <!-- @include('librarian.widgets.author-modal') -->
+    @include('librarian.widgets.author-modal')
+    @include('librarian.widgets.publisher-modal')
 </div>
 
 @stop
