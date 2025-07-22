@@ -3,7 +3,8 @@
     'item' => 'author',
     'Item' => 'Author',
     'icon'=> 'user-tie',
-    'Icon' => 'user-tie'
+    'Icon' => 'user-tie',
+    'style' => 'btn-outline-info btn-sm'
 ])      
 
 <script>

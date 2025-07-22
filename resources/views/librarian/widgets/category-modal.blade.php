@@ -1,6 +1,6 @@
 <!-- include the modal structure-->
-<div class="container mt-5">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#categoriesModal">
+<div id="categoryButtonStyle">
+    <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#categoriesModal">
         <i class="fas fa-sitemap"></i> Manage categories
     </button>
 </div>

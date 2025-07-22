@@ -1,5 +1,5 @@
-<div class="container mt-5">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{ $item }}sModal">
+<div id="{{ $item }}ButtonStyle">
+    <button type="button" class="btn {{$style}}" data-toggle="modal" data-target="#{{ $item }}sModal" >
         <i class="fas fa-{{ $Icon }}"></i> Manage {{ $Item }}s
     </button>
 </div>

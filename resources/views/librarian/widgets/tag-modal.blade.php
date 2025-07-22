@@ -3,7 +3,8 @@
     'item' => 'tag',
     'Item' => 'Tag',
     'icon'=> 'tag',
-    'Icon' => 'tag'
+    'Icon' => 'tag',
+    'style'=> 'btn-outline-warning btn-sm'
 ])      
 
 <script>
@@ -114,7 +115,7 @@
 
     function updateSelectedTagsDisplay() {
         const container = $('#selectedTagList');
-
+        
         if (oldTags.length === 0 && newTags.length === 0) {
             container.html('No item selected yet');
             return;

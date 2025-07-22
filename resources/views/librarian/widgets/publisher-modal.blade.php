@@ -3,7 +3,8 @@
     'item' => 'publisher',
     'Item' => 'Publisher',
     'icon'=> 'building',
-    'Icon' => 'building'
+    'Icon' => 'building',
+    'style'=> 'btn-outline-success btn-sm'
 ])      
 
 <script>
