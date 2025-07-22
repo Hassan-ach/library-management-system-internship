@@ -32,29 +32,32 @@ class UserController extends Controller
 
     public function search(Request $request)
     {
-        try {
-            $search = $request->input('search', '');
+        $search = $request->input('search');
+        $role = $request->input('role');
+        $status = $request->input('status');
 
-            $users = User::where(function ($query) use ($search) {
-                $query->where('first_name', 'like', '%'.$search.'%')
-                    ->orWhere('last_name', 'like', '%'.$search.'%')
-                    ->orWhere('email', 'like', '%'.$search.'%');
+        $users = User::query()
+            ->when($search, function ($query, $search) {
+                return $query->where(function ($q) use ($search) {
+                    $q->where('first_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('id', 'like', "%{$search}%");
+                });
             })
-                ->when($search === 'active' || $search === 'inactive', function ($query) use ($search) {
-                    $query->orWhere('is_active', $search === 'active');
-                })
-                ->orWhereHas('role', function ($query) use ($search) {
-                    $query->where('name', 'like', '%'.$search.'%');
-                })
-                ->paginate(25);
+            ->when($role, function ($query, $role) {
+                return $query->where('role', $role);
+            })
+            ->when($status, function ($query, $status) {
+                return $query->where('is_active', $status == 'active');
+            })
+            ->orderBy('id')
+            ->paginate(25);
 
-            return view('admin.users.all', compact('users', 'search'));
-
-        } catch (\Exception $e) {
-            return redirect()->route('admin.users.all')
-                ->with('error', 'Search failed: '.$e->getMessage());
-        }
+        return view('admin.users.index', compact('users'));
     }
+    // >>>>>>>>>>>>>>>>>>>> search user
+
     // <<<<<<<<<<<<<<<<<<<< Create user(s) method
 
     public function create_page(){

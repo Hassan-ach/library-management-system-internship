@@ -83,6 +83,9 @@ Route::middleware('auth:web')->group(function () {
         Route::prefix('statistics')->name('statistics.')->group(function () {
             Route::get('/users', [StatisticsController::class,'users_stat'])->name('users');
             Route::get('/users/export', [StatisticsController::class,'exportUsers'])->name('users.export');
+            Route::get('/users/history', [StatisticsController::class,'users_history'])->name('users.history');
+            Route::resource('user_history', UserController::class)->names('user.hitory');
+
 
             Route::get('/requests', [LibrarianRequestController::class,'requests_stat'])->name('requests');
             Route::get('/requests/export', [LibrarianRequestController::class,'exportRequests'])->name('requests.export');

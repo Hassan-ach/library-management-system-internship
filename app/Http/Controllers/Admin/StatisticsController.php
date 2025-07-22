@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Activity;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Exports\UsersExport;
@@ -58,5 +59,16 @@ class StatisticsController extends Controller
     public function exportBooks(){
         $users = User::all();
         return Excel::download( new UsersExport($users),'users.xlsx');
+    }
+
+    public function history(User $user)
+    {
+        $activities = Activity::where('causer_id', $user->id)
+        ->orWhere('subject_id', $user->id)
+        ->with(['causer', 'subject'])
+        ->latest()
+        ->paginate(15);
+
+        return view('admin.statistics.users_history',compact('user', 'activities'));
     }
 }
