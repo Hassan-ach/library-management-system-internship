@@ -1,7 +1,7 @@
 <!-- include the modal structure-->
 @include('librarian.widgets.raw-modal', [
-    'item' => 'item',
-    'Item' => 'Item',
+    'item' => 'tag',
+    'Item' => 'Tag',
     'icon'=> 'tag',
     'Icon' => 'tag'
 ])      
@@ -9,10 +9,10 @@
 <script>
     $(document).ready(function() {
         // Search functionality
-        $('#itemSearchInput').on('input', function(){
+        $('#tagSearchInput').on('input', function(){
             const query = $(this).val().toLowerCase();
             if ( query.length >= 2){
-                searchItems(query);
+                searchTags(query);
             }
         });
 
@@ -25,8 +25,8 @@
         });
 
         // Create new tag
-        $('#createItemBtn').click(function() {
-            const tagName = $('#newItemInput').val().trim();
+        $('#createTagBtn').click(function() {
+            const tagName = $('#newTagInput').val().trim();
             if (tagName) {
                 createNewTag(tagName);
             }
@@ -39,13 +39,13 @@
         });
 
         // Save tags
-        $('#saveItemsBtn').click(function() {
+        $('#saveTagsBtn').click(function() {
             saveSelectedTags();
         });
     });
 
-    function searchItems(query) {
-        $('#searchResults').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Searching...</div>');
+    function searchTags(query) {
+        $('#tagsResults').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Searching...</div>');
         
         $.ajax({
             url: '/api/tag/search', 
@@ -60,16 +60,16 @@
             },*/
             success: function(response) {
                 
-                displaySearchResults(response);
+                displayTagsResults(response);
             },
             error: function(xhr, status, error) {
-                $('#searchResults').html('<div class="text-danger">Search failed. Please try again.</div>');
+                $('#tagsResults').html('<div class="text-danger">Search failed. Please try again.</div>');
             }
         });
     }
     
-    function displaySearchResults(tags) {
-        const container = $('#searchResults');
+    function displayTagsResults(tags) {
+        const container = $('#tagsResults');
         
         if (tags.length === 0) {
             container.html('<div class="text-muted">No items found</div>');
@@ -89,17 +89,17 @@
 
     function addTagToSelection(tagId, tagName) {
         // Check if tag is already selected
-        if (oldItems.find(tag => tag['label'] === tagName) || newItems.find(tag => tag === tagName)) {
+        if (oldTags.find(tag => tag['label'] === tagName) || newTags.find(tag => tag === tagName)) {
             //nothing
             return;
         }
-        // Items with id == '*' means that are new 
+        // Tags with id == '*' means that are new 
         if ( tagId === '*'){
-            newItems.push( tagName);
+            newTags.push( tagName);
         }else{
-            oldItems.push({ id: tagId, label: tagName });
+            oldTags.push({ id: tagId, label: tagName });
         }
-        updateSelectedItemsDisplay();
+        updateSelectedTagsDisplay();
     }
 
     function createNewTag(tagName) {
@@ -107,21 +107,21 @@
     }
 
     function removeTagFromSelection(tagName) {
-        oldItems = oldItems.filter(tag => tag['label'] != tagName);
-        newItems = newItems.filter(tag => tag != tagName);
-        updateSelectedItemsDisplay();
+        oldTags = oldTags.filter(tag => tag['label'] != tagName);
+        newTags = newTags.filter(tag => tag != tagName);
+        updateSelectedTagsDisplay();
     }
 
-    function updateSelectedItemsDisplay() {
-        const container = $('#selectedItemList');
+    function updateSelectedTagsDisplay() {
+        const container = $('#selectedTagList');
 
-        if (oldItems.length === 0 && newItems.length === 0) {
+        if (oldTags.length === 0 && newTags.length === 0) {
             container.html('No item selected yet');
             return;
         }
 
         let html = '';
-        oldItems.forEach(tag => {
+        oldTags.forEach(tag => {
             html += `
                 <div class="badge badge-primary badge-pill mr-2 mb-2 selected-tag" data-tag-name="${tag['label']}">
                     ${tag['label']}
@@ -131,7 +131,7 @@
                 </div>
             `;
         });
-        newItems.forEach(tag => {
+        newTags.forEach(tag => {
             html += `
                 <div class="badge badge-primary badge-pill mr-2 mb-2 selected-tag" data-tag-name="${tag}">
                     ${tag}
@@ -146,9 +146,9 @@
     }
 
     function saveSelectedTags() {
-        console.log('Saving old selected tags:', oldItems);
-        console.log('Saving new selected tags:', newItems);
+        console.log('Saving old selected tags:', oldTags);
+        console.log('Saving new selected tags:', newTags);
         // Close modal
-        $('#itemsModal').modal('hide');
+        $('#tagsModal').modal('hide');
     }
 </script>

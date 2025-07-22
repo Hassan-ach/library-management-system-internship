@@ -28,7 +28,7 @@
                                 placeholder="Search for existing {{ $item }}s...">
                         </div>
                         <!-- Search Results -->
-                        <div id="searchResults" style="max-height: 200px; overflow-y: auto;">
+                        <div id="{{ $item }}sResults" style="max-height: 200px; overflow-y: auto;">
                             <!-- Dynamic search results will appear here -->
                         </div>
                     </div>
@@ -43,7 +43,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-{{ $icon }}"></i></span>
                             </div>
-                            <input type="text" class="form-control" id="newItemInput" 
+                            <input type="text" class="form-control" id="new{{ $Item }}Input" 
                                     placeholder="Enter new {{ $item }} name...">
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="button" id="create{{ $Item }}Btn">
@@ -81,4 +81,4 @@
 <!-- Bootstrap JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.2.0/js/adminlte.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.2.0/js/adminlte.min.js"></script>       
