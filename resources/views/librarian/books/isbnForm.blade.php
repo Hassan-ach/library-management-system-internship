@@ -67,6 +67,7 @@
     @include('librarian.widgets.tag-modal')
     @include('librarian.widgets.author-modal')
     @include('librarian.widgets.publisher-modal')
+    @include('librarian.widgets.category-modal')
 </div>
 
 @stop

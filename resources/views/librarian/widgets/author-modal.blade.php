@@ -32,7 +32,7 @@
             }
         });
 
-        // Remove tag from selection
+        // Remove author from selection
         $(document).on('click', '.remove-author-btn', function() {
             const Name = $(this).data('author-name');
             removeAuthorFromSelection( Name);
