@@ -1,7 +1,7 @@
 <!-- include the modal structure-->
 <div class="container mt-5">
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#categoriesModal">
-        <i class="fas fa-tag"></i> Manage categories
+        <i class="fas fa-sitemap"></i> Manage categories
     </button>
 </div>
 
@@ -42,7 +42,7 @@
                     <div class="card-body">
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-tag"></i></span>
+                                <span class="input-group-text"><i class="fas fa-sitemap"></i></span>
                             </div>
                             <input type="text" class="form-control" id="newCategoryInput" 
                                     placeholder="Enter new category ...">
@@ -80,12 +80,7 @@
         </div>
     </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<!-- Bootstrap JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.2.0/js/adminlte.min.js"></script>            
-
+        
 <script>
     $(document).ready(function() {
         // Search functionality
@@ -164,7 +159,7 @@
         categories.forEach(category => {
             html += `
                 <div class="cat-search-item p-2 border-bottom" data-cat-id="${category.id}" data-cat-name="${category.label}" style="cursor: pointer;">
-                    <i class="fas fa-tag mr-2"></i>${category.label}
+                    <i class="fas fa-sitemap mr-2"></i>${category.label}
                 </div>
             `; 
         });
@@ -173,7 +168,7 @@
     
     function addCategoryToSelection( Id, Name, Description = "") {
         // Check if category is already selected
-        if (oldCategories.find(category => category['name'] === Name) || newCategories.find(category => category === Name)) {
+        if (oldCategories.find(category => category['name'] === Name) || newCategories.find(category => category[0] === Name)) {
             //nothing
             return;
         }
@@ -192,7 +187,7 @@
 
     function removeCategoryFromSelection( Name) {
         oldCategories = oldCategories.filter(category => category['name'] != Name);
-        newCategories = newCategories.filter(category => category != Name);
+        newCategories = newCategories.filter(category => category[0] != Name);
         updateSelectedCategoriesDisplay();
     }
 

@@ -2,8 +2,8 @@
 @include('librarian.widgets.raw-modal', [
     'item' => 'publisher',
     'Item' => 'Publisher',
-    'icon'=> 'tag',
-    'Icon' => 'tag'
+    'icon'=> 'building',
+    'Icon' => 'building'
 ])      
 
 <script>
