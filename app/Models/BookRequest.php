@@ -37,7 +37,7 @@ class BookRequest extends Model
         $latestInfo = $this->latestRequestInfo;
 
         if ($latestInfo && $latestInfo->status === RequestStatus::BORROWED) {
-            $maxDuree = $setting?->DUREE_EMPRUNT_MAX ?? 3;
+            $maxDuree = $setting?->DUREE_EMPRUNT_MAX ?? 4;
 
             return Carbon::parse($latestInfo->created_at)->addDays($maxDuree);
         }

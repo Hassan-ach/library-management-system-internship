@@ -84,19 +84,5 @@
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/ensup-custom.css') }}">
-@stop```
+@stop
 
-**Key Points for Both Views:**
-
-*   **`@extends('adminlte::auth.auth-page')`**: This ensures they inherit the basic AdminLTE authentication page layout, including the centered card and background.
-*   **`@section('auth_header')`**: Sets the title displayed at the top of the authentication card.
-*   **Branding**: The ENSUP logo and "ENSUP Library" text are included at the top of the form body, consistent with your `auth.login` page.
-*   **Form Structure**: Standard Laravel form structure with `@csrf` for security.
-*   **AdminLTE Input Groups**: `input-group` and `input-group-append` are used to add icons to the input fields, which is a common AdminLTE pattern.
-*   **Error Display**: `@error` directives are used to display validation errors below the respective input fields.
-*   **Session Status**: For the "Forgot Password" view, `session('status')` is checked to display the success message after the reset link has been sent.
-*   **Links**: Links back to the login page are provided.
-*   **Footer Branding**: The project version and copyright information are displayed in the footer, using `config('project.version')` (ensure you have a `project.version` key in your `config/app.php` or a dedicated `config/project.php` file, otherwise it will default to '1.0.0').
-*   **Custom CSS**: `asset('css/ensup-custom.css')` is included to apply your custom branding styles.
-
-These views provide a complete and branded user interface for the password reset flow in your ENSUP Library Management System.

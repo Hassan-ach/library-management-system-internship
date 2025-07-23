@@ -28,7 +28,7 @@ class DashboardTest extends TestCase
         RequestInfo::factory()->create([
             'request_id' => $bookRequest1->id,
             'status' => RequestStatus::BORROWED,
-            'created_at' => now()->subDays(3),
+            'created_at' => now()->subDays(2),
         ]);
 
         RequestInfo::factory()->create([
@@ -40,7 +40,7 @@ class DashboardTest extends TestCase
         RequestInfo::factory()->create([
             'request_id' => $bookRequest3->id,
             'status' => RequestStatus::RETURNED,
-            'created_at' => now()->subDay(),
+            'created_at' => now()->subDay(0),
         ]);
 
         // Act as the student and request dashboard page
