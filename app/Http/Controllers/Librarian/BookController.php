@@ -66,7 +66,8 @@ class BookController extends Controller
             'publihsers.old' => 'array',
             'publishers.new' => 'array',
         ]);
-
+        return view('errors.dataValidation')->with('request', file_get_contents('php://input'));
+        /*
         // handle the validated data using services class
         //$Service = App::make(Services::class);
         $this->services->createBook($validated);
@@ -74,9 +75,10 @@ class BookController extends Controller
         // return a View showed that the book was created
         // should change to books.show if successe and return back if fail
         return view('librarian.books.create');
+        */
     }
     catch(ValidationException $e){
-        return view('errors.dataValidation');
+        return view('errors.dataValidation')->with('request', file_get_contents('php://input'));
     }
     catch(Exception $e){
         return view('errors.databaseException');

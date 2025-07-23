@@ -146,6 +146,7 @@
             
             container.html(html);
             form_container.html(html);
+            fillHiddenInputs();
         }
 
         function saveSelectedTags() {
@@ -297,6 +298,7 @@
             
             container.html(html);
             form_container.html(html);
+            fillHiddenInputs();
         }
 
         function saveSelectedPublishers() {
@@ -453,6 +455,7 @@
             
             container.html(html);
             form_container.html(html);
+            fillHiddenInputs();
         }
 
         function saveSelectedCategories() {
@@ -604,6 +607,7 @@
             
             container.html(html);
             form_container.html(html);
+            fillHiddenInputs();
         }
 
         function saveSelectedAuthors() {
@@ -631,7 +635,38 @@
             updateSelectedAuthorsDisplay();
             updateSelectedPublishersDisplay();
             updateSelectedCategoriesDisplay();
-            updateSelectedTagsDisplay()
+            updateSelectedTagsDisplay();
+            
+        }
+
+        function fillHiddenInputs(){ 
+            document.getElementById('tags').value = JSON.stringify({
+                "new": newTags,
+                "old": oldTags
+            });
+
+            // Set categories input
+            document.getElementById('categories').value = JSON.stringify({
+                "new": newCategories,
+                "old": oldCategories
+            });
+
+            // Set publishers input
+            document.getElementById('publishers').value = JSON.stringify({
+                "new": newPublishers,
+                "old": oldPublishers
+            });
+
+            // Set authors input
+            document.getElementById('authors').value = JSON.stringify({
+                "new": newAuthors,
+                "old": oldAuthors
+            });
+            
+        }
+        
+        function toArray(arr){
+            
         }
         updateSelectedItems();
     </script>
@@ -643,105 +678,112 @@
     }
 </style>
 <div class="container-fluid">
-    <div class="row">
-    <div class="col-12">
-    
-    
-    <label>Book Title</label>
-    <div class="input-group">
-        <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fas fa-book"></i></span>
-        </div>
-        <input type="text" class="form-control" placeholder="Enter book title">
-    </div>
-        
-    <label>ISBN</label>
-    <div class="input-group">
-        <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fas fa-barcode"></i></span>
-        </div>
-        <input type="text" class="form-control" placeholder="978-0-123456-78-9">
-    </div>
-    <small class="form-text text-muted">Format: 978-0-123456-78-9</small>
-    
+    <form id="bookForm" method="POST" action="/books">
+        <div class="row">
+            <div class="col-12">
+                <label >Book Title</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-book"></i></span>
+                    </div>
+                    <input type="text" name="title" class="form-control" value="" placeholder="Enter book title">
+                </div>
+                    
+                <label>ISBN</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-barcode"></i></span>
+                    </div>
+                    <input type="text" class="form-control" name="isbn" value="" placeholder="978-0-123456-78-9">
+                </div>
+                <small class="form-text text-muted">Format: 978-0-123456-78-9</small>
+                
 
-    <label>Publication Date</label>
-    <div class="input-group">
-        <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-        </div>
-        <input type="date" class="form-control" placeholder="Select publication date">
-    </div>
+                <label>Publication Date</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                    </div>
+                    <input type="date" class="form-control" name="publication_date" value="" placeholder="Select publication date">
+                </div>
 
-    <label>Number of Pages</label>
-    <div class="input-group">
-        <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fas fa-file-alt"></i></span>
-        </div>
-        <input type="number" class="form-control" min="1" placeholder="Enter page count">
-    </div>
+                <label>Number of Pages</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-file-alt"></i></span>
+                    </div>
+                    <input type="number" class="form-control" name="number_of_pages" min="1" value="" placeholder="Enter page count">
+                </div>
 
-    <label>Total Copies</label>
-    <div class="input-group">
-        <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fas fa-copy"></i></span>
-        </div>
-        <input type="number" class="form-control" min="1" value="1" placeholder="Enter total copies">
-    </div>
+                <label>Total Copies</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-copy"></i></span>
+                    </div>
+                    <input type="number" class="form-control" name="total_copies" min="1" value="1" placeholder="Enter total copies">
+                </div>
 
-    <label>Description</label>
-    <div>
-        <textarea class="form-control" rows="4" placeholder="Enter book description..."></textarea>
-    </div>
-    <!-- Tags Display Section -->
-    <div class="form-group">
-        <div class="mt-3">
-            <div id="tags-display" class="data-display empty">No tags selected</div>
-        </div>
-        @include('librarian.widgets.raw-modal', [
-            'item' => 'tag',
-            'Item' => 'Tag',
-            'icon'=> 'tag',
-            'Icon' => 'tag',
-            'style'=> 'btn-outline-warning btn-sm'
-        ])      
-    </div>
+                <label>Description</label>
+                <div>
+                    <textarea class="form-control" name="description" rows="4" value="" placeholder="Enter book description..."></textarea>
+                </div>
+                <!-- Tags Display Section -->
+                <div class="form-group">
+                    <div class="mt-3">
+                        <div id="tags-display" class="data-display empty">No tags selected</div>
+                    </div>
+                    @include('librarian.widgets.raw-modal', [
+                        'item' => 'tag',
+                        'Item' => 'Tag',
+                        'icon'=> 'tag',
+                        'Icon' => 'tag',
+                        'style'=> 'btn-outline-warning btn-sm'
+                    ])      
+                </div>
 
-    <!-- Categories Display Section -->
-    <div class="form-group">
-        <div class="mt-3">
-            <div id="categories-display" class="data-display empty">No categories selected</div>
+                <!-- Categories Display Section -->
+                <div class="form-group">
+                    <div class="mt-3">
+                        <div id="categories-display" class="data-display empty">No categories selected</div>
+                    </div>
+                    @include('librarian.widgets.category-modal')
+                </div>
+                
+                <!-- Authors Display Section -->
+                <div class="form-group">
+                    <div class="mt-3">
+                        <div id="authors-display" class="data-display empty">No authors selected</div>
+                    </div>
+                    @include('librarian.widgets.raw-modal', [
+                        'item' => 'author',
+                        'Item' => 'Author',
+                        'icon'=> 'user-tie',
+                        'Icon' => 'user-tie',
+                        'style' => 'btn-outline-info btn-sm'
+                    ])   
+                </div>
+                
+                <!-- Publishers Display Section -->
+                <div class="form-group">
+                    <div class="mt-3">
+                        <div id="publishers-display" class="data-display empty">No publishers selected</div>
+                    </div>
+                    @include('librarian.widgets.raw-modal', [
+                        'item' => 'publisher',
+                        'Item' => 'Publisher',
+                        'icon'=> 'building',
+                        'Icon' => 'building',
+                        'style'=> 'btn-outline-success btn-sm'
+                    ])
+                <div>
+                <input type="hidden" name="tags" id="tags">
+                <input type="hidden" name="categories" id="categories">
+                <input type="hidden" name="publishers" id="publishers">
+                <input type="hidden" name="authors" id="authors">
+                
+                <button type="submit">Submit</button>
+            </div>
         </div>
-        @include('librarian.widgets.category-modal')
-    </div>
-    
-    <!-- Authors Display Section -->
-    <div class="form-group">
-        <div class="mt-3">
-            <div id="authors-display" class="data-display empty">No authors selected</div>
-        </div>
-        @include('librarian.widgets.raw-modal', [
-            'item' => 'author',
-            'Item' => 'Author',
-            'icon'=> 'user-tie',
-            'Icon' => 'user-tie',
-            'style' => 'btn-outline-info btn-sm'
-        ])   
-    </div>
-    
-    <!-- Publishers Display Section -->
-    <div class="form-group">
-        <div class="mt-3">
-            <div id="publishers-display" class="data-display empty">No publishers selected</div>
-        </div>
-        @include('librarian.widgets.raw-modal', [
-            'item' => 'publisher',
-            'Item' => 'Publisher',
-            'icon'=> 'building',
-            'Icon' => 'building',
-            'style'=> 'btn-outline-success btn-sm'
-        ])
-    <div>
+    </form>
 </div>
-</div></div>
 @stop
