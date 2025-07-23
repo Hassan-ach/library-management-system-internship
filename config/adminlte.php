@@ -389,12 +389,12 @@ return [
 
         // Logout button (always visible for authenticated users)
         ['header' => 'COMPTE'],
-        [
-            'text' => 'Changer le mot de passe',
-            'url' => 'admin/settings/password', // Example route for password change
-            'icon' => 'fas fa-fw fa-lock',
-            'can' => 'view-profile', // Or any permission that allows user to change password
-        ],
+        // [
+        //     'text' => 'Changer le mot de passe',
+        //     'url' => 'admin/settings/password', // Example route for password change
+        //     'icon' => 'fas fa-fw fa-lock',
+        //     'can' => 'view-profile', // Or any permission that allows user to change password
+        // ],
         [
             'text' => 'Déconnexion',
             'url' => 'logout',
