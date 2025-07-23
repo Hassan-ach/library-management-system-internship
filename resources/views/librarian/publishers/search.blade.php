@@ -1,9 +1,7 @@
 <div class="container">
-    <ul>
     @foreach ($publishers as $pub)
-        <li>{{ $pub->name }}</li>
+        {{ $pub->name }}
     @endforeach
-    </ul>
 </div>
  
 {{ $publishers->links() }}

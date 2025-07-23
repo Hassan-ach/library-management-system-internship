@@ -5,38 +5,47 @@ namespace App\Http\Controllers\Librarian;
 use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Services\Services;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Validation\ValidationException;
+
 
 class BookController extends Controller
 {
     /*
         Any external or reusable logic will be placed in Services .
     */
+
+    private Services $services;
+    public function __construct(Services $services){
+        $this->services = $services;
+    }
+    
     public function isbnForm()
     {
         return view('librarian.books.isbnForm');
+
     }
 
     public function create(Request $request)
     {
-        /*  Request structure:
-            $req = {
-                title: ***,
-                ...
-                description: ***,
-                tags : {
-                    new : {labels of new tags to be create}
-                    old : {ids of old tags}
-                },
-                categories:{},
-                publishers:{},
-                authors:{}
-            }
-        */
-
+    /*  Request structure:
+        $req = {
+            title: ***,
+            ...
+            description: ***,
+            tags : {
+                new : {labels of new tags to be create}
+                old : {ids of old tags}
+            },
+            categories:{},
+            publishers:{},
+            authors:{}
+        }
+    */
+    try{
         // validate request's values
-
         $validated = $request->validate([
             'title' => 'required | string',
             'isbn' => 'bail | required | unique:books', /* the validation process should be stopped if isbn not valide */
@@ -58,25 +67,32 @@ class BookController extends Controller
             'publishers.new' => 'array',
         ]);
 
-        // handle the validated data using book services
-        $Service = App::make(Services::class);
-        $Service->createBook($validated);
+        // handle the validated data using services class
+        //$Service = App::make(Services::class);
+        $this->services->createBook($validated);
 
         // return a View showed that the book was created
         // should change to books.show if successe and return back if fail
         return view('librarian.books.create');
     }
+    catch(ValidationException $e){
+        return view('errors.dataValidation');
+    }
+    catch(Exception $e){
+        return view('errors.databaseException');
+    }
+    }
 
-    public function update(Request $request)
-    {
+    public function update(Request $request, $id)
+    {   
+    try{
         $validated = $request->validate([
-            'book_id' => 'int | required',
-            'title' => 'required | string',
-            'isbn' => 'required',
+            'title' => 'string',
+            'isbn' => 'string',
             'description' => 'string',
             'publication_date' => 'date',
             'number_of_pages' => 'integer',
-            'total_copies' => 'required | integer',
+            'total_copies' => 'integer',
             'tags' => 'required',
             'tags.old' => 'array ',
             'tags.new' => 'array',
@@ -88,20 +104,35 @@ class BookController extends Controller
             'authors.new' => 'array',
             'publishers' => 'required',
             'publihsers.old' => 'array',
-            'publishers.new' => 'array',
+            'publishers.new' => 'array'
         ]);
-
-        $Serice = App::make(Services::class);
-
-        $Serice->updateBook($validated);
-
+        //$Serice = App::make(Services::class);
+        $this->services->updateBook($id, $validated);
+        
         return view('librarian.books.edit');
+
+    }catch (ValidationException $e)
+    {
+        return view('errors.dataValidation');
+    }
+    catch(Exception $e){
+        return view('errors.databaseException');
+    }
     }
 
-    public function delete(Request $request, $bookId)
-    {
-        $Service = App::make(Services::class);
+    public function delete(int $bookId)
+    {   
+        try{
+            //$Service = App::make(Services::class);
+            $this->services->deleteBook($bookId);
 
-        $Service->deleteBook($bookId);
+            return view('librarian.books.delete'); //temporary
+        }catch(ValidationException $e){
+            return view('errors.dataValidation');
+        }
+        catch(Exception $e){
+            return view('errors.databaseException');
+        }
+
     }
 }

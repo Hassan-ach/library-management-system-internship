@@ -1,9 +1,7 @@
 <div class="container">
-    <ul>
     @foreach ($authors as $author)
-        <li>{{ $author->name }}</li>
+        {{ $author->name }}
     @endforeach
-    </ul>
 </div>
  
 {{ $authors->links() }}

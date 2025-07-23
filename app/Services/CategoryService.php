@@ -14,14 +14,22 @@ class CategoryService
     }
 
     public function getCategory(int $id): Category{
-
-        $category = Category::find( $id);
+        $category = Category::findOrFail( $id);
         
         return $category;
     }
 
-    public function deleteCategory( Category $category){
-        $category->delete();
+    public function updateCategory( int $id, array $validated){
+        $category = $this->getCategory( $id);
+        $category->updateOrFail(
+            $validated
+        );
+        $category->save();
+    }
+
+    public function deleteCategory( int $id){
+        $category = $this->getCategory( $id);
+        $category->deleteOrFail();
     }
 
     public function createSetOfCategories( array $data): array{ 
@@ -46,14 +54,14 @@ class CategoryService
 
         return $categories;
     }
-   
-    public function deleteSetOfCategories( array $categories){
-        try{
-            foreach( $categories as $Category){
-                $this->deleteCategory( $Category);
-            }
-        }catch(\Exception $e){
-            echo 'This Category cann\'t be deleted, it is maybe attached to another object';
-        }       
+
+    public function paginateCategories(int $num = 10){
+        $categories = Category::latest()->paginate( $num);
+        return $categories;
+    }
+
+    public function searchCategories( $query, int $num = 10){
+        $categories = Category::where('label', 'like', "%{$query}%")->paginate($num);
+        return $categories;
     }
 }
