@@ -75,11 +75,11 @@ class Services
         }
     }
 
-    public function updateBook(array $data){
+    public function updateBook(int $id, array $data){
         DB::beginTransaction();
         try{
             $book = $this->book_service->updateBook(
-                $data['book_id'],
+                $id,
                 $data['title'],
                 $data['isbn'],
                 $data['description'],
@@ -121,11 +121,11 @@ class Services
 
     }
 
-    public function deleteBook(array $data)
+    public function deleteBook( int $bookId)
     {
         DB::beginTransaction();
         try{
-            $book = $this->book_service->getBook( $data['book_id']);
+            $book = $this->book_service->getBook( $bookId);
             
             $this->book_service->detachBook( $book);
             
