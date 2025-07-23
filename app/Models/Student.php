@@ -22,7 +22,7 @@ class Student extends User
     // Relatioships
     public function bookRequests()
     {
-        return $this->hasMany(BookRequest::class, 'user_id');
+        return $this->hasMany(BookRequest::class, 'user_id')->orderBy('created_at', 'desc');
     }
 
     public function requestInfo()

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\RequestStatus;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,6 +29,20 @@ class BookRequest extends Model
     public function latestRequestInfo()
     {
         return $this->hasOne(RequestInfo::class, 'request_id')->latestOfMany();
+    }
+
+    public function return_date()
+    {
+        $setting = Setting::find(1);
+        $latestInfo = $this->latestRequestInfo;
+
+        if ($latestInfo && $latestInfo->status === RequestStatus::BORROWED) {
+            $maxDuree = $setting?->DUREE_EMPRUNT_MAX ?? 4;
+
+            return Carbon::parse($latestInfo->created_at)->addDays($maxDuree);
+        }
+
+        return null;
     }
 
     public function user()

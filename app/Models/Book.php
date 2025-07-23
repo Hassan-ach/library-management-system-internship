@@ -31,6 +31,11 @@ class Book extends Model
         return $this->hasMany(BookRequest::class, 'book_id');
     }
 
+    public function available_copies(): int
+    {
+        return $this->total_copies - get_borrowed_copies($this);
+    }
+
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class, 'book_categories', 'book_id', 'category_id');

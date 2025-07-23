@@ -42,5 +42,15 @@ class AppServiceProvider extends ServiceProvider
             return $user->is_active && $user->role == UserRole::LIBRARIAN;
         });
 
+        Gate::define('student', function (User $user) {
+            return $user->role === UserRole::STUDENT;
+        });
+        Gate::define('librarian', function (User $user) {
+            return $user->role === UserRole::LIBRARIAN;
+        });
+        Gate::define('admin', function (User $user) {
+            return $user->role === UserRole::ADMIN;
+        });
+
     }
 }
