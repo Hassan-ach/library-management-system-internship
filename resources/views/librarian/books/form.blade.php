@@ -89,7 +89,7 @@
 
         function addTagToSelection(tagId, tagName) {
             // Check if tag is already selected
-            if (oldTags.find(tag => tag['label'] === tagName) || newTags.find(tag => tag === tagName)) {
+            if (oldTags.find(tag => tag['name'] === tagName) || newTags.find(tag => tag === tagName)) {
                 //nothing
                 return;
             }
@@ -97,7 +97,7 @@
             if ( tagId === '*'){
                 newTags.push( tagName);
             }else{
-                oldTags.push({ id: tagId, label: tagName });
+                oldTags.push({ id: tagId, name: tagName });
             }
             updateSelectedTagsDisplay();
         }
@@ -107,7 +107,7 @@
         }
 
         function removeTagFromSelection(tagName) {
-            oldTags = oldTags.filter(tag => tag['label'] != tagName);
+            oldTags = oldTags.filter(tag => tag['name'] != tagName);
             newTags = newTags.filter(tag => tag != tagName);
             updateSelectedTagsDisplay();
         }
@@ -125,9 +125,9 @@
             let html = '';
             oldTags.forEach(tag => {
                 html += `
-                    <div class="badge badge-primary badge-pill mr-2 mb-2 selected-tag" data-tag-name="${tag['label']}">
-                        ${tag['label']}
-                        <button type="button" class="btn btn-sm ml-1 remove-tag-btn" data-tag-name="${tag['label']}" style="background: none; border: none; color: white; padding: 0; margin-left: 5px;">
+                    <div class="badge badge-primary badge-pill mr-2 mb-2 selected-tag" data-tag-name="${tag['name']}">
+                        ${tag['name']}
+                        <button type="button" class="btn btn-sm ml-1 remove-tag-btn" data-tag-name="${tag['name']}" style="background: none; border: none; color: white; padding: 0; margin-left: 5px;">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
@@ -619,16 +619,16 @@
     </script>
 
     <script>
-        let oldTags = [];      // Ids of old items - would be send with request 
+        let oldTags = @json($tags ?? []);      // Ids of old items - would be send with request 
         let newTags = [];      // infos of new items - would be send with request
         
-        let oldCategories = [];      // Ids of old categories - would be send with request 
+        let oldCategories = @json($categories ?? []);        // Ids of old categories - would be send with request 
         let newCategories = [];      // infos of new categories - would be send with request
 
-        let oldAuthors= [];      // Ids of old authors - would be send with request 
+        let oldAuthors= @json($authors ?? []);        // Ids of old authors - would be send with request 
         let newAuthors = [];      // infos of new authors - would be send with request
 
-        let oldPublishers = [];      // Ids of old items - would be send with request 
+        let oldPublishers = @json($publishers ?? []);        // Ids of old items - would be send with request 
         let newPublishers = [];      // infos of new items - would be send with request
 
         function updateSelectedItems() {
@@ -642,32 +642,33 @@
         function fillHiddenInputs(){ 
             document.getElementById('tags').value = JSON.stringify({
                 "new": newTags,
-                "old": oldTags
+                "old": toArray(oldTags)
             });
 
             // Set categories input
             document.getElementById('categories').value = JSON.stringify({
                 "new": newCategories,
-                "old": oldCategories
+                "old": toArray(oldCategories)
             });
 
             // Set publishers input
             document.getElementById('publishers').value = JSON.stringify({
                 "new": newPublishers,
-                "old": oldPublishers
+                "old": toArray(oldPublishers)
             });
 
             // Set authors input
             document.getElementById('authors').value = JSON.stringify({
                 "new": newAuthors,
-                "old": oldAuthors
+                "old": toArray(oldAuthors)
             });
             
         }
         
         function toArray(arr){
-            
+            return(arr.map(item => item.id));
         }
+        
         updateSelectedItems();
     </script>
 @stop
@@ -678,7 +679,7 @@
     }
 </style>
 <div class="container-fluid">
-    <form id="bookForm" method="POST" action="/books">
+    <form id="bookForm" method="POST" action="{{ $action ?? route('books.store') }}">
         <div class="row">
             <div class="col-12">
                 <label >Book Title</label>
@@ -686,7 +687,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-book"></i></span>
                     </div>
-                    <input type="text" name="title" class="form-control" value="" placeholder="Enter book title">
+                    <input type="text" name="title" class="form-control" value="{{ old('title', $title ?? '') }}" placeholder="Enter book title">
                 </div>
                     
                 <label>ISBN</label>
@@ -694,7 +695,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-barcode"></i></span>
                     </div>
-                    <input type="text" class="form-control" name="isbn" value="" placeholder="978-0-123456-78-9">
+                    <input type="text" class="form-control" name="isbn" value="{{ old('isbn', $isbn ?? '') }}" placeholder="978-0-123456-78-9">
                 </div>
                 <small class="form-text text-muted">Format: 978-0-123456-78-9</small>
                 
@@ -704,7 +705,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
                     </div>
-                    <input type="date" class="form-control" name="publication_date" value="" placeholder="Select publication date">
+                    <input type="date" class="form-control" name="publication_date" value="{{ old('publication_date', $publication_date ?? '') }}" placeholder="Select publication date">
                 </div>
 
                 <label>Number of Pages</label>
@@ -712,7 +713,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-file-alt"></i></span>
                     </div>
-                    <input type="number" class="form-control" name="number_of_pages" min="1" value="" placeholder="Enter page count">
+                    <input type="number" class="form-control" name="number_of_pages" min="1" value="{{ old('number_of_pages', $number_of_pages ?? '') }}" placeholder="Enter page count">
                 </div>
 
                 <label>Total Copies</label>
@@ -720,12 +721,12 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-copy"></i></span>
                     </div>
-                    <input type="number" class="form-control" name="total_copies" min="1" value="1" placeholder="Enter total copies">
+                    <input type="number" class="form-control" name="total_copies" min="1" value="{{ old('total_copies', $total_copies ?? '') }}" placeholder="Enter total copies">
                 </div>
 
                 <label>Description</label>
                 <div>
-                    <textarea class="form-control" name="description" rows="4" value="" placeholder="Enter book description..."></textarea>
+                    <textarea class="form-control" name="description" rows="4" placeholder="Enter book description...">{{ old('description', $description ?? '') }}</textarea>
                 </div>
                 <!-- Tags Display Section -->
                 <div class="form-group">
@@ -781,6 +782,8 @@
                 <input type="hidden" name="publishers" id="publishers">
                 <input type="hidden" name="authors" id="authors">
                 
+                <input name="_method" type="hidden" value="{{ $method ?? 'POST'}}">
+
                 <button type="submit">Submit</button>
             </div>
         </div>

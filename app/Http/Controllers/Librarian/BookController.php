@@ -22,13 +22,28 @@ class BookController extends Controller
         $this->services = $services;
     }
     
-    public function isbnForm()
+    public function create()
     {
-        return view('librarian.books.isbnForm');
-
+        return view('librarian.books.form');
     }
 
-    public function create(Request $request)
+    public function edit( $id)
+    {   
+        try{
+            $data = $this->services->getBookData( $id);
+            $action = route('books.update', $id);
+            $method = 'PATCH';
+            
+            return view( 'librarian.books.form', $data)
+            ->with('action', $action)
+            ->with('method', $method);
+        }
+        catch(Exception $e){
+            return view('errors.databaseException');
+        }
+    }
+
+    public function store(Request $request)
     {
     /*  Request structure:
         $req = {
@@ -45,10 +60,17 @@ class BookController extends Controller
         }
     */
     try{
+        // decode json items
+        $request->merge([
+            'tags' => json_decode($request->input('tags'), true),
+            'categories' => json_decode($request->input('categories'), true),
+            'publishers' => json_decode($request->input('publishers'), true),
+            'authors' => json_decode($request->input('authors'), true),
+        ]);
         // validate request's values
         $validated = $request->validate([
             'title' => 'required | string',
-            'isbn' => 'bail | required | unique:books', /* the validation process should be stopped if isbn not valide */
+            'isbn' => 'required | string', /* the validation process should be stopped if isbn not valide */
             'description' => 'string',
             'publication_date' => 'date',
             'number_of_pages' => 'integer',
@@ -66,19 +88,17 @@ class BookController extends Controller
             'publihsers.old' => 'array',
             'publishers.new' => 'array',
         ]);
-        return view('errors.dataValidation')->with('request', file_get_contents('php://input'));
-        /*
+        
         // handle the validated data using services class
-        //$Service = App::make(Services::class);
         $this->services->createBook($validated);
 
         // return a View showed that the book was created
         // should change to books.show if successe and return back if fail
         return view('librarian.books.create');
-        */
+    
     }
     catch(ValidationException $e){
-        return view('errors.dataValidation')->with('request', file_get_contents('php://input'));
+        return view('errors.dataValidation');
     }
     catch(Exception $e){
         return view('errors.databaseException');
@@ -88,6 +108,14 @@ class BookController extends Controller
     public function update(Request $request, $id)
     {   
     try{
+         // decode json items
+         $request->merge([
+            'tags' => json_decode($request->input('tags'), true),
+            'categories' => json_decode($request->input('categories'), true),
+            'publishers' => json_decode($request->input('publishers'), true),
+            'authors' => json_decode($request->input('authors'), true),
+        ]);
+        //validate
         $validated = $request->validate([
             'title' => 'string',
             'isbn' => 'string',
@@ -108,7 +136,6 @@ class BookController extends Controller
             'publihsers.old' => 'array',
             'publishers.new' => 'array'
         ]);
-        //$Serice = App::make(Services::class);
         $this->services->updateBook($id, $validated);
         
         return view('librarian.books.edit');
@@ -125,7 +152,6 @@ class BookController extends Controller
     public function delete(int $bookId)
     {   
         try{
-            //$Service = App::make(Services::class);
             $this->services->deleteBook($bookId);
 
             return view('librarian.books.delete'); //temporary

@@ -36,7 +36,7 @@ class GoogleApiServiceController extends Controller
                 );
             }
 
-            return view('librarian.books.create', compact('response'));
+            return view('librarian.books.form', compact('response'));
         } catch (\Exception $e) {
 
             return back()->withErrors(['error' => 'An error occurred while getting book info.']);
