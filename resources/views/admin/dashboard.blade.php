@@ -1,4 +1,81 @@
-<!DOCTYPE html>
+{{-- resources/views/layouts/app.blade.php --}}
+@php
+if (!isset($__adminlte_head)) {
+    $__adminlte_head = true;
+    @endphp
+    @extends('adminlte::page', [
+        'styles' => [
+            asset('https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css'),
+            asset('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css')
+        ]
+    ])
+    @php
+}
+@endphp
+
+
+{{-- resources/views/layouts/app.blade.php --}}
+@extends('adminlte::page')
+
+@section('title', 'ENSUP Library - ' . (isset($title) ? $title : 'Dashboard'))
+
+@section('content_header')
+    {{-- Breadcrumbs will go here, AdminLTE handles this via config or @section('plugins.Datatables', true) --}}
+    <h1>{{ isset($page_title) ? $page_title : 'Dashboard' }}</h1>
+    @if(isset($breadcrumbs))
+        <ol class="breadcrumb float-sm-right">
+            @foreach($breadcrumbs as $label => $url)
+                @if($loop->last)
+                    <li class="breadcrumb-item active">{{ $label }}</li>
+                @else
+                    <li class="breadcrumb-item"><a href="{{ $url }}">{{ $label }}</a></li>
+                @endif
+            @endforeach
+        </ol>
+    @endif
+@stop
+
+@section('content')
+    {{-- Your page content will be injected here --}}
+        @yield('content_header')
+    
+        <div class="wrapper">
+            @yield('content')
+        </div>
+
+@stop
+
+@section('footer')
+    <div class="float-right d-none d-sm-inline">
+        ENSUP Library Management System v{{ config('adminlte.version') }}
+    </div>
+    <strong>Copyright © {{ date('Y') }} <a href="#">ENSUP</a>.</strong> All rights reserved.
+@stop
+
+@section('css')
+    {{-- Add any page-specific CSS here if needed --}}
+@stop
+
+@section('js')
+    {{-- Add any page-specific JS here if needed --}}
+    <script>
+        // Example for Toastr notifications
+        @if(Session::has('success'))
+            toastr.success("{{ Session::get('success') }}");
+        @endif
+        @if(Session::has('error'))
+            toastr.error("{{ Session::get('error') }}");
+        @endif
+        @if(Session::has('warning'))
+            toastr.warning("{{ Session::get('warning') }}");
+        @endif
+        @if(Session::has('info'))
+            toastr.info("{{ Session::get('info') }}");
+        @endif
+    </script>
+@stop
+
+{{-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -59,4 +136,4 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+</html> --}}
