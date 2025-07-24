@@ -1,0 +1,77 @@
+/* resources/css/ensup-custom.css */
+
+/* Override AdminLTE primary color variables */
+:root {
+    --blue: #1e3a8a; /* ENSUP Blue */
+    --primary: var(--blue);
+    --info: #17a2b8; /* Default AdminLTE info, adjust if needed */
+    --warning: #f59e0b; /* Accent Gold for warning/accent */
+    --success: #28a745;
+    --danger: #dc3545;
+    --dark: #343a40;
+    --light: #f8f9fa;
+}
+
+/* Specific overrides for elements that might not pick up variables */
+.main-sidebar .nav-item.menu-open > .nav-link,
+.main-sidebar .nav-item > .nav-link.active {
+    background-color: var(--primary) !important;
+    color: #fff !important;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+.btn-primary:hover {
+    background-color: #1a3070; /* Slightly darker ENSUP blue on hover */
+    border-color: #1a3070;
+}
+
+.bg-primary {
+    background-color: var(--primary) !important;
+}
+
+.text-primary {
+    color: var(--primary) !important;
+}
+
+/* Custom styles for the login page illustration */
+.login-page-illustration {
+    background-image: url("/images/login-illustration.svg"); /* Assuming you have an SVG illustration */
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Ensure the brand text uses the specified font */
+.brand-text {
+    font-family: "Source Sans Pro", sans-serif;
+}
+.card {
+    border-radius: 12px;
+}
+
+.login-card-body {
+    padding: 1.5rem;
+}
+
+.btn-primary {
+    white-space: nowrap;
+}
+
+.input-group-text i {
+    width: 1rem;
+    text-align: center;
+}
+
+input.form-control {
+    border-radius: 0.25rem;
+}
+
+.login-box {
+    width: 100%;
+}

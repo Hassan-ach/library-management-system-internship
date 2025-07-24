@@ -17,6 +17,19 @@ use Illuminate\Support\Facades\Request;
 class RequestController extends Controller
 {
     //
+    public function index()
+    {
+        $user = Student::findOrFail(Auth::user()->id);
+
+        // Get all book requests for the current student with their latest status
+        $bookRequests = BookRequest::with(['book', 'latestRequestInfo'])
+            ->where('user_id', $user->id)
+            ->orderByDesc('created_at')
+            ->paginate(10);
+
+        return view('student.requests.index', compact('bookRequests'));
+    }
+
     public function create(Request $req, $bookId)
     {
         $user = Student::findOrFail(Auth::user()->id);
@@ -56,10 +69,8 @@ class RequestController extends Controller
 
     public function cancel(Request $req, $reqId)
     {
-        //
         $bookReq = BookRequest::findOrFail($reqId);
         $user = Student::findOrFail(Auth::user()->id);
-        // $user = Auth::user();
 
         if (! Gate::allows('cancel_req', $bookReq)) {
             return back()->with(['error' => 'You\'re not allowed to cancel this book request']);
@@ -87,14 +98,14 @@ class RequestController extends Controller
     {
         //
         $user = Student::findOrFail(Auth::user()->id);
-        $bookReq = BookRequest::findOrFail($reqId);
+        $bookReq = BookRequest::with('latestRequestInfo')->findOrFail($reqId);
 
         if (! Gate::allows('show_req', $bookReq)) {
             return back()->with(['error' => 'You\'re not allowed to see this book request']);
         }
 
         try {
-            $reqInfo = get_latest_info($reqId);
+            $reqInfo = $bookReq->latestRequestInfo;
             if ($reqInfo == null) {
                 throw new Error('request info not found');
             }
