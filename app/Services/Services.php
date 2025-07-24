@@ -25,6 +25,42 @@ class Services
         $this->author_service = $author_service;
         $this->publisher_service = $publisher_service;
     }
+    public function getBookData( $id):array
+    {
+        $book = $this->book_service->getBook( $id);
+
+        $tags = [];
+        foreach( $book->tags as $tag){
+            array_push( $tags, ['id'=> $tag->id, 'name' => $tag->label]);
+        }
+        $categories = [];
+        foreach( $book->categories as $cat){
+            array_push( $categories, ['id'=> $cat->id, 'name' => $cat->label]);
+        }
+        $publishers = [];
+        foreach( $book->publishers as $publisher){
+            array_push( $publishers, ['id'=> $publisher->id, 'name' => $publisher->name]);
+        }
+        $authors = [];
+        foreach( $book->authors as $author){
+            array_push( $authors, ['id'=> $author->id, 'name' => $author->name]);
+        }
+
+        $book_data = [
+            'title' => $book->title,
+            'isbn' => $book->isbn,
+            'publication_date' => $book->publication_date->format('Y-m-d'),
+            'number_of_pages' => $book->number_of_pages,
+            'total_copies' => $book->total_copies,
+            'description' => $book->description,
+            'tags' => $tags,
+            'categories' => $categories,
+            'publishers' => $publishers,
+            'authors' => $authors
+        ];
+
+        return $book_data;
+    }
     
     public function createBook(array $data){
         DB::beginTransaction();
