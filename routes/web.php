@@ -109,3 +109,22 @@ Route::middleware('auth:web')->group(function () {
         Route::delete('/users/{id}', [UserController::class, 'delete'])->name('users.delete');
     });
 });
+
+Route::get('/api/tag/search', [TagController::class, 'apiSearch']);
+Route::get('/api/author/search', [AuthorController::class, 'apiSearch']);
+Route::get('/api/publisher/search', [PublisherController::class, 'apiSearch']);
+Route::get('/api/category/search', [CategoryController::class, 'apiSearch']);
+
+//this route is responsable to store the data from form(api/manual) to DB
+Route::post('/books', [LibrarianBookController::class, 'store'])->name('books.store');
+// show form to create book manually
+Route::get('/books/create', [LibrarianBookController::class, 'create'])->name('books.create');
+
+Route::post('/books/by-isbn', [GoogleApiServiceController::class, 'getBookInfo'])->name('books.isbn.getInfo');
+
+// show form to edit book infos
+Route::get('/books/{id}/edit', [LibrarianBookController::class, 'edit'])->name('books.edit');
+// update new book infos on database
+Route::patch('/books/{id}', [LibrarianBookController::class, 'update'])->name('books.update');
+
+Route::delete('/books/{id}', [LibrarianBookController::class, 'delete'])->name('books.delete');

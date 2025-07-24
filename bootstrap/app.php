@@ -16,6 +16,14 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => RoleMiddleware::class,
         ]);
+        $middleware->validateCsrfTokens(except: [
+            '/books/*',
+            '/books',
+            '/api/tag/search',
+            '/api/author/search',
+            '/api/publisher/search',
+            '/api/category/search'
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
