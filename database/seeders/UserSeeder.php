@@ -16,47 +16,31 @@ class UserSeeder extends Seeder
     {
         //
         User::create([
-            'first_name' => 'Alice',
-            'last_name' => 'Johnson',
-            'email' => 'alice@student.com',
-            'password' => Hash::make('password'),
-            'is_active' => true,
-            'role' => UserRole::STUDENT,
-        ]);
-
-        User::create([
-            'first_name' => 'Bob',
-            'last_name' => 'Smith',
-            'email' => 'bob@librarian.com',
-            'password' => Hash::make('password'),
-            'is_active' => true,
-            'role' => UserRole::LIBRARIAN,
-        ]);
-
-        User::create([
-            'first_name' => 'Charlie',
-            'last_name' => 'Brown',
-            'email' => 'charlie@admin.com',
+            'id' => 1,
+            'first_name' => 'system',
+            'last_name' => 'admin',
+            'email' => 'system@admin.com',
             'password' => Hash::make('password'),
             'is_active' => true,
             'role' => UserRole::ADMIN,
         ]);
-
         User::create([
-            'first_name' => 'Dana',
-            'last_name' => 'White',
-            'email' => 'dana@student.com',
-            'password' => Hash::make('password'),
-            'is_active' => false,
-            'role' => UserRole::STUDENT,
-        ]);
-
-        User::create([
-            'first_name' => 'Eli',
-            'last_name' => 'Black',
-            'email' => 'eli@librarian.com',
+            'id' => 2,
+            'first_name' => 'system',
+            'last_name' => 'librarian',
+            'email' => 'system@librarian.com',
             'password' => Hash::make('password'),
             'is_active' => true,
-            'role' => UserRole::LIBRARIAN, ]);
+            'role' => UserRole::LIBRARIAN,
+        ]);
+        User::create([
+            'id' => 3,
+            'first_name' => 'system',
+            'last_name' => 'student',
+            'email' => 'system@student.com',
+            'password' => Hash::make('password'),
+            'is_active' => true,
+            'role' => UserRole::STUDENT,
+        ]);
     }
 }

@@ -33,13 +33,26 @@ class BookRequest extends Model
 
     public function return_date()
     {
-        $setting = Setting::find(1);
-        $latestInfo = $this->latestRequestInfo;
+        $maxDuree = optional(Setting::find(1))->DUREE_EMPRUNT_MAX ?? 4;
 
-        if ($latestInfo && $latestInfo->status === RequestStatus::BORROWED) {
-            $maxDuree = $setting?->DUREE_EMPRUNT_MAX ?? 4;
+        $borrowedInfo = $this->requestInfo()
+            ->where('status', RequestStatus::BORROWED)
+            ->orderBy('created_at')
+            ->first();
 
-            return Carbon::parse($latestInfo->created_at)->addDays($maxDuree);
+        $returnedInfo = $this->requestInfo()
+            ->where('status', RequestStatus::RETURNED)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        $latestStatus = $this->latestRequestInfo?->status;
+
+        if ($latestStatus === RequestStatus::RETURNED && $returnedInfo) {
+            return $returnedInfo->created_at; // actual return date
+        }
+
+        if (($latestStatus === RequestStatus::BORROWED || $latestStatus === RequestStatus::OVERDUE) && $borrowedInfo) {
+            return Carbon::parse($borrowedInfo->created_at)->addDays($maxDuree); // expected return date
         }
 
         return null;

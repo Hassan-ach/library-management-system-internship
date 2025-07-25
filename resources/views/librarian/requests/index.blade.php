@@ -77,11 +77,7 @@
                 <span class="badge {{ $badgeClass }}">{{ ucfirst($status) }}</span>
             </td>
             <td>
-                @if($request->latestRequestInfo && $request->latestRequestInfo->status->value === 'borrowed')
                     {{ $request->return_date() ? $request->return_date()->format('d/m/Y') : 'N/A' }}
-                @else
-                    N/A
-                @endif
             </td>
             <td> {{-- Colonne Actions --}}
                 {{-- Button to trigger the details modal --}}
