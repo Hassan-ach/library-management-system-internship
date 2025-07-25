@@ -1,11 +1,12 @@
-<head>
-    {{-- Your existing head content --}}
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Users</h1>
+@extends('admin.dashboard')
+
+@section('css')
+
+@endsection
+
+@section('content')
+<div class="container mb-4">
+    <h1>Users</h1>
         {{-- <ul style="list-style: none;display:flex;flex-direction: row; gap: 10px;">
             <li><a href="{{ route('admin.users.create') }}" class="btn btn-primary">Create user</a></li>
         </ul> --}}
@@ -22,7 +23,7 @@
                     <input type="text" class="form-control" id="search" name="search" 
                         placeholder="Search by name, email, etc." value="{{ request('search') }}">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label for="role" class="form-label">Role</label>
                     <select class="form-select" id="role" name="role">
                         <option value="">All Roles</option>
@@ -31,7 +32,7 @@
                         <option value="librarian" {{ request('role') == 'librarian' ? 'selected' : '' }}>Librarian</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label for="status" class="form-label">Status</label>
                     <select class="form-select" id="status" name="status">
                         <option value="">All Statuses</option>
@@ -39,12 +40,12 @@
                         <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
                     </select>
                 </div>
-                <div class="col-md-2 d-flex align-items-end">
+                <div class="col-md-6 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary w-100">
                         <i class="fas fa-search me-2"></i> Search
                     </button>
                 </div>
-                <div class="col-md-2 d-flex align-items-end">
+                <div class="col-md-6 d-flex align-items-end">
                     <a href="{{ route('admin.users.all') }}" class="btn btn-outline-secondary w-100">
                         <i class="fas fa-times me-2"></i> Clear
                     </a>
@@ -53,12 +54,14 @@
         </div>
     </div>
     {{-- >>>>>>>>>>>>>> search and filter --}}
-    
+
     {{-- <<<<<<<<<<<<<< Create user --}}
-    
-    <ul style="list-style: none;display:flex;flex-direction: row; gap: 10px;">
-        <li><a href="{{ route('admin.users.create') }}" class="btn btn-primary">Create user</a></li>
-    </ul>
+
+    <div class="col-md-6 d-flex align-items-end">
+        <a href="{{ route('admin.users.create') }}" class="btn btn-primary">
+            <i class="fa-solid fa-user-plus me-2"></i> Create user
+        </a>
+    </div><br>
 
     {{-- >>>>>>>>>>>>>> Create user --}}
 
@@ -73,7 +76,7 @@
         </div>
     @endif
     {{-- >>>>>>>>>>>>>> show user --}}
-    
+
 
 
 
@@ -107,19 +110,21 @@
                             <div class="d-flex gap-2">
                                 <!-- Edit Button -->
                                 <a href="{{ route('admin.users.update', $user->id) }}" 
-                                   class="btn btn-sm btn-warning" 
-                                   title="Edit">
-                                    <i style="padding: 0px 0px -10px 0px" class="fas fa-edit"></i>
+                                    class="btn btn-sm btn-warning" 
+                                    title="Edit">
+                                    <i class="fas fa-edit me-2"></i>
                                 </a>
                                 
                                 <!-- Delete Button with Confirmation -->
                                 <form action="{{ route('admin.users.delete', $user->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" 
-                                            onclick="return confirm('Are you sure you want to delete this user?')">
-                                        <i class="fas fa-trash-alt"></i> 
-                                    </button>
+                                    <div class="col-md-6 d-flex align-items-end">
+                                        <button type="submit" class="btn btn-danger btn-sm" 
+                                                onclick="return confirm('Are you sure you want to delete this user?')">
+                                            <i class="fas fa-trash-alt me-2"></i> 
+                                        </button>
+                                    </div>
                                 </form>
                             </div>
                         </td>
@@ -129,7 +134,8 @@
         </table>
             {{ $users->withQueryString()->links() }}
     </div>
+</div>
     {{-- >>>>>>>>>>>>>> list users --}}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+@endsection

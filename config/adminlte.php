@@ -344,9 +344,9 @@ return [
         ],
         [
             'text' => 'Gestion des utilisateurs',
-            'url' => 'admin/users',
+            'url' => 'admin/users/index',
             'icon' => 'fas fa-fw fa-users',
-            'active' => ['admin/users'],
+            'active' => ['admin/users/index'],
             'can' => 'admin',
         ],
         [
@@ -355,6 +355,23 @@ return [
             'icon' => 'fas fa-fw fa-chart-line',
             'active' => ['admin*'],
             'can' => 'admin',
+            'submenu' => [
+                [
+                    'text' => 'les utilisateurs',
+                    'url' => 'admin/users',
+                    'active' => ['admin/users'],
+                ],
+                [
+                    'text' => 'les livres',
+                    'url' => 'admin/users/create',
+                    'active' => ['admin/users/create'],
+                ],
+                [
+                    'text' => 'les demandes',
+                    'url' => 'admin/users/search',
+                    'active' => ['admin/users/search'],
+                ],
+            ],
         ],
         [
             'text' => 'Paramètres système',
@@ -362,23 +379,6 @@ return [
             'icon' => 'fas fa-fw fa-cogs',
             'active' => ['admin*'],
             'can' => 'admin',
-            'submenu' => [
-                [
-                    'text' => 'Tous les utilisateurs',
-                    'url' => 'admin/users',
-                    'active' => ['admin/users'],
-                ],
-                [
-                    'text' => 'Tous les livres',
-                    'url' => 'admin/users/create',
-                    'active' => ['admin/users/create'],
-                ],
-                [
-                    'text' => 'Tous les demandes',
-                    'url' => 'admin/users/search',
-                    'active' => ['admin/users/search'],
-                ],
-            ],
         ],
 
 

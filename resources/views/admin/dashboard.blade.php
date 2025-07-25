@@ -1,19 +1,7 @@
-{{-- resources/views/layouts/app.blade.php --}}
-@php
-if (!isset($__adminlte_head)) {
-    $__adminlte_head = true;
-    @endphp
-    @extends('adminlte::page', [
-        'styles' => [
-            asset('https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css'),
-            asset('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css')
-        ]
-    ])
-    @php
-}
-@endphp
-
-
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
 {{-- resources/views/layouts/app.blade.php --}}
 @extends('adminlte::page')
 
@@ -21,7 +9,7 @@ if (!isset($__adminlte_head)) {
 
 @section('content_header')
     {{-- Breadcrumbs will go here, AdminLTE handles this via config or @section('plugins.Datatables', true) --}}
-    <h1>{{ isset($page_title) ? $page_title : 'Dashboard' }}</h1>
+    {{-- <h1>{{ isset($page_title) ? $page_title : 'Dashboard' }}</h1> --}}
     @if(isset($breadcrumbs))
         <ol class="breadcrumb float-sm-right">
             @foreach($breadcrumbs as $label => $url)
@@ -37,14 +25,9 @@ if (!isset($__adminlte_head)) {
 
 @section('content')
     {{-- Your page content will be injected here --}}
-        @yield('content_header')
     
-        <div class="wrapper">
-            @yield('content')
-        </div>
-
 @stop
-
+<br><br>
 @section('footer')
     <div class="float-right d-none d-sm-inline">
         ENSUP Library Management System v{{ config('adminlte.version') }}
