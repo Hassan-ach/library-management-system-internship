@@ -1,4 +1,8 @@
-@extends('adminlte::page')
+@extends('layouts.app')
+@section('title', $page_title ?? 'Ajouter un livre')
+@section('content_header')
+    <h1 class="m-0 text-dark">{{$page_header ?? 'Ajouter un livre'}}</h1>
+@stop
 <!-- Input Group with Icon -->
 @section('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

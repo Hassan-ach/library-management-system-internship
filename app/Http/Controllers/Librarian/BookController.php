@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Librarian;
 
 use App\Http\Controllers\Controller;
-use App\Models\Book;
 use App\Services\Services;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Validation\ValidationException;
+use App\Models\Book;
 
 
 class BookController extends Controller
@@ -22,6 +21,41 @@ class BookController extends Controller
         $this->services = $services;
     }
     
+    public function index(){
+        try {
+            $books = Book::paginate( 2);
+            return view('librarian.books.index')->with('books', $books);
+
+        } catch (\Throwable $th) {
+            throw $th;
+            //return view('librarian.books.index')->with('error', 'Unable to load categories at the moment. Please try again later.');
+        }
+    }
+
+    public function search(Request $request){
+        try {
+            $query = $request->input('query');
+            
+            if (! $query) {
+                $books = Book::paginate( 2);
+            } else {
+                $books = Book::where('title', 'like', "%{$query}%")->paginate(20);
+            }
+            if( !count($books)){
+                return view('librarian.books.index')
+                ->with('message', 'Aucun livre est trouvé sous ce titre "'.$query.'"')
+                ->with('books', null);
+            }
+            return view('librarian.books.index')->with('books', $books);
+            
+        } catch (\Throwable $th) {
+            throw $th;
+            //return view('librarian.books.index')->with('error', 'Unable to load categories at the moment. Please try again later.');
+
+        }
+    }
+
+
     public function create()
     {
         return view('librarian.books.form');
@@ -36,7 +70,9 @@ class BookController extends Controller
             
             return view( 'librarian.books.form', $data)
             ->with('action', $action)
-            ->with('method', $method);
+            ->with('method', $method)
+            ->with('page_title', 'Modifier les détails du livre')
+            ->with('page_header', 'Modifier les détails du livre');
         }
         catch(Exception $e){
             return view('errors.databaseException');
