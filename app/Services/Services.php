@@ -53,7 +53,7 @@ class Services
             'publication_date' => $book->publication_date->format('Y-m-d'),
             'number_of_pages' => $book->number_of_pages,
             'total_copies' => $book->total_copies,
-            'available_copies' => get_borrowed_copies( $book),
+            'available_copies' => $book->total_copies - get_borrowed_copies( $book),
             'description' => $book->description,
             'tags' => $tags,
             'categories' => $categories,

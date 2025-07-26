@@ -188,7 +188,8 @@ class BookController extends Controller
 
     }catch (ValidationException $e)
     {
-        return view('errors.dataValidation');
+        return $e;
+        //return view('errors.dataValidation');
     }
     catch(Exception $e){
         return view('errors.databaseException');

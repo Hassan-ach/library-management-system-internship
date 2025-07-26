@@ -46,16 +46,24 @@
                                 
                                 <dt class="col-sm-4">Auteur(s):</dt>
                                 <dd class="col-sm-8">
-                                    @foreach($authors as $author)
-                                        {{ $author['name'] }}{{ !$loop->last ? ', ' : '' }}
-                                    @endforeach
+                                    @if( $authors)
+                                        @foreach($authors as $author)
+                                            {{ $author['name'] }}{{ !$loop->last ? ', ' : '' }}
+                                        @endforeach
+                                    @else
+                                        {{ "N/A" }}
+                                    @endif
                                 </dd> 
 
                                 <dt class="col-sm-4">Éditeur(s):</dt>
                                 <dd class="col-sm-8">
-                                    @foreach($publishers as $publisher)
-                                        {{ $publisher['name'] }}{{ !$loop->last ? ', ' : '' }}
-                                    @endforeach
+                                    @if( $publishers)
+                                        @foreach($publishers as $publisher)
+                                            {{ $publisher['name'] }}{{ !$loop->last ? ', ' : '' }}
+                                        @endforeach
+                                    @else
+                                        {{ "N/A" }}
+                                    @endif
                                 </dd>
                                 
                                 <dt class="col-sm-4">Année de publication:</dt>
@@ -66,16 +74,24 @@
 
                                 <dt class="col-sm-4">Catégorie(s):</dt>
                                 <dd class="col-sm-8">
-                                    @foreach($categories as $category)
-                                        <span class="badge badge-info">{{ $category['name'] }}</span>{{ !$loop->last ? ' ' : '' }}
-                                    @endforeach
+                                    @if( $categories)
+                                        @foreach($categories as $category)
+                                            <span class="badge badge-info">{{ $category['name'] }}</span>{{ !$loop->last ? ' ' : '' }}
+                                        @endforeach
+                                    @else
+                                        {{ "N/A" }}
+                                    @endif
                                 </dd>
 
-                                <dt class="col-sm-4">Tags:</dt>
+                                <dt class="col-sm-4">Etiquettes:</dt>
                                 <dd class="col-sm-8">
-                                    @foreach($tags as $tag)
-                                        <span class="badge badge-secondary">{{ $tag['name'] }}</span>{{ !$loop->last ? ' ' : '' }}
-                                    @endforeach
+                                    @if( $tags)
+                                        @foreach($tags as $tag)
+                                            <span class="badge badge-secondary">{{ $tag['name'] }}</span>{{ !$loop->last ? ' ' : '' }}
+                                        @endforeach
+                                    @else
+                                        {{ "N/A" }}
+                                    @endif
                                 </dd>
 
                                 <dt class="col-sm-4">Nombre total de copies:</dt>
@@ -87,7 +103,7 @@
                                 <dt class="col-sm-4" >Description:</dt>
                                 <dd class="col-sm-8"></dd>
                                 <dd class="col-sm" style='margin: 10px'>
-                                    <p style="text-align: justify">{{ $description ?? 'Aucune description détaillée disponible pour ce livre.' }}</p>
+                                    <p style="text-align: justify">{{ $description ?? 'Ce livre ne dispose pas encore de description.' }}</p>
                                 </dd>
                                 
                             </dl>
@@ -95,7 +111,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-footer d-flex  justify-content-between align-items-center">
+                <div class="card-footer d-flex  justify-content-between align-items-center " style="margin:15px">
                     <div >
                         <a href="{{ route('books.index') }}" class="btn btn-default">
                             <i class="fas fa-arrow-left"></i> Retour à la liste

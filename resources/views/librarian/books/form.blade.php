@@ -49,7 +49,7 @@
         });
 
         function searchTags(query) {
-            $('#tagsResults').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Searching...</div>');
+            $('#tagsResults').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Chargement des résultats...</div>');
             
             $.ajax({
                 url: '/api/tag/search', 
@@ -67,7 +67,7 @@
                     displayTagsResults(response);
                 },
                 error: function(xhr, status, error) {
-                    $('#tagsResults').html('<div class="text-danger">Search failed. Please try again.</div>');
+                    $('#tagsResults').html('<div class="text-danger">Échec de la recherche. Réessayez ultérieurement. </div>');
                 }
             });
         }
@@ -76,7 +76,7 @@
             const container = $('#tagsResults');
             
             if (tags.length === 0) {
-                container.html('<div class="text-muted">No items found</div>');
+                container.html('<div class="text-muted">Aucun résultat trouvé</div>');
                 return;
             }
 
@@ -123,8 +123,8 @@
             const form_container = $('#tags-display');
 
             if (oldTags.length === 0 && newTags.length === 0) {
-                container.html('No item selected yet');
-                form_container.html('No tags selected');
+                container.html('Aucune étiquette n\'est sélectionnée');
+                form_container.html('Aucune étiquette n\'est sélectionnée');
                 return;
             }
 
@@ -202,7 +202,7 @@
         });
 
         function searchPublishers(query) {
-            $('#publishersResults').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Searching...</div>');
+            $('#publishersResults').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Chargement des résultats...</div>');
             
             $.ajax({
                 url: '/api/publisher/search', 
@@ -220,7 +220,7 @@
                     displayPublishersResults(response);
                 },
                 error: function(xhr, status, error) {
-                    $('#publishersResults').html('<div class="text-danger">Search failed. Please try again.</div>');
+                    $('#publishersResults').html('<div class="text-danger">Échec de la recherche. Réessayez ultérieurement.</div>');
                 }
             });
         }
@@ -229,7 +229,7 @@
             const container = $('#publishersResults');
             
             if (publishers.length === 0) {
-                container.html('<div class="text-muted">No items found</div>');
+                container.html('<div class="text-muted">Aucun résultat trouvé</div>');
                 return;
             }
 
@@ -276,8 +276,8 @@
             const form_container = $('#publishers-display');
 
             if (oldPublishers.length === 0 && newPublishers.length === 0) {
-                container.html('No item selected yet');
-                form_container.html('No publishers selected');
+                container.html('Aucun éditeur n\'est sélectionné');
+                form_container.html('Aucun éditeur n\'est sélectionné');
                 return;
             }
 
@@ -340,7 +340,7 @@
                 if ( Name) {
                     const description = $('#newCategoryDescription').val().trim();
                     if ( !description) {
-                        createNewCategory( Name, 'no description');
+                        createNewCategory( Name, 'aucune description');
                     }
                     createNewCategory( Name, description);
                 }
@@ -359,7 +359,7 @@
         });
 
         function searchCategories(query) {
-            $('#categoriesResults').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Searching...</div>');
+            $('#categoriesResults').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Chargement des résultats....</div>');
             
             $.ajax({
                 url: '/api/category/search', 
@@ -377,7 +377,7 @@
                     displayCategoriesResults(response);
                 },
                 error: function(xhr, status, error) {
-                    $('#categoriesResults').html('<div class="text-danger">Search failed. Please try again.</div>');
+                    $('#categoriesResults').html('<div class="text-danger">Échec de la recherche. Réessayez ultérieurement.</div>');
                 }
             });
         }
@@ -386,7 +386,7 @@
             const container = $('#categoriesResults');
             
             if (categories.length === 0) {
-                container.html('<div class="text-muted">No items found</div>');
+                container.html('<div class="text-muted">Aucun résultat trouvé</div>');
                 return;
             }
 
@@ -433,8 +433,8 @@
             const form_container = $('#categories-display');
 
             if (oldCategories.length === 0 && newCategories.length === 0) {
-                container.html('No item selected yet');
-                form_container.html('No categories selected');
+                container.html('Aucune catégorie n\'est sélectionnée');
+                form_container.html('Aucune catégorie n\'est sélectionnée');
 
                 return;
             }
@@ -513,7 +513,7 @@
         });
 
         function searchAuthors(query) {
-            $('#authorsResults').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Searching...</div>');
+            $('#authorsResults').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Chargement des résultats...</div>');
             
             $.ajax({
                 url: '/api/author/search', 
@@ -531,7 +531,7 @@
                     displayAuthorsResults(response);
                 },
                 error: function(xhr, status, error) {
-                    $('#authorsResults').html('<div class="text-danger">Search failed. Please try again.</div>');
+                    $('#authorsResults').html('<div class="text-danger">Échec de la recherche. Réessayez ultérieurement. </div>');
                 }
             });
         }
@@ -540,7 +540,7 @@
             const container = $('#authorsResults');
             
             if (authors.length === 0) {
-                container.html('<div class="text-muted">No items found</div>');
+                container.html('<div class="text-muted">Aucun résultat trouvé</div>');
                 return;
             }
 
@@ -587,8 +587,8 @@
             const form_container = $('#authors-display');
 
             if (oldAuthors.length === 0 && newAuthors.length === 0) {
-                container.html('No item selected yet');
-                form_container.html('No authors selected');
+                container.html('Aucun auteur n\'est sélectionné');
+                form_container.html('Aucun auteur n\'est sélectionné');
                 return;
             }
 
@@ -679,6 +679,7 @@
         updateSelectedItems();
     </script>
 @stop
+
 @section('content')
 <style>
     #publisherButtonStyle,#categoryButtonStyle,#authorButtonStyle,#tagButtonStyle{
@@ -689,12 +690,12 @@
     <form id="bookForm" method="POST" action="{{ $action ?? route('books.store') }}">
         <div class="row">
             <div class="col-12">
-                <label >Book Title</label>
+                <label>Titre du livre</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-book"></i></span>
                     </div>
-                    <input type="text" name="title" class="form-control" value="{{ old('title', $title ?? '') }}" placeholder="Enter book title">
+                    <input type="text" name="title" class="form-control" value="{{ old('title', $title ?? '') }}" placeholder="Saisir le titre du livre">
                 </div>
                     
                 <label>ISBN</label>
@@ -707,83 +708,46 @@
                 <small class="form-text text-muted">Format: 978-0-123456-78-9</small>
                 
 
-                <label>Publication Date</label>
+                <label>Date du publication</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
                     </div>
-                    <input type="date" class="form-control" name="publication_date" value="{{ old('publication_date', $publication_date ?? '') }}" placeholder="Select publication date">
+                    <input type="date" class="form-control" name="publication_date" value="{{ old('publication_date', $publication_date ?? '') }}" placeholder="">
                 </div>
 
-                <label>Number of Pages</label>
+                <label>Nombre des pages</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-file-alt"></i></span>
                     </div>
-                    <input type="number" class="form-control" name="number_of_pages" min="1" value="{{ old('number_of_pages', $number_of_pages ?? '') }}" placeholder="Enter page count">
+                    <input type="number" class="form-control" name="number_of_pages" min="1" value="{{ old('number_of_pages', $number_of_pages ?? '') }}" placeholder="ex: 30">
                 </div>
 
-                <label>Total Copies</label>
+                <label>Nombre de copies</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-copy"></i></span>
                     </div>
-                    <input type="number" class="form-control" name="total_copies" min="1" value="{{ old('total_copies', $total_copies ?? '') }}" placeholder="Enter total copies">
+                    <input type="number" class="form-control" name="total_copies" min="1" value="{{ old('total_copies', $total_copies ?? '') }}" placeholder="ex: 2">
                 </div>
 
                 <label>Description</label>
                 <div>
-                    <textarea class="form-control" name="description" rows="4" placeholder="Enter book description...">{{ old('description', $description ?? '') }}</textarea>
+                    <textarea class="form-control" name="description" rows="4" placeholder="Saisir une description détaillée du livre">{{ old('description', $description ?? '') }}</textarea>
                 </div>
-                <!-- Tags Display Section -->
-                <div class="form-group">
-                    <div class="mt-3">
-                        <div id="tags-display" class="data-display empty">No tags selected</div>
-                    </div>
-                    @include('librarian.widgets.raw-modal', [
-                        'item' => 'tag',
-                        'Item' => 'Tag',
-                        'icon'=> 'tag',
-                        'Icon' => 'tag',
-                        'style'=> 'btn-outline-warning btn-sm'
-                    ])      
-                </div>
-
-                <!-- Categories Display Section -->
-                <div class="form-group">
-                    <div class="mt-3">
-                        <div id="categories-display" class="data-display empty">No categories selected</div>
-                    </div>
-                    @include('librarian.widgets.category-modal')
-                </div>
-                
                 <!-- Authors Display Section -->
-                <div class="form-group">
-                    <div class="mt-3">
-                        <div id="authors-display" class="data-display empty">No authors selected</div>
-                    </div>
-                    @include('librarian.widgets.raw-modal', [
-                        'item' => 'author',
-                        'Item' => 'Author',
-                        'icon'=> 'user-tie',
-                        'Icon' => 'user-tie',
-                        'style' => 'btn-outline-info btn-sm'
-                    ])   
-                </div>
+                 @include('librarian.widgets.author-modal')
                 
                 <!-- Publishers Display Section -->
-                <div class="form-group">
-                    <div class="mt-3">
-                        <div id="publishers-display" class="data-display empty">No publishers selected</div>
-                    </div>
-                    @include('librarian.widgets.raw-modal', [
-                        'item' => 'publisher',
-                        'Item' => 'Publisher',
-                        'icon'=> 'building',
-                        'Icon' => 'building',
-                        'style'=> 'btn-outline-success btn-sm'
-                    ])
-                <div>
+                 @include('librarian.widgets.publisher-modal')
+                    
+                <!-- Categories Display Section -->
+                 @include('librarian.widgets.category-modal')
+                
+                <!-- Tags Display Section -->
+                @include('librarian.widgets.tag-modal')
+               
                 <input type="hidden" name="tags" id="tags">
                 <input type="hidden" name="categories" id="categories">
                 <input type="hidden" name="publishers" id="publishers">
