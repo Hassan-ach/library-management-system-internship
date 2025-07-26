@@ -55,9 +55,9 @@ class BookController extends Controller
         }
     }
 
-    public function show( $id){
+    public function show( Book $book){
         try{
-            $data = $this->services->getBookData( $id);
+            $data = $this->services->getBookData( $book->id);
 
             return view('librarian.books.show', $data);
         }
@@ -71,11 +71,11 @@ class BookController extends Controller
         return view('librarian.books.form');
     }
 
-    public function edit( $id)
+    public function edit(Book $book)
     {   
         try{
-            $data = $this->services->getBookData( $id);
-            $action = route('books.update', $id);
+            $data = $this->services->getBookData( $book->id);
+            $action = route('books.update', $book);
             $method = 'PATCH';
             
             return view( 'librarian.books.form', $data)
@@ -151,7 +151,7 @@ class BookController extends Controller
     }
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request,Book $book)
     {   
     try{
          // decode json items
@@ -182,7 +182,7 @@ class BookController extends Controller
             'publihsers.old' => 'array',
             'publishers.new' => 'array'
         ]);
-        $this->services->updateBook($id, $validated);
+        $this->services->updateBook($book->id, $validated);
         
         return view('librarian.books.edit');
 
@@ -195,10 +195,10 @@ class BookController extends Controller
     }
     }
 
-    public function delete(int $bookId)
+    public function delete(Book $book)
     {   
         try{
-            $this->services->deleteBook($bookId);
+            $this->services->deleteBook($book->id);
 
             return view('librarian.books.delete'); //temporary
         }catch(ValidationException $e){
