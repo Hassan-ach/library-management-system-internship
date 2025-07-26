@@ -59,7 +59,7 @@ class BookController extends Controller
         try{
             $data = $this->services->getBookData( $book->id);
 
-            return view('librarian.books.show', $data);
+            return view('librarian.books.show', $data)->with('book', $book);
         }
         catch(Exception $e){
             return view('errors.databaseException');

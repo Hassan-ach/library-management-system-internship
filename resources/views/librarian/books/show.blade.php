@@ -95,12 +95,50 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-footer text-right">
-                    <a href="{{ route('books.index') }}" class="btn btn-default">
-                        <i class="fas fa-arrow-left"></i> Retour à la liste
-                    </a>
+                <div class="card-footer d-flex  justify-content-between align-items-center">
+                    <div >
+                        <a href="{{ route('books.index') }}" class="btn btn-default">
+                            <i class="fas fa-arrow-left"></i> Retour à la liste
+                        </a>
+                    </div>
+                    <div class="ml-auto">
+                        <a href="{{ route('books.edit', $book) }}">
+                            <button type="submit" class="btn btn-secondary mr-3" >
+                                <i class="fas fa-save pr-2"></i> Modifier
+                            </button>
+                        </a>
+                        <button type="submit" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" id="#deleteModal" >
+                            <i class="fas fa-save pr-2"></i> Supprimer
+                        </button>
+                    </div>
                 </div>
             </x-adminlte-card>
+        </div>
+    </div>
+     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirmer la suppression du livre</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Êtes-vous sûr de vouloir supprimer ce livre : 
+                    <strong>{{ $title }}</strong> ?
+                    <p class="text-danger mt-2">Une fois supprimé, le livre ne pourra plus être restauré.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                
+                    <form id="deleteForm" method="POST" action="{{ route('books.delete', $book) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 @stop
