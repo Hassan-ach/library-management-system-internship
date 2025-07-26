@@ -123,19 +123,19 @@ Route::middleware('auth:web')->group(function () {
         
         
         
-        Route::get('/statistics', [StatisticsController::class, 'dashboard'])->name('statistics.dashboard');
         Route::prefix('statistics')->name('statistics.')->group(function () {
             Route::get('/users', [StatisticsController::class,'users_stat'])->name('users');
+            Route::get('/users/search', [StatisticsController::class, 'search'])->name('users.search');
             Route::get('/users/export', [StatisticsController::class,'exportUsers'])->name('users.export');
-            Route::get('/users/history', [StatisticsController::class,'users_history'])->name('users.history');
+            Route::get('/users/history/{user}', [StatisticsController::class, 'user_history'])->name('users.history');
             Route::resource('user_history', UserController::class)->names('user.hitory');
 
 
-            Route::get('/requests', [LibrarianRequestController::class,'requests_stat'])->name('requests');
-            Route::get('/requests/export', [LibrarianRequestController::class,'exportRequests'])->name('requests.export');
+            Route::get('/librarian', [StatisticsController::class,'librarian_stat'])->name('librarian');
+            Route::get('/librarian/export', [StatisticsController::class,'exportlibrarian'])->name('librarian.export');
 
-            Route::get('/books', [LibrarianBookController::class,'books_stat'])->name('books');
-            Route::get('/books/export', [LibrarianBookController::class,'exportBooks'])->name('books.export');
+            Route::get('/books', [StatisticsController::class,'books_stat'])->name('books');
+            Route::get('/books/export', [StatisticsController::class,'exportBooks'])->name('books.export');
         });
     });
 });

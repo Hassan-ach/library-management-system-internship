@@ -8,8 +8,7 @@
 @section('title', 'ENSUP Library - ' . (isset($title) ? $title : 'Dashboard'))
 
 @section('content_header')
-    {{-- Breadcrumbs will go here, AdminLTE handles this via config or @section('plugins.Datatables', true) --}}
-    {{-- <h1>{{ isset($page_title) ? $page_title : 'Dashboard' }}</h1> --}}
+    
     @if(isset($breadcrumbs))
         <ol class="breadcrumb float-sm-right">
             @foreach($breadcrumbs as $label => $url)
@@ -27,7 +26,6 @@
     {{-- Your page content will be injected here --}}
     
 @stop
-<br><br>
 @section('footer')
     <div class="float-right d-none d-sm-inline">
         ENSUP Library Management System v{{ config('adminlte.version') }}

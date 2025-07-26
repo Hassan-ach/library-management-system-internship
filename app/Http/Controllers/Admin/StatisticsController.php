@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\RequestStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
+use App\Models\Book;
+use App\Models\BookRequest;
+use App\Models\Requestinfo;
 use App\Models\User;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Exports\UsersExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -15,34 +20,84 @@ class StatisticsController extends Controller
     public function dashboard(){
         return view('admin.statistics.index');
     }
-    public function users_stat(Request $request)
-    {
-        // try {
-            $users = User::latest()->paginate(25);
 
-            return view('admin.statistics.users', compact('users'));
-        // }
-        //  catch (\Exception $e) {
-        //     return redirect()->route('admin.users.index')
-        //         ->with('error', 'Unable to load users: '.$e->getMessage());
-        // }
+
+public function users_stat(Request $request)
+{
+    try {
+        // Get students with their latest book request and related info
+        $students = Student::with(['bookRequests' => function($query) {
+                $query->with(['latestRequestInfo', 'book'])
+                    ->latest()
+                    ->limit(1);
+            }])
+            ->latest()
+            ->paginate(20);
+
+        return view('admin.statistics.users', ['users' => $students]);
+    } catch (\Exception $e) {
+        return redirect()->back()
+            ->with('error', 'Error loading student data: ' . $e->getMessage());
     }
+}
+
+    public function search(Request $request)
+{
+    $search = $request->input('search');
+    $status = $request->input('status');
+    $activity = $request->input('activity');
+
+    $users = Student::query()
+        ->with(['bookRequests' => function($query) {
+            $query->with(['latestRequestInfo', 'book'])
+                ->latest()
+                ->limit(1);
+        }])
+        ->when($search, function ($query, $search) {
+            return $query->where(function ($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('id', 'like', "%{$search}%");
+            });
+        })
+        ->when($status, function ($query, $status) {
+            return $query->where('is_active', $status == 'active');
+        })
+        ->when($activity, function ($query, $activity) {
+            return $query->whereHas('bookRequests.latestRequestInfo', function($q) use ($activity) {
+                $q->where('status', RequestStatus::from($activity));
+            });
+        })
+        ->orderBy('id')
+        ->paginate(20);
+
+        if(!$users->count()) {
+            return redirect()->back()->with('info', 'No users found matching your criteria.');
+        }
+    return view('admin.statistics.users', compact('users'));
+}
 
     public function books_stat(Request $request)
     {
         // try {
-            $users = User::latest()->paginate(25);
+            $books = Book::latest()->paginate(20);
 
-            return view('admin.statistics.books', compact('users'));
+            return view('admin.statistics.books', compact('books'));
 
     }
 
-    public function requests_stat(Request $request)
+    public function librarian_stat(Request $request)
     {
-        // try {
-            $users = User::latest()->paginate(25);
+        try {
+            $users = User::where('role','librarian')->paginate(15);
 
-            return view('admin.statistics.requests', compact('users'));
+            return view('admin.statistics.librarian', compact('users'));
+            }
+         catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Unable to load users: '.$e->getMessage());
+        }
 
     }
     
@@ -51,7 +106,7 @@ class StatisticsController extends Controller
         return Excel::download( new UsersExport($users),'users.xlsx');
     }
 
-    public function exportRequests(){
+    public function exportlibrarian(){
         $users = User::all();
         return Excel::download( new UsersExport($users),'users.xlsx');
     }
@@ -61,14 +116,30 @@ class StatisticsController extends Controller
         return Excel::download( new UsersExport($users),'users.xlsx');
     }
 
-    public function history(User $user)
+    public function users_history(User $user)
     {
-        $activities = Activity::where('causer_id', $user->id)
-        ->orWhere('subject_id', $user->id)
-        ->with(['causer', 'subject'])
-        ->latest()
-        ->paginate(15);
+        $requests = BookRequest::with(['book', 'RequestInfo'])
+            ->where('user_id', $user->id)
+            ->latest()
+            ->get()
+            ->map(function ($request) {
+                $latestInfo = $request->RequestInfo->sortByDesc('created_at')->first();
+                
+                return [
+                    'id' => $request->id,
+                    'created_at' => $request->created_at,
+                    'book_title' => $request->book->title ?? 'N/A',
+                    'status' => $latestInfo->status ?? null,
+                    'processed_at' => $latestInfo->processed_at ?? null,
+                    // Add human readable diffs
+                    'created_diff' => $request->created_at->diffForHumans(),
+                    'processed_diff' => $latestInfo->processed_at ? $latestInfo->processed_at->diffForHumans() : null
+                ];
+            });
 
-        return view('admin.statistics.users_history',compact('user', 'activities'));
+        return view('admin.statistics.users_history', [
+            'user' => $user,
+            'requests' => $requests
+        ]);
     }
 }

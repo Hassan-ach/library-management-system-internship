@@ -33,6 +33,39 @@ if (! function_exists('get_latest_info')) {
     }
 }
 
+
+if (! function_exists('get_last_activity')) {
+    function get_last_activity($stud_id) {
+        $last_req = BookRequest::with('latestRequestInfo')->where('user_id', $stud_id)->latest()->first();
+        $last_activity = $last_req->latestRequestInfo->status;
+        $book_title = Book::findOrFail($last_req->book_id)->title;
+
+        return [
+            'last_activity' => $last_activity, 
+            'book_title' => $book_title
+        ];
+    }
+}
+
+// app/Helpers/RequestHelpers.php
+function get_request_status_badge($request) {
+    $latestInfo = $request->RequestInfo->sortByDesc('created_at')->first();
+    $status = strtolower($latestInfo->status ?? 'unknown');
+    
+    $bgColor = match($status) {
+        'borrowed', 'returned' => 'success',
+        'pending' => 'warning',
+        'approved' => 'info',
+        'rejected' => 'danger',
+        'overdue' => 'dark',
+        'canceled' => 'secondary',
+        default => 'primary'
+    };
+    
+    return '<span class="badge badge-'.$bgColor.'">'.ucfirst($status).'</span>';
+}
+
+
 // Count how many books aren't available
 if (! function_exists('get_non_available_books')) {
     function get_non_available_books(): int

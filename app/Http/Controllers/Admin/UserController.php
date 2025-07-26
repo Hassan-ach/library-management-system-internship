@@ -18,7 +18,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         // try {
-            $users = User::latest()->paginate(25);
+            $users = User::latest()->paginate(20);
 
             return view('/admin/users/index', compact('users'));
         // }
@@ -32,29 +32,41 @@ class UserController extends Controller
 
     public function search(Request $request)
     {
+        // if (empty($request->search) && empty($request->role) && empty($request->status)) {
+        //    return back()->with('info', 'All search fields are empty.');
+        // }
         $search = $request->input('search');
-        $role = $request->input('role');
         $status = $request->input('status');
+        $role = $request->input('role');
 
-        $users = User::query()
-            ->when($search, function ($query, $search) {
-                return $query->where(function ($q) use ($search) {
-                    $q->where('first_name', 'like', "%{$search}%")
-                    ->orWhere('last_name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('id', 'like', "%{$search}%");
-                });
-            })
-            ->when($role, function ($query, $role) {
-                return $query->where('role', $role);
-            })
+        try {
+            $users = User::query()
+                ->when(!empty($search), function ($query) use ($search) {
+                    return $query->where(function ($q) use ($search) {
+                        $q->where('first_name', 'like', "%{$search}%")
+                        ->orWhere('last_name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('id', 'like', "%{$search}%");
+                    });
+                })
+                ->when(!empty($role), function ($query) use ($role) {
+                    return $query->where('role', $role);
+                })
             ->when($status, function ($query, $status) {
                 return $query->where('is_active', $status == 'active');
             })
             ->orderBy('id')
-            ->paginate(25);
+            ->paginate(20);
+
+            if(!$users->count()) {
+                return redirect()->back()->with('info', 'No users found matching your criteria.');
+            }
 
         return view('admin.users.index', compact('users'));
+        }catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'enable to load users: '.$e->getMessage());
+        }
     }
     // >>>>>>>>>>>>>>>>>>>> search user
 
