@@ -23,7 +23,7 @@ class BookController extends Controller
     
     public function index(){
         try {
-            $books = Book::paginate( 2);
+            $books = Book::paginate( 20);
             return view('librarian.books.index')->with('books', $books);
 
         } catch (\Throwable $th) {
@@ -37,7 +37,7 @@ class BookController extends Controller
             $query = $request->input('query');
             
             if (! $query) {
-                $books = Book::paginate( 2);
+                $books = Book::paginate( 20);
             } else {
                 $books = Book::where('title', 'like', "%{$query}%")->paginate(20);
             }
@@ -55,6 +55,16 @@ class BookController extends Controller
         }
     }
 
+    public function show( $id){
+        try{
+            $data = $this->services->getBookData( $id);
+
+            return view('librarian.books.show', $data);
+        }
+        catch(Exception $e){
+            return view('errors.databaseException');
+        }
+    }
 
     public function create()
     {

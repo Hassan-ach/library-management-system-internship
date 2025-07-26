@@ -25,9 +25,10 @@
             <div class="row">
                 @forelse ($books as $book)
                     <!-- if there is books to display  -->
-                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 d-flex align-items-stretch">
+                    <div class="col-xxl-2 col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12 d-flex align-items-stretch">
+
                         <div class="card shadow-sm mb-4 w-100">
-                            
+                            <a href="{{ route('books.show', $book->id) }}">
                             @if ($book->image_url)
                                 <img src="{{ $book->image_url }}" class="card-img-top" alt="{{ $book->title }} Cover" style="height: 250px; object-fit: cover;">
                             @else
@@ -35,26 +36,29 @@
                                     <i class="fas fa-book fa-6x text-black-50"></i>
                                 </div>
                             @endif
-                            <div class="card-body d-flex flex-column">
+                            <div class="card-body d-flex flex-grow-1">
                                 <h5 class="card-title font-weight-bold">
                                     {{ \Illuminate\Support\Str::limit($book->title, 50) }}
                                 </h5>
                             </div>
-    
-                            <div class="card-footer bg-light border-top-0">
-                                <div class="d-flex justify-content-between align-items-center">    
-                                    <a href="{{ route('books.edit', $book) }}" class="btn btn-sm btn-outline-primary" title="Edit">
-                                        <i class="fas fa-edit"></i> Modifier
-                                    </a>
-    
-                                    <button class="btn btn-sm btn-outline-danger"
-                                            title="Delete"
-                                            data-toggle="modal"
-                                            data-target="#deleteModal"
-                                            data-book-id="{{ $book->id }}"
-                                            data-book-title="{{ $book->title }}">
-                                        <i class="fas fa-trash"></i> Supprimer
-                                    </button>
+                            </a>
+                            <div class="card-footer bg-light border-top-0 mt-auto">
+                                <div class="row no-gutters">    
+                                    <div class='col-6 pr-2'>
+                                        <a href="{{ route('books.edit', $book) }}" class="btn btn-sm btn-outline-primary w-100" title="Edit">
+                                            <i class="fas fa-edit"></i> Modifier
+                                        </a>
+                                    </div>
+                                    <div class='col-6 pl-2'>
+                                        <button class="btn btn-sm btn-outline-danger w-100"
+                                                title="Delete"
+                                                data-toggle="modal"
+                                                data-target="#deleteModal"
+                                                data-book-id="{{ $book->id }}"
+                                                data-book-title="{{ $book->title }}">
+                                            <i class="fas fa-trash"></i> Supprimer
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

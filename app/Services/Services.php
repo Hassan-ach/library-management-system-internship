@@ -47,11 +47,13 @@ class Services
         }
 
         $book_data = [
+            'image_url' => '',
             'title' => $book->title,
             'isbn' => $book->isbn,
             'publication_date' => $book->publication_date->format('Y-m-d'),
             'number_of_pages' => $book->number_of_pages,
             'total_copies' => $book->total_copies,
+            'available_copies' => get_borrowed_copies( $book),
             'description' => $book->description,
             'tags' => $tags,
             'categories' => $categories,

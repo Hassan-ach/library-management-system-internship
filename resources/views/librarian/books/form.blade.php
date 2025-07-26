@@ -117,6 +117,8 @@
         }
 
         function updateSelectedTagsDisplay() {
+            fillHiddenInputs();
+
             const container = $('#selectedTagList');
             const form_container = $('#tags-display');
 
@@ -150,7 +152,6 @@
             
             container.html(html);
             form_container.html(html);
-            fillHiddenInputs();
         }
 
         function saveSelectedTags() {
@@ -269,6 +270,8 @@
         }
 
         function updateSelectedPublishersDisplay() {
+            fillHiddenInputs();
+            
             const container = $('#selectedPublisherList');
             const form_container = $('#publishers-display');
 
@@ -302,7 +305,6 @@
             
             container.html(html);
             form_container.html(html);
-            fillHiddenInputs();
         }
 
         function saveSelectedPublishers() {
@@ -425,6 +427,8 @@
         }
 
         function updateSelectedCategoriesDisplay() {
+            fillHiddenInputs();
+            
             const container = $('#selectedCategoriesList');
             const form_container = $('#categories-display');
 
@@ -459,7 +463,6 @@
             
             container.html(html);
             form_container.html(html);
-            fillHiddenInputs();
         }
 
         function saveSelectedCategories() {
@@ -576,8 +579,10 @@
             newAuthors = newAuthors.filter(author => author != Name);
             updateSelectedAuthorsDisplay();
         }
-
+        
         function updateSelectedAuthorsDisplay() {
+            fillHiddenInputs();
+            
             const container = $('#selectedAuthorList');
             const form_container = $('#authors-display');
 
@@ -611,7 +616,6 @@
             
             container.html(html);
             form_container.html(html);
-            fillHiddenInputs();
         }
 
         function saveSelectedAuthors() {
@@ -640,7 +644,6 @@
             updateSelectedPublishersDisplay();
             updateSelectedCategoriesDisplay();
             updateSelectedTagsDisplay();
-            
         }
 
         function fillHiddenInputs(){ 
@@ -787,8 +790,12 @@
                 <input type="hidden" name="authors" id="authors">
                 
                 <input name="_method" type="hidden" value="{{ $method ?? 'POST'}}">
-
-                <button type="submit">Submit</button>
+                
+                <div class="text-right">
+                    <button type="submit" class="btn btn-success " style='width:10%'>
+                        <i class="fas fa-save pr-2"></i> Submit
+                    </button>
+                </div>
             </div>
         </div>
     </form>

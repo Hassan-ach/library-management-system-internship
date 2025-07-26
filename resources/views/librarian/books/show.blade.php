@@ -1,0 +1,107 @@
+@extends('layouts.app')
+
+@section('title', 'Détails du livre: ' . $title)
+
+@section('content_header')
+    <h1 class="m-0 text-dark">Détails du livre</h1>
+@stop
+
+@section('content')
+    <div class="row">
+        <div class="col-12">
+            {{-- Display success/error messages --}}
+            @if(session('success'))
+                <x-adminlte-alert theme="success" title="Succès">
+                    {{ session('success') }}
+                </x-adminlte-alert>
+            @endif
+            @if(session('error'))
+                <x-adminlte-alert theme="danger" title="Erreur">
+                    {{ session('error') }}
+                </x-adminlte-alert>
+            @endif
+
+            <x-adminlte-card title="Informations sur le livre" theme="primary" icon="fas fa-book-reader" >
+                <div class="card-body" style="//border: black solid 1px,">
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-3" style="height: 350px; max-width: 300px;">
+                            
+                            @if ($image_url)
+                                <img src="{{ $image_url }}" class="card-img-top" alt="{{ $title }} Cover" style=" object-fit: cover;">
+                            @else
+                                <div class="card-img-top d-flex justify-content-center align-items-center bg-light" style="height: 350px; width: 100%;">
+                                    <i class="fas fa-book fa-6x text-black-50"></i>
+                                </div>
+                            @endif
+                            
+                            <h4 class="mt-3" style="font-weight : 600;" >{{ $title }}</h4>
+                        </div>
+
+                        <div class="col-md-8">
+                            <dl class="row" style="padding: 10px">
+                                <dt class="col-sm-4">ISBN:</dt>
+                                <dd class="col-sm-8">
+                                    {{ $isbn }}
+                                </dd>    
+                                
+                                <dt class="col-sm-4">Auteur(s):</dt>
+                                <dd class="col-sm-8">
+                                    @foreach($authors as $author)
+                                        {{ $author['name'] }}{{ !$loop->last ? ', ' : '' }}
+                                    @endforeach
+                                </dd> 
+
+                                <dt class="col-sm-4">Éditeur(s):</dt>
+                                <dd class="col-sm-8">
+                                    @foreach($publishers as $publisher)
+                                        {{ $publisher['name'] }}{{ !$loop->last ? ', ' : '' }}
+                                    @endforeach
+                                </dd>
+                                
+                                <dt class="col-sm-4">Année de publication:</dt>
+                                <dd class="col-sm-8">{{ $publication_date ?? 'N/A' }}</dd>
+                                
+                                <dt class="col-sm-4">Nombre de pages:</dt>
+                                <dd class="col-sm-8">{{ $number_of_pages ?? 'N/A' }}</dd>
+
+                                <dt class="col-sm-4">Catégorie(s):</dt>
+                                <dd class="col-sm-8">
+                                    @foreach($categories as $category)
+                                        <span class="badge badge-info">{{ $category['name'] }}</span>{{ !$loop->last ? ' ' : '' }}
+                                    @endforeach
+                                </dd>
+
+                                <dt class="col-sm-4">Tags:</dt>
+                                <dd class="col-sm-8">
+                                    @foreach($tags as $tag)
+                                        <span class="badge badge-secondary">{{ $tag['name'] }}</span>{{ !$loop->last ? ' ' : '' }}
+                                    @endforeach
+                                </dd>
+
+                                <dt class="col-sm-4">Nombre total de copies:</dt>
+                                <dd class="col-sm-8">{{ $total_copies }}</dd>
+                                
+                                <dt class="col-sm-4">Nombre de copies disponibles</dt>
+                                <dd class="col-sm-8">{{ $available_copies }}</dd>
+                                
+                                <dt class="col-sm-4" >Description:</dt>
+                                <dd class="col-sm-8"></dd>
+                                <dd class="col-sm" style='margin: 10px'>
+                                    <p style="text-align: justify">{{ $description ?? 'Aucune description détaillée disponible pour ce livre.' }}</p>
+                                </dd>
+                                
+                            </dl>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-right">
+                    <a href="{{ route('books.index') }}" class="btn btn-default">
+                        <i class="fas fa-arrow-left"></i> Retour à la liste
+                    </a>
+                </div>
+            </x-adminlte-card>
+        </div>
+    </div>
+@stop
+
