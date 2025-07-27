@@ -6,7 +6,7 @@
     <div class="d-flex justify-content-between align-items-center">
         <h1>Tous les livres</h1>
 
-        <form action="{{ route('books.search') }}" method="GET" class="ml-auto" style="width: 30%; max-width:350px;">
+        <form action="{{ route('librarian.books.search') }}" method="GET" class="ml-auto" style="width: 30%; max-width:350px;">
             <div class="input-group">
                 <input type="text" name="query" class="form-control" placeholder="Chercher un livre..." value="{{ request('query') }}">
                 <div class="input-group-append">
@@ -28,7 +28,7 @@
                     <div class="col-xxl-2 col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12 d-flex align-items-stretch">
 
                         <div class="card shadow-sm mb-4 w-100">
-                            <a href="{{ route('books.show', $book->id) }}">
+                            <a href="{{ route('librarian.books.show', $book->id) }}">
                             @if ($book->image_url)
                                 <img src="{{ $book->image_url }}" class="card-img-top" alt="{{ $book->title }} Cover" style="height: 250px; object-fit: cover;">
                             @else
@@ -45,7 +45,7 @@
                             <div class="card-footer bg-light border-top-0 mt-auto">
                                 <div class="row no-gutters">    
                                     <div class='col-6 pr-2'>
-                                        <a href="{{ route('books.edit', $book) }}" class="btn btn-sm btn-outline-primary w-100" title="Edit">
+                                        <a href="{{ route('librarian.books.edit', $book) }}" class="btn btn-sm btn-outline-primary w-100" title="Edit">
                                             <i class="fas fa-edit"></i> Modifier
                                         </a>
                                     </div>
@@ -69,7 +69,7 @@
                         <div class="alert alert-light text-center">
                             <h4>Aucun livre disponible pour le moment</h4>
                             <p>La bibliothèque est vide. Commencez dès maintenant à ajouter vos premiers livres !</p>
-                            <a href="{{ route('books.create') }}" class="btn btn-success">Ajouter un livre</a>
+                            <a href="{{ route('librarian.books.create') }}" class="btn btn-success">Ajouter un livre</a>
                         </div>
                     </div>
                 @endforelse
@@ -92,7 +92,7 @@
                     </p>
                 </div>
             </div>
-            <a href="{{ route('books.index') }}" class="btn  btn-success" >
+            <a href="{{ route('librarian.books.index') }}" class="btn  btn-success" >
                 retourner
             </a>
             </div>
@@ -138,7 +138,7 @@
         var bookId = button.data('book-id');
         var bookTitle = button.data('book-title');
 
-        var action = '{{ url('books') }}/' + bookId;
+        var action = '{{ url('librarian/books') }}/' + bookId;
 
         var modal = $(this);
 

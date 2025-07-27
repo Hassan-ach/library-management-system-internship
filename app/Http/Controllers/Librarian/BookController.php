@@ -75,7 +75,7 @@ class BookController extends Controller
     {   
         try{
             $data = $this->services->getBookData( $book->id);
-            $action = route('books.update', $book);
+            $action = route('librarian.books.update', $book);
             $method = 'PATCH';
             
             return view( 'librarian.books.form', $data)
@@ -188,8 +188,8 @@ class BookController extends Controller
 
     }catch (ValidationException $e)
     {
-        return $e;
-        //return view('errors.dataValidation');
+        //return $e;
+        return view('errors.dataValidation');
     }
     catch(Exception $e){
         return view('errors.databaseException');

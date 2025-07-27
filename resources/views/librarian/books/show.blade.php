@@ -113,12 +113,12 @@
                 </div>
                 <div class="card-footer d-flex  justify-content-between align-items-center " style="margin:15px">
                     <div >
-                        <a href="{{ route('books.index') }}" class="btn btn-default">
+                        <a href="{{ route('librarian.books.index') }}" class="btn btn-default">
                             <i class="fas fa-arrow-left"></i> Retour à la liste
                         </a>
                     </div>
                     <div class="ml-auto">
-                        <a href="{{ route('books.edit', $book) }}">
+                        <a href="{{ route('librarian.books.edit', $book) }}">
                             <button type="submit" class="btn btn-secondary mr-3" >
                                 <i class="fas fa-save pr-2"></i> Modifier
                             </button>
@@ -148,7 +148,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
                 
-                    <form id="deleteForm" method="POST" action="{{ route('books.delete', $book) }}">
+                    <form id="deleteForm" method="POST" action="{{ route('librarian.books.delete', $book) }}">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Supprimer</button>

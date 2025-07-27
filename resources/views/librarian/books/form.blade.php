@@ -52,16 +52,16 @@
             $('#tagsResults').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Chargement des résultats...</div>');
             
             $.ajax({
-                url: '/api/tag/search', 
+                url: '/librarian/api/tag/search', 
                 type: 'GET',
                 dataType: 'json',
                 data: { 
                     q: query
                 },
-                /*headers: {
+                headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                     'Accept': 'application/json'
-                },*/
+                },
                 success: function(response) {
                     
                     displayTagsResults(response);
@@ -205,16 +205,16 @@
             $('#publishersResults').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Chargement des résultats...</div>');
             
             $.ajax({
-                url: '/api/publisher/search', 
+                url: '/librarian/api/publisher/search', 
                 type: 'GET',
                 dataType: 'json',
                 data: { 
                     q: query
                 },
-                /*headers: {
+                headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                     'Accept': 'application/json'
-                },*/
+                },
                 success: function(response) {
                     
                     displayPublishersResults(response);
@@ -362,16 +362,16 @@
             $('#categoriesResults').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Chargement des résultats....</div>');
             
             $.ajax({
-                url: '/api/category/search', 
+                url: '/librarian/api/category/search', 
                 type: 'GET',
                 dataType: 'json',
                 data: { 
                     q: query
                 },
-                /*headers: {
+                headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                     'Accept': 'application/json'
-                },*/
+                },
                 success: function(response) {
                     
                     displayCategoriesResults(response);
@@ -516,16 +516,16 @@
             $('#authorsResults').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Chargement des résultats...</div>');
             
             $.ajax({
-                url: '/api/author/search', 
+                url: '/librarian/api/author/search', 
                 type: 'GET',
                 dataType: 'json',
                 data: { 
                     q: query
                 },
-                /*headers: {
+                headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                     'Accept': 'application/json'
-                },*/
+                },
                 success: function(response) {
                     
                     displayAuthorsResults(response);
@@ -687,7 +687,8 @@
     }
 </style>
 <div class="container-fluid">
-    <form id="bookForm" method="POST" action="{{ $action ?? route('books.store') }}">
+    <form id="bookForm" method="POST" action="{{ $action ?? route('librarian.books.store') }}">
+        @csrf
         <div class="row">
             <div class="col-12">
                 <label>Titre du livre</label>

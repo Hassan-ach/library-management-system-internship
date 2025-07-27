@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\AuthController;
 
 use App\Http\Controllers\Librarian\AuthorController;
 use App\Http\Controllers\Librarian\CategoryController;
+use App\Http\Controllers\Librarian\LibrarianDashboardController;
 use App\Http\Controllers\Librarian\PublisherController;
 use App\Http\Controllers\Librarian\TagController;
 
@@ -66,17 +67,37 @@ Route::middleware('auth:web')->group(function () {
     });
     // librarian
     Route::prefix('librarian')->name('librarian.')->middleware('role:librarian')->group(function () {
-        //
+        //dashboard
+        Route::get('/dash', [LibrarianDashboardController::class, 'index'])->name('dashboard');
+        
         Route::get('/requests', [LibrarianRequestController::class, 'index'])->name('requests.index');
         Route::get('/requests/{id}', [LibrarianRequestController::class, 'show'])->name('requests.show');
         Route::post('/requests/{id}', [LibrarianRequestController::class, 'process'])->name('requests.process');
         Route::get('/students/{id}', [StudentStatisticsController::class, 'index'])->name('students.statistics');
-        // Book Routes: 
-        Route::post('/books', [LibrarianBookController::class, 'create'])->name('books.create');
-        Route::get('/books/add', [LibrarianBookController::class, 'isbnForm'])->name('books.isbnForm');
-        Route::post('/books/add', [GoogleApiServiceController::class, 'getBookInfo'])->name('books.isbn.getInfo');
-        Route::patch('/books/{id}', [LibrarianBookController::class, 'update'])->name('books.update');
-        Route::delete('/books/{id}', [LibrarianBookController::class, 'delete'])->name('books.delete');
+        
+        // display a list of all books
+        Route::get('/books', [LibrarianBookController::class, 'index'])->name('books.index');
+        Route::get('/books/search', [LibrarianBookController::class, 'search'])->name('books.search');
+        // show form to create book manually
+        Route::get('/books/create', [LibrarianBookController::class, 'create'])->name('books.create');
+        // add new book by isbn
+        Route::post('/books/by-isbn', [GoogleApiServiceController::class, 'getBookInfo'])->name('books.isbn.getInfo');
+        // store the data from form(api/manual) to DB
+        Route::post('/books', [LibrarianBookController::class, 'store'])->name('books.store');
+        // show book info
+        Route::get('/books/{book}', [LibrarianBookController::class, 'show'])->name('books.show');
+        // show form to edit book infos
+        Route::get('/books/{book}/edit', [LibrarianBookController::class, 'edit'])->name('books.edit');
+        // update new book infos on database
+        Route::patch('/books/{book}', [LibrarianBookController::class, 'update'])->name('books.update');
+        Route::delete('/books/{book}', [LibrarianBookController::class, 'delete'])->name('books.delete');
+        
+        // These rootes are used to simplify the search process during book's creation 
+        Route::get('/api/author/search', [AuthorController::class, 'apiSearch'])->name('author.api.search');
+        Route::get('/api/publisher/search', [PublisherController::class, 'apiSearch'])->name('publisher.api.search');
+        Route::get('/api/category/search', [CategoryController::class, 'apiSearch'])->name('category.api.search');
+        Route::get('/api/tag/search', [TagController::class, 'apiSearch'])->name('tag.api.search');
+
         // Author Routes:
         Route::get('/authors', [AuthorController::class, 'index'])->name('authors.index');
         Route::get('/authors/search', [AuthorController::class, 'search'])->name('authors.search');
@@ -139,22 +160,3 @@ Route::middleware('auth:web')->group(function () {
         });
     });
 });
-
-Route::get('/api/tag/search', [TagController::class, 'apiSearch']);
-Route::get('/api/author/search', [AuthorController::class, 'apiSearch']);
-Route::get('/api/publisher/search', [PublisherController::class, 'apiSearch']);
-Route::get('/api/category/search', [CategoryController::class, 'apiSearch']);
-
-//this route is responsable to store the data from form(api/manual) to DB
-Route::post('/books', [LibrarianBookController::class, 'store'])->name('books.store');
-// show form to create book manually
-Route::get('/books/create', [LibrarianBookController::class, 'create'])->name('books.create');
-
-Route::post('/books/by-isbn', [GoogleApiServiceController::class, 'getBookInfo'])->name('books.isbn.getInfo');
-
-// show form to edit book infos
-Route::get('/books/{id}/edit', [LibrarianBookController::class, 'edit'])->name('books.edit');
-// update new book infos on database
-Route::patch('/books/{id}', [LibrarianBookController::class, 'update'])->name('books.update');
-
-Route::delete('/books/{id}', [LibrarianBookController::class, 'delete'])->name('books.delete');
