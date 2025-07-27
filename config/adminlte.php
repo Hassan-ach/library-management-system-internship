@@ -359,11 +359,12 @@ return [
                 [
                     'text' => 'Les etudiants',
                     'url' => 'admin/statistics/users',
-                    'active' => ['admin/statistics/users', 'admin/statistics/users/search*'],
+                    'active' => ['admin/statistics/users*','admin/statistics/student*'],
                 ],
                 [
                     'text' => 'Les bibliothecaires',
                     'url' => 'admin/statistics/librarian',
+                    'active' => ['admin/statistics/librarian*'],
                 ],
                 [
                     'text' => 'Les livres',

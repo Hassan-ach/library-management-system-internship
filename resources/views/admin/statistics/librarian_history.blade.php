@@ -17,7 +17,7 @@ use App\Enums\RequestStatus;
     <br>
     <div class="card mb-4 shadow-sm">
         <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">User Information</h5>
+            <h5 class="mb-0">Librarian Information</h5>
         </div>
         <div class="card-body">
             <div class="row">
@@ -26,7 +26,7 @@ use App\Enums\RequestStatus;
                     <div class="d-flex align-items-center mb-3">
                         <i class="fas fa-user me-3 text-primary"></i>
                         <div>
-                            <h6 class="mb-0">Name</h6>
+                            <h6 class="mb-0">Full name</h6>
                             <p class="mb-0">{{ $user->first_name }} {{ $user->last_name }}</p>
                         </div>
                     </div>
@@ -82,11 +82,11 @@ use App\Enums\RequestStatus;
     <thead class="bg-primary text-black">
         <tr>
             <th class="text-black">ID</th>
-            <th class="text-black">Request Date</th>
+            <th class="text-black">Response Date</th>
             <th class="text-black">Book Title</th>
             <th class="text-black">Status</th>
-            <th class="text-black">Processed At</th>
-            <th class="text-black">Processed By</th>
+            <th class="text-black">Requested At</th>
+            <th class="text-black">Requested By</th>
         </tr>
     </thead>
     <tbody>

@@ -161,11 +161,10 @@ public function users_stat(Request $request)
                     'id' => $request->id,
                     'created_at' => $request->created_at,
                     'book_title' => $request->book->title ?? 'N/A',
-                    'status' => $latestInfo->status ?? null,
+                    'status' => $latestInfo->status,
                     'processed_at' => $latestInfo->processed_at ?? null,
                     'created_diff' => $request->created_at->diffForHumans(),
                     'processed_diff' => $latestInfo->processed_at ? $latestInfo->processed_at->diffForHumans() : null,
-                    // Add these for your header display
                     'is_first' => false // We'll set this for the first item
                 ];
             });
@@ -178,11 +177,35 @@ public function users_stat(Request $request)
         return view('admin.statistics.users_history', [
             'user' => $user,
             'requests' => $requests,
-            'totalRequests' => $requests->total() // Now available via paginator
+            'totalRequests' => $requests->total()
         ]);
     }
 
-    public function librarian_history(Librarian $user){
-        return view('admin.statistics.librarian_history');
-    }
+public function librarian_history(User $user)
+{
+    $requests = BookRequest::with(['book', 'requestInfo', 'user'])
+        ->where('user_id', $user->id)
+            ->latest()
+            ->paginate(15)
+        ->through(function ($request) {
+            $latestInfo = $request->requestInfo->sortByDesc('created_at')->first();
+            
+            return [
+                'id' => $request->id,
+                'response_date' => $latestInfo->created_at,
+                'book_title' => $request->book->title ?? 'N/A',
+                'status' => $latestInfo->status ?? null,
+                'requested_at' => $request->created_at,
+                'requested_by' => $request->user->name,
+                'response_diff' => $latestInfo->created_at->diffForHumans(),
+                'requested_diff' => $request->created_at->diffForHumans(),
+            ];
+        });
+
+    return view('admin.statistics.librarian_history', [
+        'user' => $user,
+        'requests' => $requests,
+        'totalRequests' => $requests->total()
+    ]);
+}
 }

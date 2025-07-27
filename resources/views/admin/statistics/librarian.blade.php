@@ -79,7 +79,7 @@
                             </td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <a href="{{ route('admin.statistics.users.history', $user->id) }}" 
+                                    <a href="{{ route('admin.statistics.librarian_history', $user->id) }}" 
                                     class="btn btn-secondary btn-sm"
                                     title="View History">
                                         <i class="fas fa-history"></i>
