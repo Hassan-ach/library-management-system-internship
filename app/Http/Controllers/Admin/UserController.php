@@ -72,9 +72,9 @@ class UserController extends Controller
 
     // <<<<<<<<<<<<<<<<<<<< Create user(s) method
 
-    public function create_page(){
-        return view("admin.users.create");
-    }
+    // public function create_page(){
+    //     return view("admin.users.create");
+    // }
     public function create(Request $request)
     {
         try {

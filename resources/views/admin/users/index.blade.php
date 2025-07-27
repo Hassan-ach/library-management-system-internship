@@ -71,7 +71,7 @@
 
     {{-- Create user --}}
     <div class="col-md-6 d-flex align-items-end mb-3">
-        <a href="{{ route('admin.users.create') }}" class="btn btn-primary">
+        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#createUserModal">
             <i class="fa-solid fa-user-plus me-2"></i> Create user
         </a>
     </div>
@@ -143,6 +143,7 @@
         {{ $users->withQueryString()->links('pagination::bootstrap-5') }}
     </div>
 </div>
+@include('admin.users.modal.create')
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 @endsection

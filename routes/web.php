@@ -113,7 +113,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/settings', [SettingsController::class, 'index'])->name('settings.get');
         Route::patch('/settings', [SettingsController::class, 'update'])->name('settings.update');
         
-        Route::get('/users', [UserController::class, 'create_page'])->name('users.create');
+        // Route::get('/users', [UserController::class, 'create_page'])->name('users.create');
         Route::post('/users', [UserController::class, 'create'])->name('create');
         Route::get('/users/index', [UserController::class, 'index'])->name('users.all');
         Route::get('/users/search', [UserController::class, 'search'])->name('users.search');

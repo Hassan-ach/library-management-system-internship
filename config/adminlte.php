@@ -375,7 +375,7 @@ return [
             'text' => 'Paramètres système',
             'url' => 'admin/settings',
             'icon' => 'fas fa-fw fa-cogs',
-            'active' => ['admin*'],
+            'active' => ['admin/settings/*'],
             'can' => 'admin',
         ],
 
