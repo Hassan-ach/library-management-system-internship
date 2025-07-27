@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Book;
 use App\Models\BookRequest;
+use App\Models\Librarian;
 use App\Models\Requestinfo;
 use App\Models\User;
 use App\Models\Student;
@@ -28,11 +29,11 @@ public function users_stat(Request $request)
         // Get students with their latest book request and related info
         $students = Student::with(['bookRequests' => function($query) {
                 $query->with(['latestRequestInfo', 'book'])
-                    ->latest()
+                    
                     ->limit(1);
             }])
             ->latest()
-            ->paginate(20);
+            ->paginate(22);
 
         return view('admin.statistics.users', ['users' => $students]);
     } catch (\Exception $e) {
@@ -78,6 +79,37 @@ public function users_stat(Request $request)
     return view('admin.statistics.users', compact('users'));
 }
 
+    public function search_librarian(Request $request)
+{
+    try{
+        $search = $request->input('search');
+        $status = $request->input('status');
+
+        $users = Librarian::query()
+            ->when($search, function ($query, $search) {
+                return $query->where(function ($q) use ($search) {
+                    $q->where('first_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('id', 'like', "%{$search}%");
+                });
+            })
+            ->when($status, function ($query, $status) {
+                return $query->where('is_active', $status == 'active');
+            })
+            ->orderBy('id')
+            ->paginate(5);
+
+            if(!$users->count()) {
+                return redirect()->back()->with('info', 'No users found matching your criteria.');
+            }
+        return view('admin.statistics.librarian', compact('users'));
+        }catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Error loading librarian data: ' . $e->getMessage());
+        }
+}
+
     public function books_stat(Request $request)
     {
         // try {
@@ -116,13 +148,13 @@ public function users_stat(Request $request)
         return Excel::download( new UsersExport($users),'users.xlsx');
     }
 
-    public function users_history(User $user)
+    public function user_history(Student $user)
     {
         $requests = BookRequest::with(['book', 'RequestInfo'])
             ->where('user_id', $user->id)
             ->latest()
-            ->get()
-            ->map(function ($request) {
+            ->paginate(15) // Changed to paginate
+            ->through(function ($request) {
                 $latestInfo = $request->RequestInfo->sortByDesc('created_at')->first();
                 
                 return [
@@ -131,15 +163,26 @@ public function users_stat(Request $request)
                     'book_title' => $request->book->title ?? 'N/A',
                     'status' => $latestInfo->status ?? null,
                     'processed_at' => $latestInfo->processed_at ?? null,
-                    // Add human readable diffs
                     'created_diff' => $request->created_at->diffForHumans(),
-                    'processed_diff' => $latestInfo->processed_at ? $latestInfo->processed_at->diffForHumans() : null
+                    'processed_diff' => $latestInfo->processed_at ? $latestInfo->processed_at->diffForHumans() : null,
+                    // Add these for your header display
+                    'is_first' => false // We'll set this for the first item
                 ];
             });
 
+        // Mark the first request for special display
+        if ($requests->count() > 0) {
+            $requests->first()['is_first'] = true;
+        }
+
         return view('admin.statistics.users_history', [
             'user' => $user,
-            'requests' => $requests
+            'requests' => $requests,
+            'totalRequests' => $requests->total() // Now available via paginator
         ]);
+    }
+
+    public function librarian_history(Librarian $user){
+        return view('admin.statistics.librarian_history');
     }
 }

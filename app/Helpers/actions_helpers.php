@@ -47,22 +47,38 @@ if (! function_exists('get_last_activity')) {
     }
 }
 
-// app/Helpers/RequestHelpers.php
-function get_request_status_badge($request) {
-    $latestInfo = $request->RequestInfo->sortByDesc('created_at')->first();
-    $status = strtolower($latestInfo->status ?? 'unknown');
-    
-    $bgColor = match($status) {
-        'borrowed', 'returned' => 'success',
-        'pending' => 'warning',
-        'approved' => 'info',
-        'rejected' => 'danger',
-        'overdue' => 'dark',
-        'canceled' => 'secondary',
-        default => 'primary'
-    };
-    
-    return '<span class="badge badge-'.$bgColor.'">'.ucfirst($status).'</span>';
+
+if (! function_exists('get_request_status_badge')) {
+    function get_request_status_badge($status) {    
+        $bgColor = match($status) {
+            RequestStatus::BORROWED => 'success',
+            RequestStatus::RETURNED => 'success',
+            RequestStatus::PENDING => 'warning',
+            RequestStatus::APPROVED => 'info',
+            RequestStatus::REJECTED => 'danger',
+            RequestStatus::OVERDUE => 'dark',
+            RequestStatus::CANCELED => 'secondary',
+            default => 'primary'
+        };
+        
+        return $bgColor;
+    }
+}
+
+if (! function_exists('get_request_status_text')){
+    function get_request_status_text($status) {
+        $badgeText = match($status) {
+            RequestStatus::BORROWED => 'Emprunté',
+            RequestStatus::RETURNED => 'Rendu',
+            RequestStatus::PENDING => 'En attente',
+            RequestStatus::APPROVED => 'Approuvé',
+            RequestStatus::REJECTED => 'Rejeté',
+            RequestStatus::OVERDUE => 'depassé',
+            RequestStatus::CANCELED => 'Annulé',
+            default => 'Inconnu'
+        };
+        return $badgeText;
+    }
 }
 
 

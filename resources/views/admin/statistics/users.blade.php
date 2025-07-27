@@ -109,14 +109,14 @@ use App\Enums\RequestStatus;
                 </thead>
                 <tbody>
                     @foreach($users as $user)
-                    @php
-                        $latestInfo = null;
-                        if ($user->bookRequests && $user->bookRequests->isNotEmpty()) {
-                            $latestRequest = $user->bookRequests->first();
-                            $latestInfo = $latestRequest->latestRequestInfo ?? null;
-                        }
-                    @endphp
-                        {{-- @if ($user->role->value === 'student') --}}
+                            @php
+                                $latestInfo = null;
+                                if ($user->bookRequests && $user->bookRequests->isNotEmpty()) {
+                                    $latestRequest = $user->bookRequests->first();
+                                    $latestInfo = $latestRequest->latestRequestInfo ?? null;
+                                }
+                            @endphp
+                                {{-- @if ($user->role->value === 'student') --}}
                             <tr>
                                 <td>{{ $user->id }}</td>
                                 <td>{{ $user->first_name }}</td>
@@ -127,34 +127,11 @@ use App\Enums\RequestStatus;
                                     @if($latestInfo)
                                         @php
                                             $status = $latestInfo->status;
-                                            $bgColor = match($status) {
-                                                RequestStatus::BORROWED => 'success',
-                                                RequestStatus::RETURNED => 'success',
-                                                RequestStatus::PENDING => 'warning',
-                                                RequestStatus::APPROVED => 'info',
-                                                RequestStatus::REJECTED => 'danger',
-                                                RequestStatus::OVERDUE => 'dark',
-                                                RequestStatus::CANCELED => 'secondary',
-                                                default => 'primary'
-                                            };
+                                            $bgColor = get_request_status_badge($status);
+                                            $badgeText = get_request_status_text($status);
                                         @endphp
                                         
-                                        <span class="badge bg-{{ $bgColor }}">
-                                            @if (strtoupper($status->value) === 'PENDING')
-                                                en attente
-                                            @elseif (strtoupper($status->value) === 'BORROWED')
-                                                emprunté
-                                            @elseif (strtoupper($status->value) === 'APPROVED')
-                                                approuvé
-                                            @elseif (strtoupper($status->value) === 'REJECTED')
-                                                rejeté
-                                            @elseif (strtoupper($status->value) === 'OVERDUE')
-                                                depassé
-                                            @elseif (strtoupper($status->value) === 'RETURNED')
-                                                retourné
-                                            @elseif (strtoupper($status->value) === 'CANCELED')
-                                            @endif
-                                        </span>
+                                        <span class="badge bg-{{ $bgColor }}"> {{$badgeText}} </span>
                                         ({{ $latestInfo->created_at->diffForHumans() }})
                                     @else
                                         <span class="badge bg-secondary">pas d'activié</span>

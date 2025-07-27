@@ -340,7 +340,7 @@ return [
             'url' => 'admin',
             'icon' => 'fas fa-fw fa-tachometer-alt',
             // 'active' => ['admin'],
-            'can' => 'admin', // Check if user has 'administrator' role
+            'can' => 'admin',
         ],
         [
             'text' => 'Gestion des utilisateurs',
@@ -362,12 +362,12 @@ return [
                     'active' => ['admin/statistics/users', 'admin/statistics/users/search*'],
                 ],
                 [
-                    'text' => 'Les livres',
-                    'url' => 'admin/statistics/books',
-                ],
-                [
                     'text' => 'Les bibliothecaires',
                     'url' => 'admin/statistics/librarian',
+                ],
+                [
+                    'text' => 'Les livres',
+                    'url' => 'admin/statistics/books',
                 ],
             ],
         ],
