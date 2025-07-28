@@ -698,6 +698,7 @@
                     </div>
                     <input type="text" name="title" class="form-control" value="{{ old('title', $title ?? '') }}" placeholder="Saisir le titre du livre">
                 </div>
+                    <input type="hidden" name="image_url" class="form-control" value="{{ $image_url ?? null}}" >
 
                 <label>ISBN</label>
                 <div class="input-group">

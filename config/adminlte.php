@@ -279,26 +279,6 @@ return [
                     'url' => 'librarian/books/create/isbn',
                     'active' => ['librarian/books/add'],
                 ],
-                [
-                    'text' => 'Catégories',
-                    'url' => 'librarian/categories',
-                    'active' => ['librarian/categories*'],
-                ],
-                [
-                    'text' => 'Auteurs',
-                    'url' => 'librarian/authors',
-                    'active' => ['librarian/authors*'],
-                ],
-                [
-                    'text' => 'Éditeurs',
-                    'url' => 'librarian/publishers',
-                    'active' => ['librarian/publishers*'],
-                ],
-                [
-                    'text' => 'Tags',
-                    'url' => 'librarian/tags',
-                    'active' => ['librarian/tags*'],
-                ],
             ],
         ],
         [
@@ -308,31 +288,31 @@ return [
             'active' => ['librarian/requests*'],
             'can' => 'librarian',
         ],
-        [
-            'text' => 'Emprunts actifs',
-            'url' => 'librarian/borrowings',
-            'icon' => 'fas fa-fw fa-hand-holding',
-            'active' => ['librarian/borrowings*'],
-            'can' => 'librarian',
-        ],
-        [
-            'text' => 'Statistiques',
-            'icon' => 'fas fa-fw fa-chart-bar',
-            'active' => ['librarian/statistics*', 'librarian/students/statistics*'],
-            'can' => 'librarian',
-            'submenu' => [
-                [
-                    'text' => 'Statistiques générales',
-                    'url' => 'librarian/statistics',
-                    'active' => ['librarian/statistics'],
-                ],
-                [
-                    'text' => 'Statistiques des étudiants',
-                    'url' => 'librarian/students/statistics',
-                    'active' => ['librarian/students/statistics'],
-                ],
-            ],
-        ],
+        // [
+        //     'text' => 'Emprunts actifs',
+        //     'url' => 'librarian/borrowings',
+        //     'icon' => 'fas fa-fw fa-hand-holding',
+        //     'active' => ['librarian/borrowings*'],
+        //     'can' => 'librarian',
+        // ],
+        // [
+        //     'text' => 'Statistiques',
+        //     'icon' => 'fas fa-fw fa-chart-bar',
+        //     'active' => ['librarian/statistics*', 'librarian/students/statistics*'],
+        //     'can' => 'librarian',
+        //     'submenu' => [
+        //         [
+        //             'text' => 'Statistiques générales',
+        //             'url' => 'librarian/statistics',
+        //             'active' => ['librarian/statistics'],
+        //         ],
+        //         [
+        //             'text' => 'Statistiques des étudiants',
+        //             'url' => 'librarian/students/statistics',
+        //             'active' => ['librarian/students/statistics'],
+        //         ],
+        //     ],
+        // ],
 
         // Administrator Menu
         [

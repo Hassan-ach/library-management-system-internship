@@ -5,6 +5,7 @@ namespace App\Services\GoogleApiService;
 use App\Models\Author;
 use App\Models\Category;
 use App\Models\Publisher;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 
 class GoogleBookService
@@ -35,7 +36,7 @@ class GoogleBookService
             'title' => $item['title'] ?? '',
             'isbn' => $isbn,
             'description' => $item['description'] ?? '',
-            'publication_date' => $item['publishedDate'] ?? null,
+            'publication_date' => Carbon::createFromFormat('Y', $item['publishedDate'] ?? null)->format('Y-m-d'),
             'number_of_pages' => $item['pageCount'] ?? null,
             'total_copies' => 1, // Default value as in original
             'image_url' => $item['imageLinks']['thumbnail'] ?? null,
@@ -68,10 +69,12 @@ class GoogleBookService
             // Add new categories to 'new' array
             foreach ($categoryLabels as $label) {
                 if (! in_array($label, $existingCategoryLabels)) {
-                    $categories['new'][] = [
-                        'label' => $label,
-                        'description' => '', // Empty for now; can be filled later
-                    ];
+                    // $categories['new'][] = [
+                    //     'label' => $label,
+                    //     'description' => '', // Empty for now; can be filled later
+                    // ];
+                    array_push($categories['new'], [$label, 'no descritpion']);
+
                 }
             }
         }
@@ -96,9 +99,10 @@ class GoogleBookService
             // Add new authors to 'new' array
             foreach ($authorNames as $name) {
                 if (! in_array($name, $existingAuthorNames)) {
-                    $authors['new'][] = [
-                        'name' => $name,
-                    ];
+                    // $authors['new'][] = [
+                    //     'name' => $name,
+                    // ];
+                    array_push($authors['new'], $name);
                 }
             }
         }
@@ -118,9 +122,10 @@ class GoogleBookService
                 ];
             } else {
                 // Add new publisher to 'new' array
-                $publishers['new'][] = [
-                    'name' => $publisherName,
-                ];
+                // $publishers['new'][] = [
+                //     'name' => $publisherName,
+                // ];
+                array_push($publishers['new'], $publisherName);
             }
         }
 
