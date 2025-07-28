@@ -12,7 +12,7 @@
     }
 
     .tag_style {
-        background: #ababab;
+        background: #bdbdbd;
         border-radius: 15px;
         padding: 1px 5px;
         bottom: 5px;
@@ -28,8 +28,7 @@
     <!-- books statistics -->
     <div class="col-lg-4 col-6 d-flex">
         <div class="info-box-wrapper w-100 ">
-            <x-adminlte-info-box title="" text="" icon="fas fa-book-open" theme="info"
-                icon-theme="info" class="w-100">
+            <x-adminlte-info-box title="" text="" icon="fas fa-book-open" theme="info" icon-theme="info" class="w-100">
                 <x-slot name="description">
                     <div class="multi-stats mt-8">
                         <div class="stat-item">
@@ -55,7 +54,8 @@
     <!-- Request_info_1 -->
     <div class="col-lg-4 col-6 d-flex">
         <div class="info-box-wrapper w-100 h-100">
-            <x-adminlte-info-box title="" text="" icon="fas fa-clipboard-list" theme="warning" icon-theme="warning" class="w-100">
+            <x-adminlte-info-box title="" text="" icon="fas fa-clipboard-list" theme="warning" icon-theme="warning"
+                class="w-100">
                 <x-slot name="description">
                     <div class="multi-stats mt-8">
                         <div class="stat-item">
@@ -80,8 +80,8 @@
     <!-- Accpted_request_status  -->
     <div class="col-lg-4 col-6 d-flex">
         <div class="info-box-wrapper w-100">
-            <x-adminlte-info-box title="" text="" icon="fas fa-info-circle" theme="success"
-                icon-theme="success" class="w-100">
+            <x-adminlte-info-box title="" text="" icon="fas fa-info-circle" theme="success" icon-theme="success"
+                class="w-100">
                 <x-slot name="description">
                     <div class="multi-stats mt-8">
                         <div class="stat-item">
@@ -104,5 +104,147 @@
     </div>
 </div>
 
+<div class="container-fluid" style="margin-top:25px">
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-9 col-md-7 col-sm-12 mb-2">
+            <h4>Demandes en attente</h4>
+
+            <div class="table-responsive bg-white">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Id demande</th>
+                            <th>Titre de livre</th>
+                            <th>Etudiant</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($pending_requests_data as $request)
+                            <tr>
+                                <td>
+                                    <span class="badge bg-dark">{{ $request->id }}</span>
+                                </td>
+                                <td>
+                                    <span>
+                                        {{ $request->book_title}}
+                                    </span>
+                                </td>
+                                <td>{{ $request->user_name }}</td>
+                                <td>{{ $request->date }}</td>
+                                <td>
+                                    {{--
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-success btn-sm" title="Approuver" data-toggle="tooltip">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                        <button class="btn btn-danger btn-sm" title="Rejeter" data-toggle="tooltip">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                    --}}
+                                    <div class="btn-group" role="group">
+                                        <form action="{{ route('librarian.requests.process', $request->id) }}" method="POST"
+                                            style="display: inline;">
+                                            @csrf
+                                            <input type="hidden" name="status"
+                                                value="{{ App\Enums\RequestStatus::APPROVED }}">
+                                            <button type="submit" class="btn btn-success btn-sm"
+                                                style='width:35px; margin-right: 3px;' title="Approuver">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('librarian.requests.process', $request->id) }}" method="POST"
+                                            style="display: inline;">
+                                            @csrf
+                                            <input type="hidden" name="status"
+                                                value="{{ App\Enums\RequestStatus::REJECTED }}">
+                                            <button type="submit" class="btn btn-danger btn-sm " style='width:35px;'
+                                                title="Rejeter">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+
+                        <tr></tr>
+                    </tbody>
+
+                </table>
+            </div>
+
+            <div class="mt-2 mr-1 text-right">
+                <a href="{{ route('librarian.requests.index') }}" class="btn btn-sm btn-primary"
+                    style="font-weight:600; ;">
+                    voir plus<i style='font-size:13px; vertical-align: middle' class='fas ml-1'>&#xf101;</i>
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Quick action sidebar -->
+        <div class="col-lg-3 col-md-5 col-sm-12 ">
+
+            <div class="d-grid gap-3" style='width: 80%; margin: 0 auto;'>
+                <h4>Démarrage rapide</h4>
+                <!-- Action Buttons -->
+                <div class="d-grid gap-2">
+                    <x-adminlte-button theme="outline-info" icon="fas fa-plus-circle" label="Ajouter un livre"
+                        class="btn-block" data-toggle="modal" data-target="#BookModal"/>
+
+                    <x-adminlte-button theme="outline-secondary" icon="fas fa-cog" label="Paramètres" class="btn-block"
+                        onclick="window.location.href='{{ route('profile.show') }}'" />
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<x-adminlte-modal id="BookModal" title="Ajouter un livre" theme="info" icon="fas fa-plus">
+    <form id="customForm" action="{{ route('librarian.books.isbn.getInfo') }}" method="POST">
+        @csrf
+        
+        <div class="form-group">
+            <label for="item_name">ISBN du livre</label>
+            <div class="input-group">
+                <input type="text" 
+                       class="form-control" 
+                       id="item_name" 
+                       name="item_name" 
+                       placeholder="Saisir ici ..." 
+                       required>
+                <div class="input-group-append">
+                    <button type="submit" class="btn" style="background-color:#00b6d3;">
+                        <i class="fas fa-magic"></i> Ajouter
+                    </button>
+                </div>
+            </div>
+            <small class="form-text text-muted">
+                Ce livre sera recherché via l'API Google Books 
+            </small>
+        </div>
+    </form>
+
+    <hr class="my-3">
+    
+    <div class="text-center">
+        <p class="text-muted mb-3">Ou choisissez une autre manière :</p>
+        <a href="{{route('librarian.books.create')}}">
+            <button type="button" class="btn btn-secondary btn-lg btn-block" >
+                <i class="fas fa-pen"></i> Ajouter le livre manuellement
+            </button>
+        </a>
+    </div>
+
+    <x-slot name="footerSlot">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+            <i class="fas fa-times"></i> Annuler
+        </button>
+    </x-slot>
+</x-adminlte-modal>
 
 @stop

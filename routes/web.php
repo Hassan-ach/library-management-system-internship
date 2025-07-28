@@ -68,7 +68,7 @@ Route::middleware('auth:web')->group(function () {
     // librarian
     Route::prefix('librarian')->name('librarian.')->middleware('role:librarian')->group(function () {
         //dashboard
-        Route::get('/dash', [LibrarianDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [LibrarianDashboardController::class, 'index'])->name('dashboard');
         
         Route::get('/requests', [LibrarianRequestController::class, 'index'])->name('requests.index');
         Route::get('/requests/{id}', [LibrarianRequestController::class, 'show'])->name('requests.show');

@@ -36,8 +36,8 @@
                                     <i class="fas fa-book fa-6x text-black-50"></i>
                                 </div>
                             @endif
-                            <div class="card-body d-flex flex-grow-1">
-                                <h5 class="card-title font-weight-bold">
+                            <div class="card-body d-flex flex-grow-1 justify-content-center">
+                                <h5 class="card-title font-weight-bold" style="color:black">
                                     {{ \Illuminate\Support\Str::limit($book->title, 50) }}
                                 </h5>
                             </div>

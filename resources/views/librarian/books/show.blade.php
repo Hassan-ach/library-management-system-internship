@@ -120,11 +120,11 @@
                     <div class="ml-auto">
                         <a href="{{ route('librarian.books.edit', $book) }}">
                             <button type="submit" class="btn btn-secondary mr-3" >
-                                <i class="fas fa-save pr-2"></i> Modifier
+                                <i class="fas fa-pencil-alt pr-2"></i> Modifier
                             </button>
                         </a>
                         <button type="submit" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" id="#deleteModal" >
-                            <i class="fas fa-save pr-2"></i> Supprimer
+                            <i class="fas fa-trash pr-2"></i> Supprimer
                         </button>
                     </div>
                 </div>
