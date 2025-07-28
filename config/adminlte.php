@@ -271,12 +271,12 @@ return [
                 ],
                 [
                     'text' => 'Ajouter un livre (Form)',
-                    'url' => 'librarian/books/form',
-                    'active' => ['librarian/books/form'],
+                    'url' => 'librarian/books/create',
+                    'active' => ['librarian/books/create'],
                 ],
                 [
                     'text' => 'Ajouter par ISBN',
-                    'url' => 'librarian/books/add',
+                    'url' => 'librarian/books/create/isbn',
                     'active' => ['librarian/books/add'],
                 ],
                 [
@@ -359,7 +359,7 @@ return [
                 [
                     'text' => 'Les etudiants',
                     'url' => 'admin/statistics/users',
-                    'active' => ['admin/statistics/users*','admin/statistics/student*'],
+                    'active' => ['admin/statistics/users*', 'admin/statistics/student*'],
                 ],
                 [
                     'text' => 'Les bibliothecaires',
@@ -379,7 +379,6 @@ return [
             'active' => ['admin/settings/*'],
             'can' => 'admin',
         ],
-
 
         // Logout button (always visible for authenticated users)
         ['header' => 'COMPTE'],

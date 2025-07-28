@@ -8,7 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
-    
+
     <!-- tag-modal script-->
     <script>
         $(document).ready(function() {
@@ -50,12 +50,12 @@
 
         function searchTags(query) {
             $('#tagsResults').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Chargement des résultats...</div>');
-            
+
             $.ajax({
-                url: '/librarian/api/tag/search', 
+                url: '/librarian/api/tag/search',
                 type: 'GET',
                 dataType: 'json',
-                data: { 
+                data: {
                     q: query
                 },
                 headers: {
@@ -63,7 +63,7 @@
                     'Accept': 'application/json'
                 },
                 success: function(response) {
-                    
+
                     displayTagsResults(response);
                 },
                 error: function(xhr, status, error) {
@@ -71,10 +71,10 @@
                 }
             });
         }
-        
+
         function displayTagsResults(tags) {
             const container = $('#tagsResults');
-            
+
             if (tags.length === 0) {
                 container.html('<div class="text-muted">Aucun résultat trouvé</div>');
                 return;
@@ -86,9 +86,9 @@
                     <div class="tag-search-item p-2 border-bottom" data-tag-id="${tag.id}" data-tag-name="${tag.label}" style="cursor: pointer;">
                         <i class="fas fa-tag mr-2"></i>${tag.label}
                     </div>
-                `; 
+                `;
             });
-            container.html(html);   
+            container.html(html);
         }
 
         function addTagToSelection(tagId, tagName) {
@@ -97,7 +97,7 @@
                 //nothing
                 return;
             }
-            // Tags with id == '*' means that are new 
+            // Tags with id == '*' means that are new
             if ( tagId === '*'){
                 newTags.push( tagName);
             }else{
@@ -149,7 +149,7 @@
                     </div>
                 `;
             });
-            
+
             container.html(html);
             form_container.html(html);
         }
@@ -161,7 +161,7 @@
             $('#tagsModal').modal('hide');
         }
     </script>
-    
+
     <!-- publisher-modal script-->
     <script>
         $(document).ready(function() {
@@ -203,12 +203,12 @@
 
         function searchPublishers(query) {
             $('#publishersResults').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Chargement des résultats...</div>');
-            
+
             $.ajax({
-                url: '/librarian/api/publisher/search', 
+                url: '/librarian/api/publisher/search',
                 type: 'GET',
                 dataType: 'json',
-                data: { 
+                data: {
                     q: query
                 },
                 headers: {
@@ -216,7 +216,7 @@
                     'Accept': 'application/json'
                 },
                 success: function(response) {
-                    
+
                     displayPublishersResults(response);
                 },
                 error: function(xhr, status, error) {
@@ -224,10 +224,10 @@
                 }
             });
         }
-        
+
         function displayPublishersResults( publishers) {
             const container = $('#publishersResults');
-            
+
             if (publishers.length === 0) {
                 container.html('<div class="text-muted">Aucun résultat trouvé</div>');
                 return;
@@ -239,18 +239,18 @@
                     <div class="publisher-search-item p-2 border-bottom" data-publisher-id="${publisher.id}" data-publisher-name="${publisher.name}" style="cursor: pointer;">
                         <i class="fas fa-tag mr-2"></i>${publisher.name}
                     </div>
-                `; 
+                `;
             });
-            container.html(html);   
+            container.html(html);
         }
-        
+
         function addPublisherToSelection( Id, Name) {
             // Check if publisher is already selected
             if (oldPublishers.find(publisher => publisher['name'] === Name) || newPublishers.find(publisher => publisher === Name)) {
                 //nothing
                 return;
             }
-            // Publishers with id == '*' means that are new 
+            // Publishers with id == '*' means that are new
             if ( Id === '*'){
                 newPublishers.push( Name);
             }else{
@@ -271,7 +271,7 @@
 
         function updateSelectedPublishersDisplay() {
             fillHiddenInputs();
-            
+
             const container = $('#selectedPublisherList');
             const form_container = $('#publishers-display');
 
@@ -302,7 +302,7 @@
                     </div>
                 `;
             });
-            
+
             container.html(html);
             form_container.html(html);
         }
@@ -360,12 +360,12 @@
 
         function searchCategories(query) {
             $('#categoriesResults').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Chargement des résultats....</div>');
-            
+
             $.ajax({
-                url: '/librarian/api/category/search', 
+                url: '/librarian/api/category/search',
                 type: 'GET',
                 dataType: 'json',
-                data: { 
+                data: {
                     q: query
                 },
                 headers: {
@@ -373,7 +373,7 @@
                     'Accept': 'application/json'
                 },
                 success: function(response) {
-                    
+
                     displayCategoriesResults(response);
                 },
                 error: function(xhr, status, error) {
@@ -381,10 +381,10 @@
                 }
             });
         }
-        
+
         function displayCategoriesResults(categories) {
             const container = $('#categoriesResults');
-            
+
             if (categories.length === 0) {
                 container.html('<div class="text-muted">Aucun résultat trouvé</div>');
                 return;
@@ -396,18 +396,18 @@
                     <div class="cat-search-item p-2 border-bottom" data-cat-id="${category.id}" data-cat-name="${category.label}" style="cursor: pointer;">
                         <i class="fas fa-sitemap mr-2"></i>${category.label}
                     </div>
-                `; 
+                `;
             });
-            container.html(html);   
+            container.html(html);
         }
-        
+
         function addCategoryToSelection( Id, Name, Description = "") {
             // Check if category is already selected
             if (oldCategories.find(category => category['name'] === Name) || newCategories.find(category => category[0] === Name)) {
                 //nothing
                 return;
             }
-            // Categories with id == '*' means that are new 
+            // Categories with id == '*' means that are new
             if ( Id === '*'){
                 newCategories.push( [Name, Description]);
             }else{
@@ -428,7 +428,7 @@
 
         function updateSelectedCategoriesDisplay() {
             fillHiddenInputs();
-            
+
             const container = $('#selectedCategoriesList');
             const form_container = $('#categories-display');
 
@@ -460,7 +460,7 @@
                     </div>
                 `;
             });
-            
+
             container.html(html);
             form_container.html(html);
         }
@@ -514,12 +514,12 @@
 
         function searchAuthors(query) {
             $('#authorsResults').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Chargement des résultats...</div>');
-            
+
             $.ajax({
-                url: '/librarian/api/author/search', 
+                url: '/librarian/api/author/search',
                 type: 'GET',
                 dataType: 'json',
-                data: { 
+                data: {
                     q: query
                 },
                 headers: {
@@ -527,7 +527,7 @@
                     'Accept': 'application/json'
                 },
                 success: function(response) {
-                    
+
                     displayAuthorsResults(response);
                 },
                 error: function(xhr, status, error) {
@@ -535,10 +535,10 @@
                 }
             });
         }
-        
+
         function displayAuthorsResults(authors) {
             const container = $('#authorsResults');
-            
+
             if (authors.length === 0) {
                 container.html('<div class="text-muted">Aucun résultat trouvé</div>');
                 return;
@@ -550,18 +550,18 @@
                     <div class="author-search-item p-2 border-bottom" data-author-id="${author.id}" data-author-name="${author.name}" style="cursor: pointer;">
                         <i class="fas fa-tag mr-2"></i>${author.name}
                     </div>
-                `; 
+                `;
             });
-            container.html(html);   
+            container.html(html);
         }
-        
+
         function addAuthorToSelection( Id, Name) {
             // Check if author is already selected
             if (oldAuthors.find(author => author['name'] === Name) || newAuthors.find(author => author === Name)) {
                 //nothing
                 return;
             }
-            // Authors with id == '*' means that are new 
+            // Authors with id == '*' means that are new
             if ( Id === '*'){
                 newAuthors.push( Name);
             }else{
@@ -579,10 +579,10 @@
             newAuthors = newAuthors.filter(author => author != Name);
             updateSelectedAuthorsDisplay();
         }
-        
+
         function updateSelectedAuthorsDisplay() {
             fillHiddenInputs();
-            
+
             const container = $('#selectedAuthorList');
             const form_container = $('#authors-display');
 
@@ -613,7 +613,7 @@
                     </div>
                 `;
             });
-            
+
             container.html(html);
             form_container.html(html);
         }
@@ -627,17 +627,17 @@
     </script>
 
     <script>
-        let oldTags = @json($tags ?? []);      // Ids of old items - would be send with request 
-        let newTags = [];      // infos of new items - would be send with request
-        
-        let oldCategories = @json($categories ?? []);        // Ids of old categories - would be send with request 
-        let newCategories = [];      // infos of new categories - would be send with request
+        let oldTags = @json($tags['old'] ?? []);      // Ids of old items - would be send with request
+        let newTags = @json($tags['new'] ?? []);      // infos of new items - would be send with request
 
-        let oldAuthors= @json($authors ?? []);        // Ids of old authors - would be send with request 
-        let newAuthors = [];      // infos of new authors - would be send with request
+        let oldCategories = @json($categories['old'] ?? []);        // Ids of old categories - would be send with request
+        let newCategories = @json($categories['new'] ?? []);      // infos of new categories - would be send with request
 
-        let oldPublishers = @json($publishers ?? []);        // Ids of old items - would be send with request 
-        let newPublishers = [];      // infos of new items - would be send with request
+        let oldAuthors= @json($authors['old'] ?? []);        // Ids of old authors - would be send with request
+        let newAuthors = @json($authors['new'] ?? []);      // infos of new authors - would be send with request
+
+        let oldPublishers = @json($publishers['old'] ?? []);        // Ids of old items - would be send with request
+        let newPublishers = @json($publishers['new'] ?? []);      // infos of new items - would be send with request
 
         function updateSelectedItems() {
             updateSelectedAuthorsDisplay();
@@ -646,7 +646,7 @@
             updateSelectedTagsDisplay();
         }
 
-        function fillHiddenInputs(){ 
+        function fillHiddenInputs(){
             document.getElementById('tags').value = JSON.stringify({
                 "new": newTags,
                 "old": toArray(oldTags)
@@ -669,13 +669,13 @@
                 "new": newAuthors,
                 "old": toArray(oldAuthors)
             });
-            
+
         }
-        
+
         function toArray(arr){
             return(arr.map(item => item.id));
         }
-        
+
         updateSelectedItems();
     </script>
 @stop
@@ -698,7 +698,7 @@
                     </div>
                     <input type="text" name="title" class="form-control" value="{{ old('title', $title ?? '') }}" placeholder="Saisir le titre du livre">
                 </div>
-                    
+
                 <label>ISBN</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
@@ -707,7 +707,7 @@
                     <input type="text" class="form-control" name="isbn" value="{{ old('isbn', $isbn ?? '') }}" placeholder="978-0-123456-78-9">
                 </div>
                 <small class="form-text text-muted">Format: 978-0-123456-78-9</small>
-                
+
 
                 <label>Date du publication</label>
                 <div class="input-group">
@@ -739,23 +739,23 @@
                 </div>
                 <!-- Authors Display Section -->
                  @include('librarian.widgets.author-modal')
-                
+
                 <!-- Publishers Display Section -->
                  @include('librarian.widgets.publisher-modal')
-                    
+
                 <!-- Categories Display Section -->
                  @include('librarian.widgets.category-modal')
-                
+
                 <!-- Tags Display Section -->
                 @include('librarian.widgets.tag-modal')
-               
+
                 <input type="hidden" name="tags" id="tags">
                 <input type="hidden" name="categories" id="categories">
                 <input type="hidden" name="publishers" id="publishers">
                 <input type="hidden" name="authors" id="authors">
-                
+
                 <input name="_method" type="hidden" value="{{ $method ?? 'POST'}}">
-                
+
                 <div class="text-right">
                     <button type="submit" class="btn btn-success " style='width:10%'>
                         <i class="fas fa-save pr-2"></i> Submit

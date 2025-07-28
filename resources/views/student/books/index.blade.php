@@ -45,34 +45,34 @@
                                 <tbody>
                                     @foreach($books as $book)
                                         <tr>
-                                            <td>{{ $book->title }}</td>
+                                            <td>{{ $book?->title }}</td>
                                             <td>
-                                                @foreach($book->authors as $author)
+                                                @foreach($book?->authors as $author)
                                                     {{ $author->name }}{{ !$loop->last ? ', ' : '' }}
                                                 @endforeach
-                                                @if($book->authors->isEmpty()) N/A @endif
+                                                @if($book?->authors->isEmpty()) N/A @endif
                                             </td>
                                             <td>
-                                                @foreach($book->categories as $category)
+                                                @foreach($book?->categories as $category)
                                                     {{ $category->name }}{{ !$loop->last ? ', ' : '' }}
                                                 @endforeach
-                                                @if($book->categories->isEmpty()) N/A @endif
+                                                @if($book?->categories->isEmpty()) N/A @endif
                                             </td>
                                             <td>
-                                                @if($book->available_copies() > 0)
-                                                    <span class="badge badge-success">{{ $book->available_copies() }}</span>
+                                                @if($book?->available_copies() > 0)
+                                                    <span class="badge badge-success">{{ $book?->available_copies() }}</span>
                                                 @else
                                                     <span class="badge badge-danger">0</span>
                                                 @endif
                                             </td>
                                             <td>
-                                     <a href="{{route('student.books.show', $book->id)}}" class="btn btn-xs btn-info" title="Voir détails">
+                                     <a href="{{route('student.books.show', $book?->id)}}" class="btn btn-xs btn-info" title="Voir détails">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                @if($book->available_copies() > 0)
+                                                @if($book?->available_copies() > 0)
                                                     <button type="button" class="btn btn-xs btn-success request-book-btn"
                                                             data-toggle="modal" data-target="#bookDetailsModal"
-                                                            data-book-id="{{ $book->id }}"
+                                                            data-book-id="{{ $book?->id }}"
                                                             title="Demander ce livre">
                                                         <i class="fas fa-plus"></i> Demander
                                                     </button>

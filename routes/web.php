@@ -6,18 +6,13 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Librarian\AuthorController;
-use App\Http\Controllers\Librarian\CategoryController;
-use App\Http\Controllers\Librarian\LibrarianDashboardController;
-use App\Http\Controllers\Librarian\PublisherController;
-use App\Http\Controllers\Librarian\TagController;
-
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Librarian\AuthorController;
 use App\Http\Controllers\Librarian\BookController as LibrarianBookController;
 use App\Http\Controllers\Librarian\CategoryController;
 use App\Http\Controllers\Librarian\GoogleApiService\GoogleApiServiceController;
+use App\Http\Controllers\Librarian\LibrarianDashboardController;
 use App\Http\Controllers\Librarian\PublisherController;
 use App\Http\Controllers\Librarian\RequestController as LibrarianRequestController;
 use App\Http\Controllers\Librarian\StudentStatisticsController;
@@ -70,22 +65,24 @@ Route::middleware('auth:web')->group(function () {
     });
     // librarian
     Route::prefix('librarian')->name('librarian.')->middleware('role:librarian')->group(function () {
-        //dashboard
+        // dashboard
         Route::get('/dashboard', [LibrarianDashboardController::class, 'index'])->name('dashboard');
-        
+
         Route::get('/requests', [LibrarianRequestController::class, 'index'])->name('requests.index');
         Route::get('/requests/{id}', [LibrarianRequestController::class, 'show'])->name('requests.show');
         Route::get('/requests/{reqId}/details', [LibrarianRequestController::class, 'showDetails'])->name('requests.details');
         Route::post('/requests/{id}', [LibrarianRequestController::class, 'process'])->name('requests.process');
         Route::get('/students/{id}', [StudentStatisticsController::class, 'index'])->name('students.statistics');
-        
+
         // display a list of all books
         Route::get('/books', [LibrarianBookController::class, 'index'])->name('books.index');
         Route::get('/books/search', [LibrarianBookController::class, 'search'])->name('books.search');
         // show form to create book manually
+        Route::get('/books/create/isbn', [LibrarianBookController::class, 'create_isbn'])->name('books.create.isbn');
+
         Route::get('/books/create', [LibrarianBookController::class, 'create'])->name('books.create');
         // add new book by isbn
-        Route::post('/books/by-isbn', [GoogleApiServiceController::class, 'getBookInfo'])->name('books.isbn.getInfo');
+        Route::get('/books/by-isbn', [GoogleApiServiceController::class, 'getBookInfo'])->name('books.isbn.getInfo');
         // store the data from form(api/manual) to DB
         Route::post('/books', [LibrarianBookController::class, 'store'])->name('books.store');
         // show book info
@@ -95,13 +92,13 @@ Route::middleware('auth:web')->group(function () {
         // update new book infos on database
         Route::patch('/books/{book}', [LibrarianBookController::class, 'update'])->name('books.update');
         Route::delete('/books/{book}', [LibrarianBookController::class, 'delete'])->name('books.delete');
-        
-        // These rootes are used to simplify the search process during book's creation 
+
+        // These rootes are used to simplify the search process during book's creation
         Route::get('/api/author/search', [AuthorController::class, 'apiSearch'])->name('author.api.search');
         Route::get('/api/publisher/search', [PublisherController::class, 'apiSearch'])->name('publisher.api.search');
         Route::get('/api/category/search', [CategoryController::class, 'apiSearch'])->name('category.api.search');
         Route::get('/api/tag/search', [TagController::class, 'apiSearch'])->name('tag.api.search');
-      
+
         // Author Routes:
         Route::get('/authors', [AuthorController::class, 'index'])->name('authors.index');
         Route::get('/authors/search', [AuthorController::class, 'search'])->name('authors.search');
@@ -128,16 +125,15 @@ Route::middleware('auth:web')->group(function () {
         Route::delete('/tags/{id}', [TagController::class, 'delete'])->name('tags.delete');
     });
     // admin
-   Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function () {
+    Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function () {
         //
 
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
-        Route::get('/profile', [AdminDashboardController::class,'profile'])->name('profile');
+        Route::get('/profile', [AdminDashboardController::class, 'profile'])->name('profile');
 
-        
         Route::get('/settings', [SettingsController::class, 'index'])->name('settings.get');
         Route::patch('/settings', [SettingsController::class, 'update'])->name('settings.update');
-        
+
         // Route::get('/users', [UserController::class, 'create_page'])->name('users.create');
         Route::post('/users', [UserController::class, 'create'])->name('create');
         Route::get('/users/index', [UserController::class, 'index'])->name('users.all');
@@ -145,25 +141,22 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/users/{id}', [UserController::class, 'update_page'])->name('users.update');
         Route::patch('/users/{id}', [UserController::class, 'update'])->name('users.update.submit');
         Route::delete('/users/{id}', [UserController::class, 'delete'])->name('users.delete');
-        
-        
-        
+
         Route::prefix('statistics')->name('statistics.')->group(function () {
-            Route::get('/users', [StatisticsController::class,'users_stat'])->name('users');
+            Route::get('/users', [StatisticsController::class, 'users_stat'])->name('users');
             Route::get('/students/search', [StatisticsController::class, 'search'])->name('users.search');
             Route::get('/librarian/search', [StatisticsController::class, 'search_librarian'])->name('librarians.search');
-            Route::get('/users/export', [StatisticsController::class,'exportUsers'])->name('users.export');
+            Route::get('/users/export', [StatisticsController::class, 'exportUsers'])->name('users.export');
             // Route::get('/users/history/{user}', [StatisticsController::class, 'user_history'])->name('users.history');
             Route::get('/student/history/{user}/{status?}/{color?}', [StatisticsController::class, 'user_history'])->name('users.history');
             Route::resource('user_history', UserController::class)->names('user.hitory');
-            
-            
-            Route::get('/librarian', [StatisticsController::class,'librarian_stat'])->name('librarian');
-            Route::get('/librarian/history/{user}/{status?}/{color?}', [StatisticsController::class, 'librarian_history'])->name('librarian_history');
-            Route::get('/librarian/export', [StatisticsController::class,'exportlibrarian'])->name('librarian.export');
 
-            Route::get('/books', [StatisticsController::class,'books_stat'])->name('books');
-            Route::get('/books/export', [StatisticsController::class,'exportBooks'])->name('books.export');
+            Route::get('/librarian', [StatisticsController::class, 'librarian_stat'])->name('librarian');
+            Route::get('/librarian/history/{user}/{status?}/{color?}', [StatisticsController::class, 'librarian_history'])->name('librarian_history');
+            Route::get('/librarian/export', [StatisticsController::class, 'exportlibrarian'])->name('librarian.export');
+
+            Route::get('/books', [StatisticsController::class, 'books_stat'])->name('books');
+            Route::get('/books/export', [StatisticsController::class, 'exportBooks'])->name('books.export');
         });
     });
 });

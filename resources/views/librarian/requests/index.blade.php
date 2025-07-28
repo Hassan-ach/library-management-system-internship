@@ -56,8 +56,8 @@
     @foreach($requests as $request)
         <tr data-request-id="{{ $request->id }}"> {{-- Ajout de data-request-id --}}
             <td>{{ $request->id }}</td>
-            <td>{{ $request->book->title ?? 'Livre inconnu' }}</td>
-            <td>{{ $request->user->name ?? 'Utilisateur inconnu' }}</td>
+            <td>{{ $request->book?->title ?? 'Livre inconnu' }}</td>
+            <td>{{ $request->user->first_name.' '.$request->user->last_name ?? 'Utilisateur inconnu' }}</td>
             <td>{{ $request->created_at->format('d/m/Y H:i') }}</td>
             <td>
                 @php

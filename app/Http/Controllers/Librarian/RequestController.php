@@ -60,6 +60,7 @@ class RequestController extends Controller
             $validatedData = $req->validate([
                 'status' => ['required', new Enum(RequestStatus::class)],
             ]);
+
             $newStatusEnum = RequestStatus::from($validatedData['status']); // Convert to Enum
             $newStatusValue = $newStatusEnum->value;
 

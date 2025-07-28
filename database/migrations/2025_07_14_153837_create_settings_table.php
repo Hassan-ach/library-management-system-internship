@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
+            $table->integer('DUREE_EMPRUNT_MAX')->default(8);
+            $table->integer('NOMBRE_EMPRUNTS_MAX')->default(1);
+            $table->integer('DUREE_RESERVATION')->default(3);
             $table->timestamps();
         });
     }

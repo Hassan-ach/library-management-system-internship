@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');  // by default length 255
             $table->string('isbn');
+            $table->string('image_url')->nullable();
             $table->text('description');
             $table->date('publication_date');
             $table->integer('number_of_pages');
