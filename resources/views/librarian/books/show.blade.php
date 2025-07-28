@@ -25,7 +25,7 @@
                 <div class="card-body" style="//border: black solid 1px,">
                     <div class="row">
                         <div class="col-md-4 text-center mb-3" style="height: 350px; max-width: 300px;">
-                            
+
                             @if ($image_url)
                                 <img src="{{ $image_url }}" class="card-img-top" alt="{{ $title }} Cover" style=" object-fit: cover;">
                             @else
@@ -33,7 +33,7 @@
                                     <i class="fas fa-book fa-6x text-black-50"></i>
                                 </div>
                             @endif
-                            
+
                             <h4 class="mt-3" style="font-weight : 600;" >{{ $title }}</h4>
                         </div>
 
@@ -42,8 +42,8 @@
                                 <dt class="col-sm-4">ISBN:</dt>
                                 <dd class="col-sm-8">
                                     {{ $isbn }}
-                                </dd>    
-                                
+                                </dd>
+
                                 <dt class="col-sm-4">Auteur(s):</dt>
                                 <dd class="col-sm-8">
                                     @if( $authors)
@@ -53,7 +53,7 @@
                                     @else
                                         {{ "N/A" }}
                                     @endif
-                                </dd> 
+                                </dd>
 
                                 <dt class="col-sm-4">Éditeur(s):</dt>
                                 <dd class="col-sm-8">
@@ -65,10 +65,10 @@
                                         {{ "N/A" }}
                                     @endif
                                 </dd>
-                                
+
                                 <dt class="col-sm-4">Année de publication:</dt>
                                 <dd class="col-sm-8">{{ $publication_date ?? 'N/A' }}</dd>
-                                
+
                                 <dt class="col-sm-4">Nombre de pages:</dt>
                                 <dd class="col-sm-8">{{ $number_of_pages ?? 'N/A' }}</dd>
 
@@ -96,16 +96,16 @@
 
                                 <dt class="col-sm-4">Nombre total de copies:</dt>
                                 <dd class="col-sm-8">{{ $total_copies }}</dd>
-                                
+
                                 <dt class="col-sm-4">Nombre de copies disponibles</dt>
                                 <dd class="col-sm-8">{{ $available_copies }}</dd>
-                                
+
                                 <dt class="col-sm-4" >Description:</dt>
                                 <dd class="col-sm-8"></dd>
                                 <dd class="col-sm" style='margin: 10px'>
                                     <p style="text-align: justify">{{ $description ?? 'Ce livre ne dispose pas encore de description.' }}</p>
                                 </dd>
-                                
+
                             </dl>
 
                         </div>
@@ -141,13 +141,13 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Êtes-vous sûr de vouloir supprimer ce livre : 
+                    Êtes-vous sûr de vouloir supprimer ce livre :
                     <strong>{{ $title }}</strong> ?
                     <p class="text-danger mt-2">Une fois supprimé, le livre ne pourra plus être restauré.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                
+
                     <form id="deleteForm" method="POST" action="{{ route('librarian.books.delete', $book) }}">
                         @csrf
                         @method('DELETE')

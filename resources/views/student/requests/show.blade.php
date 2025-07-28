@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Détails de la demande: ' . ($bookReq->book->title ?? 'Demande #'.$bookReq->id))
+@section('title', 'Détails de la demande: ' . ($bookReq->book?->title ?? 'Demande #'.$bookReq->id))
 
 @section('content_header')
     <h1 class="m-0 text-dark">Détails de la demande</h1>
@@ -21,19 +21,19 @@
                 </x-adminlte-alert>
             @endif
 
-            <x-adminlte-card title="Détails de la demande {{ $bookReq->book->title }}" theme="primary" icon="fas fa-info-circle" >
+            <x-adminlte-card title="Détails de la demande {{ $bookReq->book?->title }}" theme="primary" icon="fas fa-info-circle" >
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
                             <h4>Informations sur le livre</h4>
                             <dl class="row">
                                 <dt class="col-sm-4">Titre:</dt>
-                                <dd class="col-sm-8">{{ $bookReq->book->title ?? 'Livre inconnu' }}</dd>
+                                <dd class="col-sm-8">{{ $bookReq->book?->title ?? 'Livre inconnu' }}</dd>
 
                                 <dt class="col-sm-4">Auteur(s):</dt>
                                 <dd class="col-sm-8">
-                                    @if($bookReq->book && $bookReq->book->authors->isNotEmpty())
-                                        @foreach($bookReq->book->authors as $author)
+                                    @if($bookReq->book && $bookReq->book?->authors->isNotEmpty())
+                                        @foreach($bookReq->book?->authors as $author)
                                             {{ $author->name }}{{ !$loop->last ? ', ' : '' }}
                                         @endforeach
                                     @else
@@ -42,8 +42,8 @@
                                 </dd>
                                 <dt class="col-sm-4">Catégorie(s):</dt>
                                 <dd class="col-sm-8">
-                                    @if($bookReq->book && $bookReq->book->categories->isNotEmpty())
-                                        @foreach($bookReq->book->categories as $category)
+                                    @if($bookReq->book && $bookReq->book?->categories->isNotEmpty())
+                                        @foreach($bookReq->book?->categories as $category)
                                             <span class="badge badge-info">{{ $category->name }}</span>{{ !$loop->last ? ' ' : '' }}
                                         @endforeach
                                     @else

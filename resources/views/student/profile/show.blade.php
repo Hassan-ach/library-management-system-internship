@@ -88,7 +88,7 @@
                                 <tbody>
                                     @foreach($requests->take(5) as $request) {{-- Show only 5 recent requests --}}
                                         <tr>
-                                            <td>{{ $request->book->title ?? 'Livre inconnu' }}</td>
+                                            <td>{{ $request->book?->title ?? 'Livre inconnu' }}</td>
                                             <td>{{ $request->created_at->format('d/m/Y') }}</td>
                                             <td>
                                                 <x-status-badge :status="$request->latestRequestInfo->status->value" />

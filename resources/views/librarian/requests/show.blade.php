@@ -34,24 +34,24 @@
                         <h4>Informations sur le livre</h4>
                         <dl class="row">
                             <dt class="col-sm-4">Titre:</dt>
-                            <dd class="col-sm-8">{{ $request->book->title ?? 'N/A' }}</dd>
+                            <dd class="col-sm-8">{{ $request->book?->title ?? 'N/A' }}</dd>
 
                             <dt class="col-sm-4">Auteur(s):</dt>
                             <dd class="col-sm-8">
-                                @if($request->book->authors->isNotEmpty())
-                                    {{ $request->book->authors->pluck('name')->join(', ') }}
+                                @if($request->book?->authors->isNotEmpty())
+                                    {{ $request->book?->authors->pluck('name')->join(', ') }}
                                 @else
                                     N/A
                                 @endif
                             </dd>
 
                             <dt class="col-sm-4">ISBN:</dt>
-                            <dd class="col-sm-8">{{ $request->book->isbn ?? 'N/A' }}</dd>
+                            <dd class="col-sm-8">{{ $request->book?->isbn ?? 'N/A' }}</dd>
 
                             <dt class="col-sm-4">Catégorie(s):</dt>
                             <dd class="col-sm-8">
-                                @if($request->book->categories->isNotEmpty())
-                                    {{ $request->book->categories->pluck('name')->join(', ') }}
+                                @if($request->book?->categories->isNotEmpty())
+                                    {{ $request->book?->categories->pluck('name')->join(', ') }}
                                 @else
                                     N/A
                                 @endif
@@ -59,8 +59,8 @@
 
                             <dt class="col-sm-4">Copies dispo:</dt>
                             <dd class="col-sm-8">
-                                <span class="badge {{ $request->book->available_copies() > 0 ? 'badge-success' : 'badge-danger' }}">
-                                    {{ $request->book->available_copies() }}
+                                <span class="badge {{ $request->book?->available_copies() > 0 ? 'badge-success' : 'badge-danger' }}">
+                                    {{ $request->book?->available_copies() }}
                                 </span>
                             </dd>
                         </dl>

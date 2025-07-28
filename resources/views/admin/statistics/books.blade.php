@@ -24,7 +24,7 @@
     <h1>Nos Livres</h1>
     <div class="scrollable-table-container">
         <table class="table table-striped table-hover">
-            <thead class="thead-dark sticky-header">    
+            <thead class="thead-dark sticky-header">
                 <tr>
                     <th>Titre</th>
                     <th>ISBN</th>
@@ -36,13 +36,13 @@
             <tbody>
                 @foreach($books as $book)
                     <tr>
-                        <td>{{ $book->title }}</td>
-                        <td>{{ $book->isbn }}</td>
-                        <td>{{ $book->number_of_pages }}</td>
-                        <td>{{ $book->total_copies }}</td>
+                        <td>{{ $book?->title }}</td>
+                        <td>{{ $book?->isbn }}</td>
+                        <td>{{ $book?->number_of_pages }}</td>
+                        <td>{{ $book?->total_copies }}</td>
                         <td>
                             <div class="btn-group" role="group">
-                                <a href="{{ route('admin.statistics.users.history', $book->id) }}" 
+                                <a href="{{ route('admin.statistics.users.history', $book?->id) }}"
                                 class="btn btn-secondary btn-sm"
                                 title="View History">
                                     <i class="fas fa-history"></i>

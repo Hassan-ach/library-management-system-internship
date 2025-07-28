@@ -28,9 +28,9 @@
                     <div class="col-xxl-2 col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12 d-flex align-items-stretch">
 
                         <div class="card shadow-sm mb-4 w-100">
-                            <a href="{{ route('librarian.books.show', $book->id) }}">
-                            @if ($book->image_url)
-                                <img src="{{ $book->image_url }}" class="card-img-top" alt="{{ $book->title }} Cover" style="height: 250px; object-fit: cover;">
+                            <a href="{{ route('librarian.books.show', $book?->id) }}">
+                            @if ($book?->image_url)
+                                <img src="{{ $book?->image_url }}" class="card-img-top" alt="{{ $book?->title }} Cover" style="height: 250px; object-fit: cover;">
                             @else
                                 <div class="card-img-top d-flex justify-content-center align-items-center bg-light" style="height: 250px;">
                                     <i class="fas fa-book fa-6x text-black-50"></i>
@@ -38,7 +38,7 @@
                             @endif
                             <div class="card-body d-flex flex-grow-1 justify-content-center">
                                 <h5 class="card-title font-weight-bold" style="color:black">
-                                    {{ \Illuminate\Support\Str::limit($book->title, 50) }}
+                                    {{ \Illuminate\Support\Str::limit($book?->title, 50) }}
                                 </h5>
                             </div>
                             </a>
@@ -54,8 +54,8 @@
                                                 title="Delete"
                                                 data-toggle="modal"
                                                 data-target="#deleteModal"
-                                                data-book-id="{{ $book->id }}"
-                                                data-book-title="{{ $book->title }}">
+                                                data-book-id="{{ $book?->id }}"
+                                                data-book-title="{{ $book?->title }}">
                                             <i class="fas fa-trash"></i> Supprimer
                                         </button>
                                     </div>

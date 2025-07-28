@@ -26,7 +26,7 @@ use App\Enums\RequestStatus;
 @section('content')
     <div class="container">
         <h1>Les etudiants</h1>
-        
+
         {{-- Search and filter --}}
         <div class="card mb-4">
             <div class="card-header">
@@ -36,7 +36,7 @@ use App\Enums\RequestStatus;
                 <form action="{{ route('admin.statistics.users.search') }}" method="GET" class="row g-3">
                     <div class="col-md-4">
                         <label for="search" class="form-label">Search Term</label>
-                        <input type="text" class="form-control" id="search" name="search" 
+                        <input type="text" class="form-control" id="search" name="search"
                             placeholder="Search by name, email, etc." value="{{ request('search') }}">
                     </div>
                     <div class="col-md-4">
@@ -130,14 +130,14 @@ use App\Enums\RequestStatus;
                                             $bgColor = get_request_status_badge($status);
                                             $badgeText = get_request_status_text($status);
                                         @endphp
-                                        
+
                                         <span class="badge bg-{{ $bgColor }}"> {{$badgeText}} </span>
                                         ({{ $latestInfo->created_at->diffForHumans() }})
                                     @else
                                         <span class="badge bg-secondary">pas d'activié</span>
                                     @endif
                                 </td>
-                                <td>{{$latestRequest->book->title ?? 'N/A'}}</td>
+                                <td>{{$latestRequest->book?->title ?? 'N/A'}}</td>
                                 <td>
                                     <span class="badge {{ $user->is_active ? 'bg-success' : 'bg-danger' }}">
                                         {{ $user->is_active ? 'Active' : 'Inactive' }}
@@ -145,7 +145,7 @@ use App\Enums\RequestStatus;
                                 </td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <a href="{{ route('admin.statistics.users.history', $user->id) }}" 
+                                        <a href="{{ route('admin.statistics.users.history', $user->id) }}"
                                         class="btn btn-secondary btn-sm"
                                         title="View History">
                                             <i class="fas fa-history"></i>
@@ -164,7 +164,7 @@ use App\Enums\RequestStatus;
                 <i class="fas fa-file-excel mr-2"></i> Export all
             </a>
         </div>
-        
+
         {{-- Keep pagination for navigation --}}
         {{ $users->withQueryString()->links('pagination::bootstrap-5') }}
     </div>

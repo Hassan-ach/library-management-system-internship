@@ -17,7 +17,7 @@ if (! function_exists('get_borrowed_copies')) {
         // Count how many have latestRequestInfo with status BORROWED or APPROVED
         return $bookRequests->filter(function ($request) {
             return $request->latestRequestInfo
-                && in_array($request->latestRequestInfo->status, [RequestStatus::BORROWED, RequestStatus::APPROVED]);
+                && in_array($request->latestRequestInfo->status, [RequestStatus::BORROWED, RequestStatus::APPROVED, RequestStatus::OVERDUE]);
         })->count();
     }
 }
@@ -33,24 +33,24 @@ if (! function_exists('get_latest_info')) {
     }
 }
 
-
 if (! function_exists('get_last_activity')) {
-    function get_last_activity($stud_id) {
+    function get_last_activity($stud_id)
+    {
         $last_req = BookRequest::with('latestRequestInfo')->where('user_id', $stud_id)->latest()->first();
         $last_activity = $last_req->latestRequestInfo->status;
         $book_title = Book::findOrFail($last_req->book_id)->title;
 
         return [
-            'last_activity' => $last_activity, 
-            'book_title' => $book_title
+            'last_activity' => $last_activity,
+            'book_title' => $book_title,
         ];
     }
 }
 
-
 if (! function_exists('get_request_status_badge')) {
-    function get_request_status_badge($status) {    
-        $bgColor = match($status) {
+    function get_request_status_badge($status)
+    {
+        $bgColor = match ($status) {
             RequestStatus::BORROWED => 'success',
             RequestStatus::RETURNED => 'success',
             RequestStatus::PENDING => 'warning',
@@ -60,14 +60,15 @@ if (! function_exists('get_request_status_badge')) {
             RequestStatus::CANCELED => 'secondary',
             default => 'primary'
         };
-        
+
         return $bgColor;
     }
 }
 
-if (! function_exists('get_request_status_text')){
-    function get_request_status_text($status) {
-        $badgeText = match($status) {
+if (! function_exists('get_request_status_text')) {
+    function get_request_status_text($status)
+    {
+        $badgeText = match ($status) {
             RequestStatus::BORROWED => 'Emprunté',
             RequestStatus::RETURNED => 'Rendu',
             RequestStatus::PENDING => 'En attente',
@@ -77,10 +78,10 @@ if (! function_exists('get_request_status_text')){
             RequestStatus::CANCELED => 'Annulé',
             default => 'Inconnu'
         };
+
         return $badgeText;
     }
 }
-
 
 // Count how many books aren't available
 if (! function_exists('get_non_available_books')) {
@@ -89,30 +90,31 @@ if (! function_exists('get_non_available_books')) {
         // To find non available books, we check just the BookRequest table
         $book_requests = BookRequest::all();
         $count = 0;
-        foreach( $book_requests as $request){
-            $book = Book::find( $request->book_id);
-            $count += get_borrowed_copies( $book);
+        foreach ($book_requests as $request) {
+            $book = Book::find($request->book_id);
+            $count += get_borrowed_copies($book);
         }
-        
+
         return $count;
     }
-} 
+}
 
 // Count how many books we have on our database
 if (! function_exists('count_total_books')) {
     function count_total_books(): int
     {
         $count = Book::sum('total_copies');
+
         return $count;
     }
-} 
+}
 
 // Count the number of accepted/rejected requests and returned books in last 30 days
 if (! function_exists('get_requests_statics')) {
     function get_requests_statics()
     {
         $librarian_id = Auth::user()->id;
-        
+
         $statistics = RequestInfo::selectRaw('
             COUNT(CASE WHEN status = "returned" THEN 1 END) as returned_books,
             COUNT(CASE WHEN status = "approved" THEN 1 END) as approved_requests,
@@ -120,8 +122,8 @@ if (! function_exists('get_requests_statics')) {
             COUNT(CASE WHEN status = "overdue" THEN 1 END) as overdue_requests,
             COUNT(CASE WHEN status = "borrowed" THEN 1 END) as borrowed_books
         ')->where('created_at', '>=', now()->subDays(30))
-        ->where('user_id', $librarian_id)
-        ->first();
+            ->first();
+
         /*
         if (!$statistics) {
             $statistics = (object) [
@@ -135,4 +137,4 @@ if (! function_exists('get_requests_statics')) {
         */
         return $statistics;
     }
-} 
+}

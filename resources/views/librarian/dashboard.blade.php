@@ -135,16 +135,6 @@
                                 <td>{{ $request->user_name }}</td>
                                 <td>{{ $request->date }}</td>
                                 <td>
-                                    {{--
-                                    <div class="btn-group" role="group">
-                                        <button class="btn btn-success btn-sm" title="Approuver" data-toggle="tooltip">
-                                            <i class="fas fa-check"></i>
-                                        </button>
-                                        <button class="btn btn-danger btn-sm" title="Rejeter" data-toggle="tooltip">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </div>
-                                    --}}
                                     <div class="btn-group" role="group">
                                         <form action="{{ route('librarian.requests.process', $request->id) }}" method="POST"
                                             style="display: inline;">
@@ -205,17 +195,17 @@
     </div>
 </div>
 <x-adminlte-modal id="BookModal" title="Ajouter un livre" theme="info" icon="fas fa-plus">
-    <form id="customForm" action="{{ route('librarian.books.isbn.getInfo') }}" method="POST">
+    <form id="customForm" action="{{ route('librarian.books.isbn.getInfo') }}" method="GET">
         @csrf
-        
+
         <div class="form-group">
             <label for="item_name">ISBN du livre</label>
             <div class="input-group">
-                <input type="text" 
-                       class="form-control" 
-                       id="item_name" 
-                       name="item_name" 
-                       placeholder="Saisir ici ..." 
+                <input type="text"
+                       class="form-control"
+                       id="item_name"
+                       name="isbn"
+                       placeholder="Saisir ici ..."
                        required>
                 <div class="input-group-append">
                     <button type="submit" class="btn" style="background-color:#00b6d3;">
@@ -224,13 +214,13 @@
                 </div>
             </div>
             <small class="form-text text-muted">
-                Ce livre sera recherché via l'API Google Books 
+                Ce livre sera recherché via l'API Google Books
             </small>
         </div>
     </form>
 
     <hr class="my-3">
-    
+
     <div class="text-center">
         <p class="text-muted mb-3">Ou choisissez une autre manière :</p>
         <a href="{{route('librarian.books.create')}}">

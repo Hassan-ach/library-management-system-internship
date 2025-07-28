@@ -51,7 +51,7 @@
                             <tbody>
                                 @foreach($recent as $request)
                                     <tr>
-                                        <td>{{ $request->book->title ?? 'N/A' }}</td>
+                                        <td>{{ $request->book?->title ?? 'N/A' }}</td>
                                         <td>{{ $request->created_at->format('d/m/Y') }}</td>
                                         <td>
                                                 <x-status-badge :status="$request->latestRequestInfo->status->value" />

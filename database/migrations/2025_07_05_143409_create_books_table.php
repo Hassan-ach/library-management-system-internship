@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->string('title');  // by default length 255
-            $table->string('isbn');
+            $table->string('isbn')->unique();
+            $table->string('image_url')->nullable();
             $table->text('description');
             $table->date('publication_date');
             $table->integer('number_of_pages');
