@@ -6,7 +6,6 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
-
 use App\Http\Controllers\Librarian\AuthorController;
 use App\Http\Controllers\Librarian\CategoryController;
 use App\Http\Controllers\Librarian\LibrarianDashboardController;
@@ -15,10 +14,14 @@ use App\Http\Controllers\Librarian\TagController;
 
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\ProfileController;
+use App\Http\Controllers\Librarian\AuthorController;
 use App\Http\Controllers\Librarian\BookController as LibrarianBookController;
+use App\Http\Controllers\Librarian\CategoryController;
 use App\Http\Controllers\Librarian\GoogleApiService\GoogleApiServiceController;
+use App\Http\Controllers\Librarian\PublisherController;
 use App\Http\Controllers\Librarian\RequestController as LibrarianRequestController;
 use App\Http\Controllers\Librarian\StudentStatisticsController;
+use App\Http\Controllers\Librarian\TagController;
 use App\Http\Controllers\Student\BookController as StudentBookController;
 use App\Http\Controllers\Student\RequestController as StudentRequestController;
 use App\Http\Controllers\Student\StudentDashboardController;
@@ -72,6 +75,7 @@ Route::middleware('auth:web')->group(function () {
         
         Route::get('/requests', [LibrarianRequestController::class, 'index'])->name('requests.index');
         Route::get('/requests/{id}', [LibrarianRequestController::class, 'show'])->name('requests.show');
+        Route::get('/requests/{reqId}/details', [LibrarianRequestController::class, 'showDetails'])->name('requests.details');
         Route::post('/requests/{id}', [LibrarianRequestController::class, 'process'])->name('requests.process');
         Route::get('/students/{id}', [StudentStatisticsController::class, 'index'])->name('students.statistics');
         
@@ -97,34 +101,34 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/api/publisher/search', [PublisherController::class, 'apiSearch'])->name('publisher.api.search');
         Route::get('/api/category/search', [CategoryController::class, 'apiSearch'])->name('category.api.search');
         Route::get('/api/tag/search', [TagController::class, 'apiSearch'])->name('tag.api.search');
-
+      
         // Author Routes:
         Route::get('/authors', [AuthorController::class, 'index'])->name('authors.index');
         Route::get('/authors/search', [AuthorController::class, 'search'])->name('authors.search');
-        Route::post('/authors', [AuthorController::class, 'create'])->name( 'authors.create');
-        Route::patch('/authors/{id}', [AuthorController::class, 'update'])->name( 'authors.update');
-        Route::delete('/authors/{id}', action: [AuthorController::class, 'delete'])->name( 'authors.delete');
+        Route::post('/authors', [AuthorController::class, 'create'])->name('authors.create');
+        Route::patch('/authors/{id}', [AuthorController::class, 'update'])->name('authors.update');
+        Route::delete('/authors/{id}', action: [AuthorController::class, 'delete'])->name('authors.delete');
         // Category Routes:
         Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
         Route::get('/category/search', [CategoryController::class, 'search'])->name('category.search');
-        Route::post('/category', [CategoryController::class, 'create'])->name( 'category.create');
-        Route::patch('/category/{id}', [CategoryController::class, 'update'])->name( 'category.update');
-        Route::delete('/category/{id}',  [CategoryController::class, 'delete'])->name( 'category.delete');
+        Route::post('/category', [CategoryController::class, 'create'])->name('category.create');
+        Route::patch('/category/{id}', [CategoryController::class, 'update'])->name('category.update');
+        Route::delete('/category/{id}', [CategoryController::class, 'delete'])->name('category.delete');
         // Publisher Routes:
         Route::get('/publishers', [PublisherController::class, 'index'])->name('publishers.index');
         Route::get('/publishers/search', [PublisherController::class, 'search'])->name('publishers.search');
-        Route::post('/publishers', [PublisherController::class, 'create'])->name( 'publishers.create');
-        Route::patch('/publishers/{id}', [PublisherController::class, 'update'])->name( 'publishers.update');
-        Route::delete('/publishers/{id}',  [PublisherController::class, 'delete'])->name( 'publishers.delete');
-        //Tag Routes:
+        Route::post('/publishers', [PublisherController::class, 'create'])->name('publishers.create');
+        Route::patch('/publishers/{id}', [PublisherController::class, 'update'])->name('publishers.update');
+        Route::delete('/publishers/{id}', [PublisherController::class, 'delete'])->name('publishers.delete');
+        // Tag Routes:
         Route::get('/tags', [TagController::class, 'index'])->name('tags.index');
         Route::get('/tags/search', [TagController::class, 'search'])->name('tags.search');
-        Route::post('/tags', [TagController::class, 'create'])->name( 'tags.create');
-        Route::patch('/tags/{id}', [TagController::class, 'update'])->name( 'tags.update');
-        Route::delete('/tags/{id}',  [TagController::class, 'delete'])->name( 'tags.delete');
+        Route::post('/tags', [TagController::class, 'create'])->name('tags.create');
+        Route::patch('/tags/{id}', [TagController::class, 'update'])->name('tags.update');
+        Route::delete('/tags/{id}', [TagController::class, 'delete'])->name('tags.delete');
     });
     // admin
-    Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function () {
+   Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function () {
         //
 
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
@@ -134,7 +138,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/settings', [SettingsController::class, 'index'])->name('settings.get');
         Route::patch('/settings', [SettingsController::class, 'update'])->name('settings.update');
         
-        Route::get('/users', [UserController::class, 'create_page'])->name('users.create');
+        // Route::get('/users', [UserController::class, 'create_page'])->name('users.create');
         Route::post('/users', [UserController::class, 'create'])->name('create');
         Route::get('/users/index', [UserController::class, 'index'])->name('users.all');
         Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
@@ -144,19 +148,22 @@ Route::middleware('auth:web')->group(function () {
         
         
         
-        Route::get('/statistics', [StatisticsController::class, 'dashboard'])->name('statistics.dashboard');
         Route::prefix('statistics')->name('statistics.')->group(function () {
             Route::get('/users', [StatisticsController::class,'users_stat'])->name('users');
+            Route::get('/students/search', [StatisticsController::class, 'search'])->name('users.search');
+            Route::get('/librarian/search', [StatisticsController::class, 'search_librarian'])->name('librarians.search');
             Route::get('/users/export', [StatisticsController::class,'exportUsers'])->name('users.export');
-            Route::get('/users/history', [StatisticsController::class,'users_history'])->name('users.history');
+            // Route::get('/users/history/{user}', [StatisticsController::class, 'user_history'])->name('users.history');
+            Route::get('/student/history/{user}/{status?}/{color?}', [StatisticsController::class, 'user_history'])->name('users.history');
             Route::resource('user_history', UserController::class)->names('user.hitory');
+            
+            
+            Route::get('/librarian', [StatisticsController::class,'librarian_stat'])->name('librarian');
+            Route::get('/librarian/history/{user}/{status?}/{color?}', [StatisticsController::class, 'librarian_history'])->name('librarian_history');
+            Route::get('/librarian/export', [StatisticsController::class,'exportlibrarian'])->name('librarian.export');
 
-
-            Route::get('/requests', [LibrarianRequestController::class,'requests_stat'])->name('requests');
-            Route::get('/requests/export', [LibrarianRequestController::class,'exportRequests'])->name('requests.export');
-
-            Route::get('/books', [LibrarianBookController::class,'books_stat'])->name('books');
-            Route::get('/books/export', [LibrarianBookController::class,'exportBooks'])->name('books.export');
+            Route::get('/books', [StatisticsController::class,'books_stat'])->name('books');
+            Route::get('/books/export', [StatisticsController::class,'exportBooks'])->name('books.export');
         });
     });
 });

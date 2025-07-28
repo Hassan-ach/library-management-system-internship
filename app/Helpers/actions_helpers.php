@@ -33,6 +33,55 @@ if (! function_exists('get_latest_info')) {
     }
 }
 
+
+if (! function_exists('get_last_activity')) {
+    function get_last_activity($stud_id) {
+        $last_req = BookRequest::with('latestRequestInfo')->where('user_id', $stud_id)->latest()->first();
+        $last_activity = $last_req->latestRequestInfo->status;
+        $book_title = Book::findOrFail($last_req->book_id)->title;
+
+        return [
+            'last_activity' => $last_activity, 
+            'book_title' => $book_title
+        ];
+    }
+}
+
+
+if (! function_exists('get_request_status_badge')) {
+    function get_request_status_badge($status) {    
+        $bgColor = match($status) {
+            RequestStatus::BORROWED => 'success',
+            RequestStatus::RETURNED => 'success',
+            RequestStatus::PENDING => 'warning',
+            RequestStatus::APPROVED => 'info',
+            RequestStatus::REJECTED => 'danger',
+            RequestStatus::OVERDUE => 'dark',
+            RequestStatus::CANCELED => 'secondary',
+            default => 'primary'
+        };
+        
+        return $bgColor;
+    }
+}
+
+if (! function_exists('get_request_status_text')){
+    function get_request_status_text($status) {
+        $badgeText = match($status) {
+            RequestStatus::BORROWED => 'Emprunté',
+            RequestStatus::RETURNED => 'Rendu',
+            RequestStatus::PENDING => 'En attente',
+            RequestStatus::APPROVED => 'Approuvé',
+            RequestStatus::REJECTED => 'Rejeté',
+            RequestStatus::OVERDUE => 'depassé',
+            RequestStatus::CANCELED => 'Annulé',
+            default => 'Inconnu'
+        };
+        return $badgeText;
+    }
+}
+
+
 // Count how many books aren't available
 if (! function_exists('get_non_available_books')) {
     function get_non_available_books(): int
