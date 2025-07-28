@@ -372,10 +372,17 @@ return [
                 ],
             ],
         ],
+        // [
+        //     'text' => 'Paramètres système',
+        //     'url' => 'admin/settings/index',
+        //     'icon' => 'fas fa-fw fa-cogs',
+        //     'active' => ['admin/settings/*'],
+        //     'can' => 'admin',
+        // ],
         [
             'text' => 'Paramètres système',
             'url' => 'admin/settings',
-            'icon' => 'fas fa-fw fa-cogs',
+            'icon' => 'fas fa-fw fa-users',
             'active' => ['admin/settings/*'],
             'can' => 'admin',
         ],

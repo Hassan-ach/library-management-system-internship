@@ -1,5 +1,6 @@
 @php
 use App\Enums\RequestStatus;
+use App\Enums\UserRole;
 @endphp
 
 @extends('admin.dashboard')
@@ -17,7 +18,7 @@ use App\Enums\RequestStatus;
     <br>
     <div class="card mb-4 shadow-sm">
         <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">User Information</h5>
+            <h5 class="mb-0">Student Information</h5>
         </div>
         <div class="card-body">
             <div class="row">
@@ -121,7 +122,7 @@ use App\Enums\RequestStatus;
                     @endif
                 </td>
                 <td>
-                    lol
+                    {{$request['processed_by']}}
                 </td>
             </tr>
         @endforeach
