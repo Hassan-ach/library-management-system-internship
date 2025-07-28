@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\AuthorService;
 use Dotenv\Exception\ValidationException;
 use Illuminate\Http\Request;
+use App\Models\Author;
 
 class AuthorController extends Controller
 {
@@ -97,6 +98,26 @@ class AuthorController extends Controller
         }
         catch(\Throwable $e){
             return view('errors.databaseException');
+        }
+    }
+
+    public function apiSearch(Request $request)
+    {
+        try {
+            $query = $request->input('q');
+            $authors = Author::where('name', 'LIKE', "%{$query}%")
+                   ->limit(7)
+                   ->get();
+
+            return response()->json(
+                $authors->map( function($author){
+                    return ['id'=>$author->id, 'name'=>$author->name];
+                })
+            );
+        } catch (\Throwable $th) {
+            //throw $th;
+
+            return response()->json([]);
         }
     }
 }

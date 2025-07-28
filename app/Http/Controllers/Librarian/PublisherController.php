@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Librarian;
 use App\Http\Controllers\Controller;
 use Dotenv\Exception\ValidationException;
 use App\Services\PublisherService;
+use App\Models\Publisher;
 use Illuminate\Http\Request;
 
 class PublisherController extends Controller
@@ -97,6 +98,26 @@ class PublisherController extends Controller
         }
         catch(\Throwable $e){
             return view('errors.databaseException');
+        }
+    }
+
+    public function apiSearch(Request $request)
+    {
+        try {
+            $query = $request->input('q');
+            $publishers = Publisher::where('name', 'LIKE', "%{$query}%")
+                   ->limit(7)
+                   ->get();
+
+            return response()->json(
+                $publishers->map( function($publisher){
+                    return ['id'=>$publisher->id, 'name'=>$publisher->name];
+                })
+            );
+        } catch (\Throwable $th) {
+            //throw $th;
+
+            return response()->json([]);
         }
     }
 }
