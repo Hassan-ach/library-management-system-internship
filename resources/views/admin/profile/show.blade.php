@@ -19,7 +19,7 @@
             @endif
 
             <div class="row justify-content-center">
-                <x-adminlte-card class="col-md-8 justify-content-center" title="Informations de profil" theme="primary" icon="fas fa-user" >
+                <div  class="card col-md-8 justify-content-center" title="Informations de profil" theme="primary" icon="fas fa-user" >
                     <div class="card-body ">
                         <div class="row">
                             {{-- Left Column: Avatar and Basic Info --}}
@@ -135,7 +135,7 @@
                             </div>
                         </div>
                     </div>
-                </x-adminlte-card>
+                </div>
             </div>
         </div>
     </div>

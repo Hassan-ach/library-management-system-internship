@@ -133,6 +133,7 @@ Route::middleware('auth:web')->group(function () {
 
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
         Route::get('/profile', [AdminDashboardController::class,'profile'])->name('profile');
+        Route::get('/dashboard', [LibrarianDashboardController::class, 'index'])->name('dashboard');
 
         
         Route::get('/settings', [SettingsController::class, 'edit'])->name('admin.settings.edit');
