@@ -3,30 +3,27 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Setting;
-use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Http\Request;
 
 class SettingsController extends Controller
 {
     public function edit()
     {
-        $settings = Settings::firstOrCreate([]);
-        return view('admin.settings.edit', compact('settings'));
+        $settings = Setting::getSettings();
+        return view('admin.settings.index', compact('settings'));
     }
 
     public function update(Request $request)
     {
         $validated = $request->validate([
-            'max_books_per_user' => 'required|integer|min:1',
-            'max_loan_duration' => 'required|integer|min:1',
-            'reservation_duration' => 'required|integer|min:1'
+            'DUREE_EMPRUNT_MAX' => 'required|integer|min:1',
+            'NOMBRE_EMPRUNTS_MAX' => 'required|integer|min:1',
+            'DUREE_RESERVATION' => 'required|integer|min:1'
         ]);
 
-        Settings::firstOrCreate([])->update($validated);
+        Setting::getSettings()->update($validated);
 
-        return redirect()->route('admin.settings.edit')
-            ->with('success', 'Settings updated successfully!');
+        return back()->with('success', 'Paramètres mis à jour');
     }
 }

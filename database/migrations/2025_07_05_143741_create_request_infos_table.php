@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('request_infos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained('users', 'id')->nullOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete(); // Changed
             $table->foreignId('request_id')->constrained('book_requests', 'id')->cascadeOnDelete();
             $table->enum('status', ['pending', 'approved', 'rejected', 'borrowed', 'returned', 'overdue', 'canceled']);
             $table->timestamps();

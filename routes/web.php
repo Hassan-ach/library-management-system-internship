@@ -135,8 +135,8 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/dashboard', [LibrarianDashboardController::class, 'index'])->name('dashboard');
 
         
-        Route::get('/settings', [SettingsController::class, 'edit'])->name('admin.settings.edit');
-        Route::put('/settings/update', [SettingsController::class, 'update'])->name('admin.settings.update');
+        Route::get('/settings', [SettingsController::class, 'edit'])->name('settings.edit');
+        Route::put('/settings/update', [SettingsController::class, 'update'])->name('settings.update');
         
         // Route::get('/users', [UserController::class, 'create_page'])->name('users.create');
         Route::post('/users', [UserController::class, 'create'])->name('create');
