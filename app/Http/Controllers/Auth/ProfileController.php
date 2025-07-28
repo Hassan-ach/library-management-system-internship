@@ -18,10 +18,11 @@ class ProfileController extends Controller
         }
 
         $requests = $user->bookRequests;
-
+        $requests_info = $user->requestsInfo;
+        
         return match ($user->role) {
             UserRole::STUDENT => view('student.profile.show', compact('user', 'requests')),
-            UserRole::LIBRARIAN => view('librarian.profile.show', compact('user')),
+            UserRole::LIBRARIAN => view('librarian.profile.show', compact('user', 'requests_info')),
             UserRole::ADMIN => view('admin.profile.show', compact('user')),
             default => null,
         };
