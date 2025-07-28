@@ -33,5 +33,5 @@ function get_admin(int $id): Admin
 
 function get_librarian(int $id): Librarian
 {
-    return Librarian::with('requestsInfo')->findOrFail($id);
+    return Librarian::with('requestsInfo', 'requestsInfo.bookRequest.book', 'requestsInfo.bookRequest.user')->findOrFail($id);
 }
