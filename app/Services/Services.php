@@ -48,6 +48,7 @@ class Services
         }
 
         $book_data = [
+            'image_url' => '',
             'title' => $book->title,
             'isbn' => $book->isbn,
             'image_url' => $book->image_url,

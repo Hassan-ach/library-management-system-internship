@@ -72,7 +72,7 @@ use App\Enums\RequestStatus;
                         </button>
                     </div>
                     <div class="col-md-6 d-flex align-items-end">
-                        <a href="{{ route('admin.users.all') }}" class="btn btn-outline-secondary w-100">
+                        <a href="{{ route('admin.statistics.users') }}" class="btn btn-outline-secondary w-100">
                             <i class="fas fa-times me-2"></i> Clear
                         </a>
                     </div>
