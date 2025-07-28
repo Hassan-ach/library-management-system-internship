@@ -102,35 +102,42 @@ Route::middleware('auth:web')->group(function () {
         Route::delete('/tags/{id}', [TagController::class, 'delete'])->name('tags.delete');
     });
     // admin
-    Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function () {
+   Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function () {
         //
 
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
-        Route::get('/profile', [AdminDashboardController::class, 'profile'])->name('profile');
+        Route::get('/profile', [AdminDashboardController::class,'profile'])->name('profile');
 
+        
         Route::get('/settings', [SettingsController::class, 'index'])->name('settings.get');
         Route::patch('/settings', [SettingsController::class, 'update'])->name('settings.update');
-
-        Route::get('/users', [UserController::class, 'create_page'])->name('users.create');
+        
+        // Route::get('/users', [UserController::class, 'create_page'])->name('users.create');
         Route::post('/users', [UserController::class, 'create'])->name('create');
         Route::get('/users/index', [UserController::class, 'index'])->name('users.all');
         Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
         Route::get('/users/{id}', [UserController::class, 'update_page'])->name('users.update');
         Route::patch('/users/{id}', [UserController::class, 'update'])->name('users.update.submit');
         Route::delete('/users/{id}', [UserController::class, 'delete'])->name('users.delete');
-
-        Route::get('/statistics', [StatisticsController::class, 'dashboard'])->name('statistics.dashboard');
+        
+        
+        
         Route::prefix('statistics')->name('statistics.')->group(function () {
-            Route::get('/users', [StatisticsController::class, 'users_stat'])->name('users');
-            Route::get('/users/export', [StatisticsController::class, 'exportUsers'])->name('users.export');
-            Route::get('/users/history', [StatisticsController::class, 'users_history'])->name('users.history');
+            Route::get('/users', [StatisticsController::class,'users_stat'])->name('users');
+            Route::get('/students/search', [StatisticsController::class, 'search'])->name('users.search');
+            Route::get('/librarian/search', [StatisticsController::class, 'search_librarian'])->name('librarians.search');
+            Route::get('/users/export', [StatisticsController::class,'exportUsers'])->name('users.export');
+            // Route::get('/users/history/{user}', [StatisticsController::class, 'user_history'])->name('users.history');
+            Route::get('/student/history/{user}/{status?}/{color?}', [StatisticsController::class, 'user_history'])->name('users.history');
             Route::resource('user_history', UserController::class)->names('user.hitory');
+            
+            
+            Route::get('/librarian', [StatisticsController::class,'librarian_stat'])->name('librarian');
+            Route::get('/librarian/history/{user}/{status?}/{color?}', [StatisticsController::class, 'librarian_history'])->name('librarian_history');
+            Route::get('/librarian/export', [StatisticsController::class,'exportlibrarian'])->name('librarian.export');
 
-            Route::get('/requests', [LibrarianRequestController::class, 'requests_stat'])->name('requests');
-            Route::get('/requests/export', [LibrarianRequestController::class, 'exportRequests'])->name('requests.export');
-
-            Route::get('/books', [LibrarianBookController::class, 'books_stat'])->name('books');
-            Route::get('/books/export', [LibrarianBookController::class, 'exportBooks'])->name('books.export');
+            Route::get('/books', [StatisticsController::class,'books_stat'])->name('books');
+            Route::get('/books/export', [StatisticsController::class,'exportBooks'])->name('books.export');
         });
     });
 });

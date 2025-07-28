@@ -337,31 +337,38 @@ return [
         // Administrator Menu
         [
             'text' => 'Tableau de bord',
-            'url' => 'admin/dashboard',
+            'url' => 'admin',
             'icon' => 'fas fa-fw fa-tachometer-alt',
-            'active' => ['admin/dashboard'],
-            'can' => 'administrator', // Check if user has 'administrator' role
+            // 'active' => ['admin'],
+            'can' => 'admin',
         ],
         [
             'text' => 'Gestion des utilisateurs',
+            'url' => 'admin/users/index',
             'icon' => 'fas fa-fw fa-users',
-            'active' => ['admin/users*'],
-            'can' => 'administrator',
+            'active' => ['admin/users/*'],
+            'can' => 'admin',
+        ],
+        [
+            'text' => 'Statistiques globales',
+            'url' => 'admin/statistics',
+            'icon' => 'fas fa-fw fa-chart-line',
+            'active' => ['admin/statistics/*'],
+            'can' => 'admin',
             'submenu' => [
                 [
-                    'text' => 'Tous les utilisateurs',
-                    'url' => 'admin/users',
-                    'active' => ['admin/users'],
+                    'text' => 'Les etudiants',
+                    'url' => 'admin/statistics/users',
+                    'active' => ['admin/statistics/users*','admin/statistics/student*'],
                 ],
                 [
-                    'text' => 'Ajouter un utilisateur',
-                    'url' => 'admin/users/create',
-                    'active' => ['admin/users/create'],
+                    'text' => 'Les bibliothecaires',
+                    'url' => 'admin/statistics/librarian',
+                    'active' => ['admin/statistics/librarian*'],
                 ],
                 [
-                    'text' => 'Rechercher des utilisateurs',
-                    'url' => 'admin/users/search',
-                    'active' => ['admin/users/search'],
+                    'text' => 'Les livres',
+                    'url' => 'admin/statistics/books',
                 ],
             ],
         ],
@@ -369,23 +376,10 @@ return [
             'text' => 'Paramètres système',
             'url' => 'admin/settings',
             'icon' => 'fas fa-fw fa-cogs',
-            'active' => ['admin/settings*'],
-            'can' => 'administrator',
+            'active' => ['admin/settings/*'],
+            'can' => 'admin',
         ],
-        [
-            'text' => 'Statistiques globales',
-            'url' => 'admin/statistics',
-            'icon' => 'fas fa-fw fa-chart-line',
-            'active' => ['admin/statistics*'],
-            'can' => 'administrator',
-        ],
-        [
-            'text' => 'Journaux d\'audit',
-            'url' => 'admin/audit',
-            'icon' => 'fas fa-fw fa-file-alt',
-            'active' => ['admin/audit*'],
-            'can' => 'administrator',
-        ],
+
 
         // Logout button (always visible for authenticated users)
         ['header' => 'COMPTE'],
