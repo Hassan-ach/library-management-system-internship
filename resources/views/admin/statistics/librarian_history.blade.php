@@ -77,9 +77,8 @@ use App\Enums\RequestStatus;
         </div>
     </div>
 
-<!-- In your table rows -->
-<table class="table table-striped table-hover">
-    <thead class="bg-primary text-black">
+<table class="table">
+    <thead>
         <tr>
             <th class="text-black">ID</th>
             <th class="text-black">Response Date</th>
@@ -91,39 +90,21 @@ use App\Enums\RequestStatus;
     </thead>
     <tbody>
         @foreach($requests as $request)
-            @php
-                $status = $request['status'] ?? null;
-                $bgColor = get_request_status_badge($status);
-                $badgeText = get_request_status_text($status);
-            @endphp
-            <tr>
-                <td class="align-middle">{{ $request['id'] }}</td>
-                <td class="align-middle">
-                    <div class="d-flex flex-column">
-                        <span>{{ $request['created_at']->format('Y-m-d H:i') }}</span>
-                        <small class="text-muted">{{ $request['created_diff'] }}</small>
-                    </div>
-                </td>
-                <td class="align-middle">
-                    <span class="fw-medium">{{ $request['book_title'] }}</span>
-                </td>
-                <td class="align-middle">
+        @php
+            $status = $request['status'] ?? null;
+            $bgColor = get_request_status_badge($status);
+            $badgeText = get_request_status_text($status);
+        @endphp
+        <tr>
+            <td>{{ $request['id'] }}</td>
+            <td>{{ $request['created_diff'] ?? '-' }}</td>
+            <td>{{ $request['book_title'] }}</td>
+            <td class="align-middle">
                     <span class="badge bg-{{ $bgColor }}"> {{$badgeText}} </span>
                 </td>
-                <td class="align-middle">
-                    @if($request['processed_at'])
-                    <div class="d-flex flex-column">
-                        <span>{{ $request['processed_at']->format('Y-m-d H:i') }}</span>
-                        <small class="text-muted">{{ $request['processed_diff'] }}</small>
-                    </div>
-                    @else
-                    <span class="text-muted">N/A</span>
-                    @endif
-                </td>
-                <td>
-                    lol
-                </td>
-            </tr>
+            <td>{{ $request['requested_at'] }}</td>
+            <td>{{ $request['requested_by'] }}</td>
+        </tr>
         @endforeach
     </tbody>
 </table>

@@ -8,15 +8,16 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\ProfileController;
-use App\Http\Controllers\Librarian\AuthorController;
+// use App\Http\Controllers\Librarian\AuthorController;
 use App\Http\Controllers\Librarian\BookController as LibrarianBookController;
-use App\Http\Controllers\Librarian\CategoryController;
+// use App\Http\Controllers\Librarian\CategoryController;
 use App\Http\Controllers\Librarian\GoogleApiService\GoogleApiServiceController;
 use App\Http\Controllers\Librarian\LibrarianDashboardController;
 use App\Http\Controllers\Librarian\PublisherController;
+
 use App\Http\Controllers\Librarian\RequestController as LibrarianRequestController;
 use App\Http\Controllers\Librarian\StudentStatisticsController;
-use App\Http\Controllers\Librarian\TagController;
+// use App\Http\Controllers\Librarian\TagController;
 use App\Http\Controllers\Student\BookController as StudentBookController;
 use App\Http\Controllers\Student\RequestController as StudentRequestController;
 use App\Http\Controllers\Student\StudentDashboardController;
@@ -129,11 +130,14 @@ Route::middleware('auth:web')->group(function () {
         //
 
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
-        Route::get('/profile', [AdminDashboardController::class, 'profile'])->name('profile');
 
-        Route::get('/settings', [SettingsController::class, 'index'])->name('settings.get');
-        Route::patch('/settings', [SettingsController::class, 'update'])->name('settings.update');
+        Route::get('/profile', [AdminDashboardController::class,'profile'])->name('profile');
+        Route::get('/dashboard', [LibrarianDashboardController::class, 'index'])->name('dashboard');
 
+        
+        Route::get('/settings', [SettingsController::class, 'edit'])->name('admin.settings.edit');
+        Route::put('/settings/update', [SettingsController::class, 'update'])->name('admin.settings.update');
+        
         // Route::get('/users', [UserController::class, 'create_page'])->name('users.create');
         Route::post('/users', [UserController::class, 'create'])->name('create');
         Route::get('/users/index', [UserController::class, 'index'])->name('users.all');

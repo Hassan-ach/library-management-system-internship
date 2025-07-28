@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\RequestStatus;
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Book;
@@ -157,12 +158,23 @@ public function users_stat(Request $request)
             ->through(function ($request) {
                 $latestInfo = $request->RequestInfo->sortByDesc('created_at')->first();
                 
+                $librarian = 'En attente de traitement';
+                $isPending = $latestInfo?->status === 'pending';
+                $processed_at = null;
+                
+                if (!$isPending && $latestInfo?->user && $latestInfo->user->role->value === UserRole::LIBRARIAN->value) {
+                    $librarian = $latestInfo->user->first_name . ' ' . $latestInfo->user->last_name;
+                    $processed_at = $latestInfo?->created_at ?? null;
+                }
+
+
                 return [
                     'id' => $request->id,
                     'created_at' => $request->created_at,
                     'book_title' => $request->book->title ?? 'N/A',
                     'status' => $latestInfo->status,
-                    'processed_at' => $latestInfo->processed_at ?? null,
+                    'processed_at' => $processed_at,
+                    'processed_by' => $librarian,
                     'created_diff' => $request->created_at->diffForHumans(),
                     'processed_diff' => $latestInfo->processed_at ? $latestInfo->processed_at->diffForHumans() : null,
                     'is_first' => false // We'll set this for the first item
@@ -174,38 +186,59 @@ public function users_stat(Request $request)
             $requests->first()['is_first'] = true;
         }
 
+        // if($requests[])
+
         return view('admin.statistics.users_history', [
             'user' => $user,
             'requests' => $requests,
-            'totalRequests' => $requests->total()
+            'totalRequests' => $requests->total(),
         ]);
     }
 
-public function librarian_history(User $user)
-{
-    $requests = BookRequest::with(['book', 'requestInfo', 'user'])
-        ->where('user_id', $user->id)
-            ->latest()
-            ->paginate(15)
-        ->through(function ($request) {
-            $latestInfo = $request->requestInfo->sortByDesc('created_at')->first();
-            
-            return [
-                'id' => $request->id,
-                'response_date' => $latestInfo->created_at,
-                'book_title' => $request->book->title ?? 'N/A',
-                'status' => $latestInfo->status ?? null,
-                'requested_at' => $request->created_at,
-                'requested_by' => $request->user->name,
-                'response_diff' => $latestInfo->created_at->diffForHumans(),
-                'requested_diff' => $request->created_at->diffForHumans(),
-            ];
-        });
+    public function librarian_history(Librarian $user)
+    {
+        $requests = BookRequest::with(['book', 'RequestInfo.user', 'user'])
+                      ->whereHas('requestInfo', function($q) use ($user) {
+                            $q->where('user_id', $user->id); // Filter by librarian's actions
+                        })
+                    ->latest()
+                    ->paginate(15)
+                    ->through(function ($request) {
+                        $latestInfo = $request->RequestInfo->sortByDesc('created_at')->first();
+                        
+                        // Gestion du bibliothécaire
+                        $librarian = 'Pending processing';
+                        $responseDate = null;
+                        
+                        if ($latestInfo && $latestInfo->status !== 'pending' && $latestInfo->user && $latestInfo->user->role === UserRole::LIBRARIAN->value) {
+                            $librarian = $latestInfo->user->first_name . ' ' . $latestInfo->user->last_name;
+                            $responseDate = $latestInfo?->created_at ?? null;
+                        }
 
-    return view('admin.statistics.librarian_history', [
-        'user' => $user,
-        'requests' => $requests,
-        'totalRequests' => $requests->total()
-    ]);
-}
+                        return [
+                            'id' => $request->id,
+                            'created_at' => $request->created_at,
+                            'created_diff' => $latestInfo?->created_at->format('d/m/Y H:i'),
+                            'response_date' => $responseDate,
+                            'book_title' => $request->book->title ?? 'N/A',
+                            'status' => $latestInfo?->status ?? 'pending',
+                            'requested_at' => $request->created_at->format('d/m/Y H:i'),
+                            'requested_by' => $request->user->first_name . ' ' . $request->user->last_name,
+                            'librarian' => $librarian,
+                        ];
+                    });
+
+            // Mark the first request for special display
+            if ($requests->count() > 0) {
+                $requests->first()['is_first'] = true;
+            }
+
+        // if($requests[])
+
+        return view('admin.statistics.librarian_history', [
+            'user' => $user,
+            'requests' => $requests,
+            'totalRequests' => $requests->total(),
+        ]);
+    }
 }

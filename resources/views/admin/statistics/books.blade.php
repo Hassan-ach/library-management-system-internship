@@ -3,7 +3,7 @@
 @section('css')
 <style>
     .scrollable-table-container {
-        max-height: 50%;  /* Adjust height as needed */
+        max-height: 45%; 
         overflow-y: auto;
         border: 1px solid #dee2e6;
         border-radius: 4px;
@@ -12,7 +12,7 @@
     .sticky-header th {
         position: sticky;
         top: 0;
-        background: #343a40; /* Matches thead-dark */
+        background: #343a40;
         color: white;
         z-index: 10;
     }
