@@ -8,6 +8,7 @@ use App\Models\Book;
 use App\Models\BookRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class AdminDashboardController extends Controller
 {
@@ -60,6 +61,23 @@ class AdminDashboardController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('admin.dashboard')
                 ->with('error', 'User not found: '.$e->getMessage());
+        }
+
+    }
+
+    public function all_requests(Request $req, $studentId)
+    {
+        //
+        try {
+            $student = Student::with('bookRequests.latestRequestInfo')
+                ->findOrFail($studentId);
+
+            return view('librarian.statistics.index', compact('student'));
+
+        } catch (\Throwable $th) {
+            // throw $th;
+            return back()
+                ->with(['error' => 'Error while querying Student profile']);
         }
 
     }

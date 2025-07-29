@@ -166,7 +166,7 @@
             </div>
 
             <div class="mt-2 mr-1 text-right">
-                <a href="{{ route('librarian.requests.index') }}" class="btn btn-sm btn-primary"
+                <a href="{{ route('admin.requests.index') }}" class="btn btn-sm btn-primary"
                     style="font-weight:600; ;">
                     voir plus<i style='font-size:13px; vertical-align: middle' class='fas ml-1'>&#xf101;</i>
                 </a>

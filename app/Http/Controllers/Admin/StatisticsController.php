@@ -134,19 +134,19 @@ public function users_stat(Request $request)
 
     }
     
-    public function exportUsers(){
-        $users = User::all();
+    public function exportStudents(){
+        $users = User::where('role', UserRole::STUDENT->value)->get('id');
         return Excel::download( new UsersExport($users),'users.xlsx');
     }
 
-    public function exportlibrarian(){
-        $users = User::all();
+    public function exportLibrarians(){
+        $users = User::where('role', UserRole::LIBRARIAN->value)->get('id');
         return Excel::download( new UsersExport($users),'users.xlsx');
     }
 
     public function exportBooks(){
-        $users = User::all();
-        return Excel::download( new UsersExport($users),'users.xlsx');
+        $books = Books::all();
+        return Excel::download( new UsersExport($books),'users.xlsx');
     }
 
     public function user_history(Student $user)

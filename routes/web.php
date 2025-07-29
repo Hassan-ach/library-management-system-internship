@@ -105,6 +105,7 @@ Route::middleware('auth:web')->group(function () {
         //
 
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/requests', [StudentRequestController::class, 'index'])->name('requests.index');
 
         Route::get('/profile', [AdminDashboardController::class,'profile'])->name('profile');
         
@@ -130,10 +131,9 @@ Route::middleware('auth:web')->group(function () {
 
             Route::get('/librarian', [StatisticsController::class, 'librarian_stat'])->name('librarian');
             Route::get('/librarian/history/{user}/{status?}/{color?}', [StatisticsController::class, 'librarian_history'])->name('librarian_history');
-            Route::get('/librarian/export', [StatisticsController::class, 'exportlibrarian'])->name('librarian.export');
+            Route::get('/librarian/export', [StatisticsController::class, 'exportLibrarians'])->name('librarian.export');
 
             Route::get('/books', [StatisticsController::class, 'books_stat'])->name('books');
-            // routes/web.php
             Route::get('/books/{book}/history', [StatisticsController::class, 'history'])->name('book.history');
             Route::get('/books/export', [StatisticsController::class, 'exportBooks'])->name('books.export');
         });
