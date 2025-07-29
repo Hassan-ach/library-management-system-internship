@@ -15,6 +15,7 @@ use App\Http\Controllers\Librarian\GoogleApiService\GoogleApiServiceController;
 use App\Http\Controllers\Librarian\LibrarianDashboardController;
 use App\Http\Controllers\Librarian\PublisherController;
 use App\Http\Controllers\Librarian\RequestController as LibrarianRequestController;
+use App\Http\Controllers\Librarian\StudentStatisticsController;
 use App\Http\Controllers\Librarian\TagController;
 use App\Http\Controllers\Student\BookController as StudentBookController;
 use App\Http\Controllers\Student\RequestController as StudentRequestController;
@@ -71,6 +72,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/requests/{id}', [LibrarianRequestController::class, 'show'])->name('requests.show');
         Route::get('/requests/{reqId}/details', [LibrarianRequestController::class, 'showDetails'])->name('requests.details');
         Route::post('/requests/{id}', [LibrarianRequestController::class, 'process'])->name('requests.process');
+        Route::get('/students/{student}', [StudentStatisticsController::class, 'index'])->name('students.statistics');
 
         // display a list of all books
         Route::get('/books', [LibrarianBookController::class, 'index'])->name('books.index');

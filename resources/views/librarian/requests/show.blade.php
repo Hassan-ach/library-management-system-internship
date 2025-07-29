@@ -67,8 +67,13 @@
                     </div>
 
                     <div class="col-md-6">
-                        <h4>Informations sur l'étudiant</h4>
-                        <dl class="row">
+                            <div>
+                                <h4 style="display:inline">Informations sur l'étudiant</h4>
+                                <a href='{{ route('librarian.students.statistics', $request->user) }}'>
+                                    <span class="fas fa-external-link-square-alt"></span>
+                                </a>    
+                            </div>
+                            <dl class="row">
                             <dt class="col-sm-4">Nom:</dt>
                             <dd class="col-sm-8">{{ $request->user->first_name . ' ' . $request->user->last_name ?? 'N/A' }}</dd> {{-- Mise à jour pour prénom/nom --}}
 
@@ -76,7 +81,7 @@
                             <dd class="col-sm-8">{{ $request->user->email ?? 'N/A' }}</dd>
 
                             <dt class="col-sm-4">ID Étudiant:</dt>
-                            <dd class="col-sm-8">{{ $request->user->student_id ?? 'N/A' }}</dd>
+                            <dd class="col-sm-8"><span class="badge bg-dark">{{ $request->user->id ?? 'N/A' }}</span></dd>
                         </dl>
                     </div>
                 </div>
