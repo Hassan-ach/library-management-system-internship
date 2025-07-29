@@ -154,7 +154,7 @@ public function users_stat(Request $request)
         $requests = BookRequest::with(['book', 'RequestInfo'])
             ->where('user_id', $user->id)
             ->latest()
-            ->paginate(15) // Changed to paginate
+            ->paginate(5) // Changed to paginate
             ->through(function ($request) {
                 $latestInfo = $request->RequestInfo->sortByDesc('created_at')->first();
                 

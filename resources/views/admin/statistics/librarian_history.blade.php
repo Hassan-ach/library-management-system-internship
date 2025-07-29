@@ -109,9 +109,9 @@ use App\Enums\RequestStatus;
     </tbody>
 </table>
 
-<!-- Pagination -->
-<div class="d-flex justify-content-center mt-4">
-    {{ $requests->links() }}
+<div >
+    {{ $requests->withQueryString()->links('pagination::bootstrap-5') }}
 </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 @endsection
