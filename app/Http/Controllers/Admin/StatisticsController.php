@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\RequestStatus;
 use App\Enums\UserRole;
+use App\Exports\BooksExport;
 use App\Exports\LibrariansExport;
 use App\Exports\StudentsExport;
 use App\Http\Controllers\Controller;
@@ -142,20 +143,31 @@ public function users_stat(Request $request)
                     ->orderBy('last_name')
                     ->orderBy('first_name');
     
-        return Excel::download(new StudentsExport($studentsQuery), 'students.xlsx');
+        return Excel::download(new StudentsExport($studentsQuery), 'students_' . now()->format('Y-m-d') . '.xlsx');
     }
 
-    public function exportLibrarians(){
-            $librariansQuery = User::where('role', UserRole::STUDENT->value)
-                            ->orderBy('last_name')
-                            ->orderBy('first_name');
-            
-            return Excel::download(new LibrariansExport($librariansQuery), 'students.xlsx');
+    public function exportLibrarians()
+    {
+        $query = User::where('role', UserRole::LIBRARIAN->value)
+                ->orderBy('last_name')
+                ->orderBy('first_name');
+        
+        return Excel::download(
+            new LibrariansExport($query),
+            'librarians_' . now()->format('Y-m-d') . '.xlsx'
+        );
     }
 
-    public function exportBooks(){
-        $books = Books::all();
-        return Excel::download( new UsersExport($books),'users.xlsx');
+    public function exportBooks()
+    {
+        $query = Book::query()
+            ->orderBy('title')
+            ->select(['title', 'isbn', 'number_of_pages', 'total_copies']);
+
+        return Excel::download(
+            new BooksExport($query),
+            'books_export_' . now()->format('Y-m-d') . '.xlsx'
+        );
     }
 
     public function user_history(Student $user)

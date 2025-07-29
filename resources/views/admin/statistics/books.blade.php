@@ -55,8 +55,8 @@
         </table>
     </div>
     <div class="mt-3">
-        <a href="{{ route('admin.statistics.users.export') }}" class="btn btn-success mr-2">
-            <i class="fas fa-file-excel mr-2"></i> Export all
+        <a href="{{ route('admin.statistics.books.export') }}" class="btn btn-success mr-2">
+            <i class="fas fa-file-excel mr-2"></i> Export
         </a>
     </div>
     {{ $books->withQueryString()->links('pagination::bootstrap-5') }}

@@ -8,11 +8,11 @@ use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithStyles;
+// use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class LibrariansExport implements FromQuery, WithHeadings, WithMapping, WithStyles, ShouldAutoSize, WithCustomStartCell
+class LibrariansExport implements FromQuery, WithHeadings, WithMapping,  ShouldAutoSize, WithCustomStartCell
 {
     protected $query;
 
@@ -52,32 +52,32 @@ class LibrariansExport implements FromQuery, WithHeadings, WithMapping, WithStyl
         ];
     }
 
-    public function styles(Worksheet $sheet)
-    {
-        return [
-            // Header style
-            1 => [
-                'font' => [
-                    'bold' => true,
-                    'color' => ['rgb' => 'FFFFFF']
-                ],
-                'fill' => [
-                    'fillType' => 'solid',
-                    'color' => ['rgb' => '5B9BD5'] // Different blue from students
-                ]
-            ],
-            // Status column coloring
-            'F' => [
-                'font' => [
-                    'color' => function($cell) {
-                        return str_contains($cell->getValue(), 'Actif') 
-                            ? ['rgb' => '00B050'] // Green
-                            : ['rgb' => 'FF0000']; // Red
-                    }
-                ]
-            ]
-        ];
-    }
+    // public function styles(Worksheet $sheet)
+    // {
+    //     return [
+    //         // Header style
+    //         1 => [
+    //             'font' => [
+    //                 'bold' => true,
+    //                 'color' => ['rgb' => 'FFFFFF']
+    //             ],
+    //             'fill' => [
+    //                 'fillType' => 'solid',
+    //                 'color' => ['rgb' => '5B9BD5'] // Different blue from students
+    //             ]
+    //         ],
+    //         // Status column coloring
+    //         'F' => [
+    //             'font' => [
+    //                 'color' => function($cell) {
+    //                     return str_contains($cell->getValue(), 'Actif') 
+    //                         ? ['rgb' => '00B050'] // Green
+    //                         : ['rgb' => 'FF0000']; // Red
+    //                 }
+    //             ]
+    //         ]
+    //     ];
+    // }
 
     public function startCell(): string
     {
