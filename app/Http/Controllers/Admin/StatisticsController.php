@@ -241,4 +241,44 @@ public function users_stat(Request $request)
             'totalRequests' => $requests->total(),
         ]);
     }
+
+    // app/Http/Controllers/BookController.php
+    public function history(Book $book)
+    {
+        $borrowings = BookRequest::with(['user', 'requestInfo.user'])
+            ->where('book_id', $book->id)
+            ->whereHas('requestInfo', function($query) {
+                $query->where('status', 'borrowed');
+            })
+            ->orderByDesc('created_at')
+            ->paginate(10)
+            ->through(function ($request) {
+                $borrowInfo = $request->requestInfo
+                    ->where('status', 'borrowed')
+                    ->sortByDesc('created_at')
+                    ->first();
+                    
+                $returnInfo = $request->requestInfo
+                    ->where('status', 'returned')
+                    ->sortByDesc('created_at')
+                    ->first();
+
+                return [
+                    'user_name' => $request->user->full_name,
+                    'borrow_date' => $borrowInfo->created_at->format('Y-m-d H:i'),
+                    'librarian_borrowed' => $borrowInfo->user->full_name ?? 'System',
+                    'return_date' => $returnInfo ? $returnInfo->created_at->format('Y-m-d H:i') : null,
+                    'librarian_returned' => $returnInfo->user->full_name ?? null,
+                    'is_returned' => !is_null($returnInfo),
+                    'duration' => $returnInfo 
+                        ? $borrowInfo->created_at->diffForHumans($returnInfo->created_at, true)
+                        : $borrowInfo->created_at->diffForHumans(now(), true)
+                ];
+            });
+
+        return view('admin.statistics.book_history', [
+            'book' => $book,
+            'borrowings' => $borrowings
+        ]);
+    }
 }

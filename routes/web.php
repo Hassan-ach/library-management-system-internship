@@ -133,6 +133,8 @@ Route::middleware('auth:web')->group(function () {
             Route::get('/librarian/export', [StatisticsController::class, 'exportlibrarian'])->name('librarian.export');
 
             Route::get('/books', [StatisticsController::class, 'books_stat'])->name('books');
+            // routes/web.php
+            Route::get('/books/{book}/history', [StatisticsController::class, 'history'])->name('book.history');
             Route::get('/books/export', [StatisticsController::class, 'exportBooks'])->name('books.export');
         });
     });
