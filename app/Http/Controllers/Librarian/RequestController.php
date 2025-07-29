@@ -15,36 +15,6 @@ use Illuminate\Validation\Rules\Enum;
 
 class RequestController extends Controller
 {
-    //
-    // public function process(Request $req, $reqId)
-    // {
-    //     if (! Gate::allows('processe_req')) {
-    //         return back()
-    //             ->with(['error' => 'You\'re not allowed to process this request']);
-    //     }
-    //     try {
-    //         if (! BookRequest::where('id', $reqId)->exists()) {
-    //             return back()->with('error', 'Invalid request ID');
-    //         }
-    //
-    //         $status = $req->validate([
-    //             'status' => ['required', new Enum(RequestStatus::class)],
-    //         ]);
-    //
-    //         RequestInfo::create([
-    //             'user_id' => Auth::user()->id,
-    //             'request_id' => $reqId,
-    //             'status' => $status['status'],
-    //         ]);
-    //
-    //         return back()->with(['message' => 'status updated successfully']);
-    //
-    //     } catch (\Throwable $th) {
-    //         return back()
-    //             ->with(['error' => 'Error while updating request']);
-    //     }
-    //
-    // }
     public function process(Request $req, $reqId)
     {
 
