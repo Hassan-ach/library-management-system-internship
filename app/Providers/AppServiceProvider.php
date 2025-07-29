@@ -51,8 +51,19 @@ class AppServiceProvider extends ServiceProvider
             return $user->is_active && $user->id == $req->user_id;
         });
 
-        Gate::define('processe_req', function (User $user) {
-            return $user->is_active && $user->role == UserRole::LIBRARIAN;
+        Gate::define('processe_req', function (User $user, Student $student, RequestStatus $status) {
+            // Basic checks - user must be active librarian
+            if (! $user->is_active || $user->role != UserRole::LIBRARIAN) {
+                return false;
+            }
+
+            // Only check borrowed books limit for APPROVED status
+            if (in_array($status, [RequestStatus::APPROVED])) {
+                return $student->get_totale_borrowed_books() < Setting::find(1)?->NOMBRE_EMPRUNTS_MAX;
+            }
+
+            // For other statuses (REJECTED, RETURNED, etc.), just allow if user is active librarian
+            return true;
         });
 
         Gate::define('student', function (User $user) {
