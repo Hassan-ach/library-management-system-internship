@@ -317,7 +317,7 @@ return [
         // Administrator Menu
         [
             'text' => 'Tableau de bord',
-            'url' => 'admin',
+            'url' => 'admin/dashboard',
             'icon' => 'fas fa-fw fa-tachometer-alt',
             // 'active' => ['admin'],
             'can' => 'admin',
@@ -377,8 +377,9 @@ return [
         // ],
         [
             'text' => 'Déconnexion',
-            'url' => 'logout',
+            'route' => 'logout',
             'icon' => 'fas fa-fw fa-sign-out-alt',
+            // 'method' => 'post',
         ],
     ],
 

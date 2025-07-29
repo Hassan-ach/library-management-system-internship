@@ -150,7 +150,7 @@ class BookController extends Controller
 
             // return a View showed that the book was created
             // should change to books.show if successe and return back if fail
-            return view('librarian.books.create');
+            return redirect('librarian/books')->with(['success' => 'the book created successefuly']);
 
         } catch (ValidationException $e) {
             return view('errors.dataValidation');
@@ -192,7 +192,7 @@ class BookController extends Controller
             ]);
             $this->services->updateBook($book->id, $validated);
 
-            return view('librarian.books.edit');
+            return redirect('librarian/books')->with(['success' => 'the book updated successefuly']);
 
         } catch (ValidationException $e) {
             // return $e;
@@ -207,7 +207,7 @@ class BookController extends Controller
         try {
             $this->services->deleteBook($book->id);
 
-            return view('librarian.books.delete'); // temporary
+            return redirect('librarian/books')->with(['success' => 'the book deleted successefuly']);
         } catch (ValidationException $e) {
             return view('errors.dataValidation');
         } catch (Exception $e) {

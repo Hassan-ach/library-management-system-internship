@@ -21,6 +21,17 @@
 
 @section('content')
     <div class="container-fluid">
+           {{-- Display success/error messages --}}
+        @if(session('success'))
+            <x-adminlte-alert theme="success" title="Succès">
+                {{ session('success') }}
+            </x-adminlte-alert>
+        @endif
+        @if(session('error'))
+            <x-adminlte-alert theme="danger" title="Erreur">
+                {{ session('error') }}
+            </x-adminlte-alert>
+        @endif
         @if( $books)
             <div class="row">
                 @forelse ($books as $book)
@@ -28,9 +39,9 @@
                     <div class="col-xxl-2 col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12 d-flex align-items-stretch">
 
                         <div class="card shadow-sm mb-4 w-100">
-                            <a href="{{ route('librarian.books.show', $book?->id) }}">
-                            @if ($book?->image_url)
-                                <img src="{{ $book?->image_url }}" class="card-img-top" alt="{{ $book?->title }} Cover" style="height: 250px; object-fit: cover;">
+                            <a href="{{ route('librarian.books.show', $book->id) }}">
+                            @if ($book->image_url)
+                                <img src="{{ $book->image_url }}" class="card-img-top" alt="{{ $book->title }} Cover" style="height: 250px; object-fit: cover;">
                             @else
                                 <div class="card-img-top d-flex justify-content-center align-items-center bg-light" style="height: 250px;">
                                     <i class="fas fa-book fa-6x text-black-50"></i>
@@ -38,12 +49,12 @@
                             @endif
                             <div class="card-body d-flex flex-grow-1 justify-content-center">
                                 <h5 class="card-title font-weight-bold" style="color:black">
-                                    {{ \Illuminate\Support\Str::limit($book?->title, 50) }}
+                                    {{ \Illuminate\Support\Str::limit($book->title, 50) }}
                                 </h5>
                             </div>
                             </a>
                             <div class="card-footer bg-light border-top-0 mt-auto">
-                                <div class="row no-gutters">    
+                                <div class="row no-gutters">
                                     <div class='col-6 pr-2'>
                                         <a href="{{ route('librarian.books.edit', $book) }}" class="btn btn-sm btn-outline-primary w-100" title="Edit">
                                             <i class="fas fa-edit"></i> Modifier
@@ -54,8 +65,8 @@
                                                 title="Delete"
                                                 data-toggle="modal"
                                                 data-target="#deleteModal"
-                                                data-book-id="{{ $book?->id }}"
-                                                data-book-title="{{ $book?->title }}">
+                                                data-book-id="{{ $book->id }}"
+                                                data-book-title="{{ $book->title }}">
                                             <i class="fas fa-trash"></i> Supprimer
                                         </button>
                                     </div>
@@ -74,12 +85,12 @@
                     </div>
                 @endforelse
             </div>
-    
+
             <div class="d-flex justify-content-center">
                 {{ $books->links('pagination::bootstrap-4') }}
             </div>
         @else
-            <div class="col-12 mt-5"> 
+            <div class="col-12 mt-5">
             <div class="alert alert-light p-4 border shadow-sm">
             <div class="d-flex align-items-center">
 
@@ -110,13 +121,13 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Êtes-vous sûr de vouloir supprimer ce livre : 
+                    Êtes-vous sûr de vouloir supprimer ce livre :
                     <strong id="bookTitleToDelete"></strong> ?
                     <p class="text-danger mt-2">Une fois supprimé, le livre ne pourra plus être restauré.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                
+
                     <form id="deleteForm" method="POST" action="">
                         @csrf
                         @method('DELETE')
@@ -130,9 +141,9 @@
 
 @section('js')
 <script>
-    
+
     $('#deleteModal').on('show.bs.modal', function (event) {
-        
+
         var button = $(event.relatedTarget);
 
         var bookId = button.data('book-id');

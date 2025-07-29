@@ -8,16 +8,15 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\ProfileController;
-// use App\Http\Controllers\Librarian\AuthorController;
+use App\Http\Controllers\Librarian\AuthorController;
 use App\Http\Controllers\Librarian\BookController as LibrarianBookController;
-// use App\Http\Controllers\Librarian\CategoryController;
+use App\Http\Controllers\Librarian\CategoryController;
 use App\Http\Controllers\Librarian\GoogleApiService\GoogleApiServiceController;
 use App\Http\Controllers\Librarian\LibrarianDashboardController;
 use App\Http\Controllers\Librarian\PublisherController;
-
 use App\Http\Controllers\Librarian\RequestController as LibrarianRequestController;
 use App\Http\Controllers\Librarian\StudentStatisticsController;
-// use App\Http\Controllers\Librarian\TagController;
+use App\Http\Controllers\Librarian\TagController;
 use App\Http\Controllers\Student\BookController as StudentBookController;
 use App\Http\Controllers\Student\RequestController as StudentRequestController;
 use App\Http\Controllers\Student\StudentDashboardController;
@@ -100,44 +99,25 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/api/category/search', [CategoryController::class, 'apiSearch'])->name('category.api.search');
         Route::get('/api/tag/search', [TagController::class, 'apiSearch'])->name('tag.api.search');
 
-        // Author Routes:
-        Route::get('/authors', [AuthorController::class, 'index'])->name('authors.index');
-        Route::get('/authors/search', [AuthorController::class, 'search'])->name('authors.search');
-        Route::post('/authors', [AuthorController::class, 'create'])->name('authors.create');
-        Route::patch('/authors/{id}', [AuthorController::class, 'update'])->name('authors.update');
-        Route::delete('/authors/{id}', action: [AuthorController::class, 'delete'])->name('authors.delete');
-        // Category Routes:
-        Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
-        Route::get('/category/search', [CategoryController::class, 'search'])->name('category.search');
-        Route::post('/category', [CategoryController::class, 'create'])->name('category.create');
-        Route::patch('/category/{id}', [CategoryController::class, 'update'])->name('category.update');
-        Route::delete('/category/{id}', [CategoryController::class, 'delete'])->name('category.delete');
-        // Publisher Routes:
-        Route::get('/publishers', [PublisherController::class, 'index'])->name('publishers.index');
-        Route::get('/publishers/search', [PublisherController::class, 'search'])->name('publishers.search');
-        Route::post('/publishers', [PublisherController::class, 'create'])->name('publishers.create');
-        Route::patch('/publishers/{id}', [PublisherController::class, 'update'])->name('publishers.update');
-        Route::delete('/publishers/{id}', [PublisherController::class, 'delete'])->name('publishers.delete');
-        // Tag Routes:
-        Route::get('/tags', [TagController::class, 'index'])->name('tags.index');
-        Route::get('/tags/search', [TagController::class, 'search'])->name('tags.search');
-        Route::post('/tags', [TagController::class, 'create'])->name('tags.create');
-        Route::patch('/tags/{id}', [TagController::class, 'update'])->name('tags.update');
-        Route::delete('/tags/{id}', [TagController::class, 'delete'])->name('tags.delete');
     });
     // admin
     Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function () {
         //
 
-        Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-        Route::get('/profile', [AdminDashboardController::class,'profile'])->name('profile');
-        Route::get('/dashboard', [LibrarianDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/profile', [AdminDashboardController::class, 'profile'])->name('profile');
 
+<<<<<<< HEAD
         
         Route::get('/settings', [SettingsController::class, 'edit'])->name('settings.edit');
         Route::put('/settings/update', [SettingsController::class, 'update'])->name('settings.update');
         
+=======
+        Route::get('/settings', [SettingsController::class, 'edit'])->name('admin.settings.edit');
+        Route::put('/settings/update', [SettingsController::class, 'update'])->name('admin.settings.update');
+
+>>>>>>> 333a9088b1386ef0de938a89630ed7b763781037
         // Route::get('/users', [UserController::class, 'create_page'])->name('users.create');
         Route::post('/users', [UserController::class, 'create'])->name('create');
         Route::get('/users/index', [UserController::class, 'index'])->name('users.all');

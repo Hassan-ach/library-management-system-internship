@@ -16,7 +16,7 @@
                 <form action="{{ route('admin.statistics.librarians.search') }}" method="GET" class="row g-3">
                     <div class="col-md-8">
                         <label for="search" class="form-label">Search Term</label>
-                        <input type="text" class="form-control" id="search" name="search" 
+                        <input type="text" class="form-control" id="search" name="search"
                             placeholder="Search by name, email, etc." value="{{ request('search') }}">
                     </div>
                     <div class="col-md-4">
@@ -40,7 +40,7 @@
                 </form>
             </div>
         </div>
-        
+
         @if(request()->hasAny(['search', 'role', 'status']))
             <div class="alert alert-info mb-3">
                 Showing results for:
@@ -79,7 +79,7 @@
                             </td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <a href="{{ route('admin.statistics.librarian_history', $user->id) }}" 
+                                    <a href="{{ route('admin.statistics.librarian_history', $user->id) }}"
                                     class="btn btn-secondary btn-sm"
                                     title="View History">
                                         <i class="fas fa-history"></i>
