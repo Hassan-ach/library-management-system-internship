@@ -106,18 +106,12 @@ Route::middleware('auth:web')->group(function () {
 
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-        Route::get('/profile', [AdminDashboardController::class, 'profile'])->name('profile');
-
-<<<<<<< HEAD
+        Route::get('/profile', [AdminDashboardController::class,'profile'])->name('profile');
+        Route::get('/dashboard', [LibrarianDashboardController::class, 'index'])->name('dashboard');
         
         Route::get('/settings', [SettingsController::class, 'edit'])->name('settings.edit');
         Route::put('/settings/update', [SettingsController::class, 'update'])->name('settings.update');
         
-=======
-        Route::get('/settings', [SettingsController::class, 'edit'])->name('admin.settings.edit');
-        Route::put('/settings/update', [SettingsController::class, 'update'])->name('admin.settings.update');
-
->>>>>>> 333a9088b1386ef0de938a89630ed7b763781037
         // Route::get('/users', [UserController::class, 'create_page'])->name('users.create');
         Route::post('/users', [UserController::class, 'create'])->name('create');
         Route::get('/users/index', [UserController::class, 'index'])->name('users.all');
