@@ -6,6 +6,8 @@ use App\Enums\RequestStatus;
 use App\Enums\UserRole;
 use App\Models\Book;
 use App\Models\BookRequest;
+use App\Models\Setting;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -26,8 +28,19 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
-        Gate::define('borrow_books', function (User $user, Book $book) {
-            return $user->is_active && $book->total_copies > get_borrowed_copies($book->id);
+        Gate::define('borrow_books', function (?User $user, Book $book) {
+            // Convert User to Student if needed
+            if ($user instanceof User && ! ($user instanceof Student)) {
+                $user = Student::find($user->id);
+            }
+
+            if (! $user || ! ($user instanceof Student)) {
+                return false;
+            }
+
+            return $user->is_active &&
+                   $book->total_copies > get_borrowed_copies($book->id) &&
+                   $user->get_totale_borrowed_books() < Setting::find(1)?->NOMBRE_EMPRUNTS_MAX;
         });
 
         Gate::define('cancel_req', function (User $user, BookRequest $req) {
