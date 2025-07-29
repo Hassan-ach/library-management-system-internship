@@ -59,21 +59,17 @@ class GoogleBookService
 
             // Add existing categories to 'old' array
             foreach ($existingCategories as $category) {
-                // $categories['old'][] = [
-                //     'id' => $category->id,
-                //     'label' => $category->label,
-                //     'description' => $category->description ?? '',
-                // ];
-                array_push($categories['old'], [$category->id, $category->label]);
+                $categories['old'][] = [
+                    'id' => $category->id,
+                    'name' => $category->label
+                ];
+                
             }
 
             // Add new categories to 'new' array
             foreach ($categoryLabels as $label) {
                 if (! in_array($label, $existingCategoryLabels)) {
-                    // $categories['new'][] = [
-                    //     'label' => $label,
-                    //     'description' => '', // Empty for now; can be filled later
-                    // ];
+
                     array_push($categories['new'], [$label, 'no descritpion']);
 
                 }

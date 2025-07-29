@@ -125,7 +125,7 @@ class BookController extends Controller
             // validate request's values
             $validated = $request->validate([
                 'title' => 'required | string',
-                'isbn' => 'required | string', /* the validation process should be stopped if isbn not valide */
+                'isbn' => 'required | string | unique:books', /* the validation process should be stopped if isbn not valide */
                 'image_url' => 'url',
                 'description' => 'string',
                 'publication_date' => 'date',

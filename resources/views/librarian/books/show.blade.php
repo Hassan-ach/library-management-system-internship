@@ -46,8 +46,8 @@
 
                                 <dt class="col-sm-4">Auteur(s):</dt>
                                 <dd class="col-sm-8">
-                                    @if( $authors)
-                                        @foreach($authors as $author)
+                                    @if( $authors["old"])
+                                        @foreach($authors['old'] as $author)
                                             {{ $author['name'] }}{{ !$loop->last ? ', ' : '' }}
                                         @endforeach
                                     @else
@@ -57,8 +57,8 @@
 
                                 <dt class="col-sm-4">Éditeur(s):</dt>
                                 <dd class="col-sm-8">
-                                    @if( $publishers)
-                                        @foreach($publishers as $publisher)
+                                    @if( $publishers['old'])
+                                        @foreach($publishers['old'] as $publisher)
                                             {{ $publisher['name'] }}{{ !$loop->last ? ', ' : '' }}
                                         @endforeach
                                     @else
@@ -74,8 +74,8 @@
 
                                 <dt class="col-sm-4">Catégorie(s):</dt>
                                 <dd class="col-sm-8">
-                                    @if( $categories)
-                                        @foreach($categories as $category)
+                                    @if( $categories['old'])
+                                        @foreach($categories['old'] as $category)
                                             <span class="badge badge-info">{{ $category['name'] }}</span>{{ !$loop->last ? ' ' : '' }}
                                         @endforeach
                                     @else
@@ -85,8 +85,8 @@
 
                                 <dt class="col-sm-4">Etiquettes:</dt>
                                 <dd class="col-sm-8">
-                                    @if( $tags)
-                                        @foreach($tags as $tag)
+                                    @if( $tags['old'])
+                                        @foreach($tags['old'] as $tag)
                                             <span class="badge badge-secondary">{{ $tag['name'] }}</span>{{ !$loop->last ? ' ' : '' }}
                                         @endforeach
                                     @else
