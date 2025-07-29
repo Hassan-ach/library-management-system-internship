@@ -54,24 +54,24 @@ class Services
             'publication_date' => $book->publication_date->format('Y-m-d'),
             'number_of_pages' => $book->number_of_pages,
             'total_copies' => $book->total_copies,
-            'available_copies' => $book->total_copies - get_borrowed_copies($book),
+            'available_copies' => $book->total_copies - get_borrowed_copies($book->id),
             'description' => $book->description,
             'tags' => [
                 'old' => $old_tags,
-                'new' => []
+                'new' => [],
             ],
             'categories' => [
                 'old' => $old_categories,
-                'new' => []
+                'new' => [],
             ],
             'publishers' => [
                 'old' => $old_publishers,
-                'new' => []
+                'new' => [],
             ],
             'authors' => [
                 'old' => $old_authors,
-                'new' => []
-            ]
+                'new' => [],
+            ],
         ];
 
         return $book_data;

@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         Gate::define('borrow_books', function (User $user, Book $book) {
-            return $user->is_active && $book->total_copies > get_borrowed_copies($book);
+            return $user->is_active && $book->total_copies > get_borrowed_copies($book->id);
         });
 
         Gate::define('cancel_req', function (User $user, BookRequest $req) {
