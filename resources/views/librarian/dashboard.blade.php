@@ -136,8 +136,10 @@
                                 <td>{{ $request->date }}</td>
                                 <td>
                                     <div class="btn-group" role="group">
+                                    {{-- change two forms to conferm the changes--}}
+                                      {{-- Added class 'process-request-form' and data-action --}}
                                         <form action="{{ route('librarian.requests.process', $request->id) }}" method="POST"
-                                            style="display: inline;">
+                                            class="d-inline process-request-form" data-action="Approuver">
                                             @csrf
                                             <input type="hidden" name="status"
                                                 value="{{ App\Enums\RequestStatus::APPROVED }}">
@@ -146,8 +148,9 @@
                                                 <i class="fas fa-check"></i>
                                             </button>
                                         </form>
+                                        {{-- Added class 'process-request-form' and data-action --}}
                                         <form action="{{ route('librarian.requests.process', $request->id) }}" method="POST"
-                                            style="display: inline;">
+                                            class="d-inline process-request-form" data-action="Rejeter">
                                             @csrf
                                             <input type="hidden" name="status"
                                                 value="{{ App\Enums\RequestStatus::REJECTED }}">
@@ -237,4 +240,32 @@
     </x-slot>
 </x-adminlte-modal>
 
+@stop
+@section('js')
+    @parent {{-- Ensure parent JS is included if any --}}
+    <script>
+        $(document).ready(function() {
+            // SweetAlert for processing requests (Approve/Reject)
+            $('.process-request-form').on('submit', function(e) {
+                e.preventDefault(); // Prevent default form submission
+                var form = this;
+                var actionType = $(form).data('action'); // Get the action type (Approuver/Rejeter)
+
+                Swal.fire({
+                    title: 'Confirmer l\'action?',
+                    text: `Êtes-vous sûr de vouloir ${actionType.toLowerCase()} cette demande?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: `Oui, ${actionType.toLowerCase()}!`,
+                    cancelButtonText: 'Annuler'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit(); // Submit the form if confirmed
+                    }
+                });
+            });
+        });
+    </script>
 @stop

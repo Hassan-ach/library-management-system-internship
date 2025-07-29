@@ -75,3 +75,33 @@ input.form-control {
 .login-box {
     width: 100%;
 }
+
+.book-cover-img {
+    height: 250px;
+    object-fit: contain; /* Changed from cover to contain */
+    width: 100%;
+    background-color: #f8f9fa; /* Add a background color for images with transparency or letterboxing */
+}
+.book-card .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100px;
+    padding-bottom: 0.5rem;
+}
+.book-card .card-title {
+    margin-bottom: 0;
+}
+.book-card .card-text {
+    margin-top: 0.25rem;
+}
+.book-card .card-footer {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+/* Custom gradient for placeholder */
+.bg-gradient-light {
+    background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
+}
