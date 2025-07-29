@@ -8,17 +8,18 @@
 
 @section('content')
     <div class="container-fluid">
-        {{-- Display success/error messages --}}
-        @if(session('success'))
-            <x-adminlte-alert theme="success" title="Succès">
-                {{ session('success') }}
-            </x-adminlte-alert>
-        @endif
-        @if(session('error'))
-            <x-adminlte-alert theme="danger" title="Erreur">
-                {{ session('error') }}
-            </x-adminlte-alert>
-        @endif
+            {{-- Display success/error messages
+            @if(session('success'))
+                <x-adminlte-alert theme="success" title="Succès">
+                    {{ session('success') }}
+                </x-adminlte-alert>
+            @endif
+            @if(session('error'))
+                <x-adminlte-alert theme="danger" title="Erreur">
+                    {{ session('error') }}
+                </x-adminlte-alert>
+            @endif
+            --}}
 
         <x-adminlte-card title="Liste des livres disponibles" theme="primary" icon="fas fa-book" >
             <div class="card-tools">

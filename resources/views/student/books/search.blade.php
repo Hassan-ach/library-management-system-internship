@@ -10,16 +10,18 @@
     <div class="container-fluid"> {{-- Added container-fluid for consistent padding --}}
         <div class="row">
             <div class="col-12">
-                @if(session('success'))
-                    <x-adminlte-alert theme="success" title="Succès">
-                        {{ session('success') }}
-                    </x-adminlte-alert>
-                @endif
-                @if(session('error'))
-                    <x-adminlte-alert theme="danger" title="Erreur">
-                        {{ session('error') }}
-                    </x-adminlte-alert>
-                @endif
+            {{-- Display success/error messages
+            @if(session('success'))
+                <x-adminlte-alert theme="success" title="Succès">
+                    {{ session('success') }}
+                </x-adminlte-alert>
+            @endif
+            @if(session('error'))
+                <x-adminlte-alert theme="danger" title="Erreur">
+                    {{ session('error') }}
+                </x-adminlte-alert>
+            @endif
+            --}}
 
                 <x-adminlte-card title="Rechercher un livre" theme="info" icon="fas fa-search" collapsible maximizable>
                     <form action="{{ route('student.books.search') }}" method="GET" class="form-inline mb-3">
