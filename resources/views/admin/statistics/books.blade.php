@@ -42,7 +42,7 @@
                         <td>{{ $book?->total_copies }}</td>
                         <td>
                             <div class="btn-group" role="group">
-                                <a href="{{ route('admin.statistics.users.history', $book?->id) }}"
+                                <a href="{{ route('admin.statistics.book.history', $book?->id) }}"
                                 class="btn btn-secondary btn-sm"
                                 title="View History">
                                     <i class="fas fa-history"></i>

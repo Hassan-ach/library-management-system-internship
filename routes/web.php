@@ -106,11 +106,11 @@ Route::middleware('auth:web')->group(function () {
 
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-        Route::get('/profile', [AdminDashboardController::class, 'profile'])->name('profile');
-
-        Route::get('/settings', [SettingsController::class, 'edit'])->name('admin.settings.edit');
-        Route::put('/settings/update', [SettingsController::class, 'update'])->name('admin.settings.update');
-
+        Route::get('/profile', [AdminDashboardController::class,'profile'])->name('profile');
+        
+        Route::get('/settings', [SettingsController::class, 'edit'])->name('settings.edit');
+        Route::put('/settings/update', [SettingsController::class, 'update'])->name('settings.update');
+        
         // Route::get('/users', [UserController::class, 'create_page'])->name('users.create');
         Route::post('/users', [UserController::class, 'create'])->name('create');
         Route::get('/users/index', [UserController::class, 'index'])->name('users.all');
@@ -133,6 +133,8 @@ Route::middleware('auth:web')->group(function () {
             Route::get('/librarian/export', [StatisticsController::class, 'exportlibrarian'])->name('librarian.export');
 
             Route::get('/books', [StatisticsController::class, 'books_stat'])->name('books');
+            // routes/web.php
+            Route::get('/books/{book}/history', [StatisticsController::class, 'history'])->name('book.history');
             Route::get('/books/export', [StatisticsController::class, 'exportBooks'])->name('books.export');
         });
     });

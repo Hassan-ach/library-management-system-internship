@@ -17,4 +17,9 @@ class Setting extends Model
         'NOMBRE_EMPRUNTS_MAX',
         'DUREE_RESERVATION',
     ];
+
+    public static function getSettings()
+    {
+        return self::firstOrCreate([]);
+    }
 }
