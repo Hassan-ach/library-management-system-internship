@@ -134,6 +134,7 @@ Route::middleware('auth:web')->group(function () {
             Route::get('/librarian/export', [StatisticsController::class, 'exportLibrarians'])->name('librarian.export');
 
             Route::get('/books', [StatisticsController::class, 'books_stat'])->name('books');
+            Route::get('/books/search', [StatisticsController::class, 'search_book'])->name('books.search');
             Route::get('/books/{book}/history', [StatisticsController::class, 'history'])->name('book.history');
             Route::get('/books/export', [StatisticsController::class, 'exportBooks'])->name('books.export');
         });

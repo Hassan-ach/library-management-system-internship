@@ -33,50 +33,52 @@ use App\Enums\RequestStatus;
                 <h5 class="mb-0">Chercher des etudiants</h5>
             </div>
             <div class="card-body">
-                <form action="{{ route('admin.statistics.users.search') }}" method="GET" class="row g-3">
-                    <div class="col-md-4">
-                        <label for="search" class="form-label">Search Term</label>
-                        <input type="text" class="form-control" id="search" name="search"
-                            placeholder="Search by name, email, etc." value="{{ request('search') }}">
-                    </div>
-                    <div class="col-md-4">
-                        <label for="activity" class="form-label">Last activity</label>
-                        <select class="form-select" id="activity" name="activity" style="cursor: pointer;">
-                            <option value="">Tous les statuts</option>
-                            @foreach(App\Enums\RequestStatus::cases() as $activity)
-                                <option value="{{ $activity->value }}" {{ request('activity') == $activity->value ? 'selected' : '' }}>
-                                    @switch($activity)
-                                        @case(App\Enums\RequestStatus::PENDING) En attente @break
-                                        @case(App\Enums\RequestStatus::BORROWED) Emprunté @break
-                                        @case(App\Enums\RequestStatus::APPROVED) Approuvé @break
-                                        @case(App\Enums\RequestStatus::REJECTED) Rejeté @break
-                                        @case(App\Enums\RequestStatus::OVERDUE) En retard @break
-                                        @case(App\Enums\RequestStatus::RETURNED) Retourné @break
-                                        @case(App\Enums\RequestStatus::CANCELED) Annulé @break
-                                    @endswitch
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="status" class="form-label">Status</label>
-                        <select class="form-select" id="status" name="status" style="cursor: pointer;">
-                            <option value="">All Statuses</option>
-                            <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
-                            <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary w-100">
-                            <i class="fas fa-search me-2"></i> Search
-                        </button>
-                    </div>
-                    <div class="col-md-6 d-flex align-items-end">
-                        <a href="{{ route('admin.statistics.users') }}" class="btn btn-outline-secondary w-100">
-                            <i class="fas fa-times me-2"></i> Clear
-                        </a>
-                    </div>
-                </form>
+                <div class="container col-11">
+                    <form action="{{ route('admin.statistics.users.search') }}" method="GET" class="row g-3">
+                        <div class="col-md-4">
+                            <label for="search" class="form-label">Search Term</label>
+                            <input type="text" class="form-control" id="search" name="search"
+                                placeholder="Search by name, email, etc." value="{{ request('search') }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="activity" class="form-label">Last activity</label>
+                            <select class="form-select" id="activity" name="activity" style="cursor: pointer;">
+                                <option value="">Tous les statuts</option>
+                                @foreach(App\Enums\RequestStatus::cases() as $activity)
+                                    <option value="{{ $activity->value }}" {{ request('activity') == $activity->value ? 'selected' : '' }}>
+                                        @switch($activity)
+                                            @case(App\Enums\RequestStatus::PENDING) En attente @break
+                                            @case(App\Enums\RequestStatus::BORROWED) Emprunté @break
+                                            @case(App\Enums\RequestStatus::APPROVED) Approuvé @break
+                                            @case(App\Enums\RequestStatus::REJECTED) Rejeté @break
+                                            @case(App\Enums\RequestStatus::OVERDUE) En retard @break
+                                            @case(App\Enums\RequestStatus::RETURNED) Retourné @break
+                                            @case(App\Enums\RequestStatus::CANCELED) Annulé @break
+                                        @endswitch
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="status" class="form-label">Status</label>
+                            <select class="form-select" id="status" name="status" style="cursor: pointer;">
+                                <option value="">All Statuses</option>
+                                <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
+                                <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-search me-2"></i> Search
+                            </button>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-end">
+                            <a href="{{ route('admin.statistics.users') }}" class="btn btn-outline-secondary w-100">
+                                <i class="fas fa-times me-2"></i> Clear
+                            </a>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
 

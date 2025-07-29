@@ -22,6 +22,41 @@
 @section('content')
 <div class="container">
     <h1>Nos Livres</h1>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Rechercher des livres</h5>
+        </div>
+        <div class="card-body">
+            <div class="container col-11">
+                <form action="{{ route('admin.statistics.books.search') }}" method="GET" class="row g-3">
+                <div class="col-md-8">
+                    <label for="search" class="form-label">Terme de recherche</label>
+                    <input type="text" class="form-control" id="search" name="search"
+                        placeholder="Rechercher par titre, ISBN, etc." value="{{ request('search') }}">
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search me-2"></i> Rechercher
+                    </button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+
+    @if(request()->hasAny(['search', 'availability']))
+        <div class="alert alert-info mb-3">
+            Résultats pour :
+            @if(request('search')) <strong>Recherche :</strong> {{ request('search') }} @endif
+            @if(request('availability')) 
+                <strong>Disponibilité :</strong> 
+                {{ request('availability') == 'available' ? 'Disponibles' : 'Non disponibles' }}
+            @endif
+            <a href="{{ route('admin.statistics.books') }}" class="float-end">Afficher tous</a>
+        </div>
+    @endif
+
     <div class="scrollable-table-container">
         <table class="table table-striped table-hover">
             <thead class="thead-dark sticky-header">

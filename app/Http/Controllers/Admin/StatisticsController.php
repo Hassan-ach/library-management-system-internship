@@ -123,6 +123,26 @@ public function users_stat(Request $request)
 
     }
 
+     public function search_book(Request $request)
+    {
+        try {
+            $query = $request->input('search');
+
+            $books = Book::where('title', 'like', "%{$query}%")
+                ->paginate(20);
+
+            if(!$books->count()) {
+                return redirect()->back()->with('info', 'No users found matching your criteria.');
+            }
+            return view('admin.statistics.books')->with('books', $books);
+
+        } catch (\Exception $e) {
+             return redirect()->back()
+                ->with('error', 'Error loading librarian data: ' . $e->getMessage());
+
+        }
+    }
+
     public function librarian_stat(Request $request)
     {
         try {
