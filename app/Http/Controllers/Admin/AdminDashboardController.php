@@ -65,20 +65,20 @@ class AdminDashboardController extends Controller
 
     }
 
-    public function all_requests(Request $req, $studentId)
+    public function all_requests(Request $req)
     {
         //
-        try {
-            $student = Student::with('bookRequests.latestRequestInfo')
-                ->findOrFail($studentId);
+        // try {
+            $requests = BookRequest::with('requestInfo', 'user', 'book')
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
+            // Get all possible statuses for the filter dropdown
+            $statuses = collect(\App\Enums\RequestStatus::cases())->filter(fn ($status) => $status->value !== 'canceled' && $status->value !== 'pending');
 
-            return view('librarian.statistics.index', compact('student'));
+            return view('admin.requests.index', compact('requests', 'statuses'));
 
-        } catch (\Throwable $th) {
-            // throw $th;
-            return back()
-                ->with(['error' => 'Error while querying Student profile']);
+        // } catch (\Throwable $th) {
+        //     return back()->with(['error' => 'Error while fetching requests']);
+
         }
-
-    }
 }

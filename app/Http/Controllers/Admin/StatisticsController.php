@@ -305,11 +305,11 @@ public function users_stat(Request $request)
                     ->first();
 
                 return [
-                    'user_name' => $request->user->full_name,
+                    'user_name' => $request->user->first_name . ' ' . $request->user->last_name,
                     'borrow_date' => $borrowInfo->created_at->format('Y-m-d H:i'),
-                    'librarian_borrowed' => $borrowInfo->user->full_name ?? 'System',
+                    'librarian_borrowed' => $borrowInfo->user->first_name . ' ' . $borrowInfo->user->first_name ?? "n'est pas emprunté",
                     'return_date' => $returnInfo ? $returnInfo->created_at->format('Y-m-d H:i') : null,
-                    'librarian_returned' => $returnInfo->user->full_name ?? null,
+                    'librarian_returned' => $returnInfo->user->first_name . ' ' . $returnInfo->user->lastname ?? 'non retourner',
                     'is_returned' => !is_null($returnInfo),
                     'duration' => $returnInfo 
                         ? $borrowInfo->created_at->diffForHumans($returnInfo->created_at, true)

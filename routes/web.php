@@ -105,7 +105,7 @@ Route::middleware('auth:web')->group(function () {
         //
 
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-        Route::get('/requests', [StudentRequestController::class, 'index'])->name('requests.index');
+        Route::get('/requests', [AdminDashboardController::class, 'all_requests'])->name('requests.index');
 
         Route::get('/profile', [AdminDashboardController::class,'profile'])->name('profile');
         
