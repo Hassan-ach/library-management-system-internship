@@ -161,7 +161,7 @@ use App\Enums\RequestStatus;
 
         <div class="mt-3">
             <a href="{{ route('admin.statistics.users.export') }}" class="btn btn-success mr-2">
-                <i class="fas fa-file-excel mr-2"></i> Export all
+                <i class="fas fa-file-excel mr-2"></i> Export
             </a>
         </div>
 

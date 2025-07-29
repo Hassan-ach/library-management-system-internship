@@ -124,7 +124,7 @@ Route::middleware('auth:web')->group(function () {
             Route::get('/users', [StatisticsController::class, 'users_stat'])->name('users');
             Route::get('/students/search', [StatisticsController::class, 'search'])->name('users.search');
             Route::get('/librarian/search', [StatisticsController::class, 'search_librarian'])->name('librarians.search');
-            Route::get('/users/export', [StatisticsController::class, 'exportUsers'])->name('users.export');
+            Route::get('/users/export', [StatisticsController::class, 'exportStudents'])->name('users.export');
             // Route::get('/users/history/{user}', [StatisticsController::class, 'user_history'])->name('users.history');
             Route::get('/student/history/{user}/{status?}/{color?}', [StatisticsController::class, 'user_history'])->name('users.history');
             Route::resource('user_history', UserController::class)->names('user.hitory');

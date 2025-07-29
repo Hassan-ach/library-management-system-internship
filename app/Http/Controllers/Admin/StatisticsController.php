@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\RequestStatus;
 use App\Enums\UserRole;
+use App\Exports\LibrariansExport;
+use App\Exports\StudentsExport;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Book;
@@ -134,14 +136,21 @@ public function users_stat(Request $request)
 
     }
     
-    public function exportStudents(){
-        $users = User::where('role', UserRole::STUDENT->value)->get('id');
-        return Excel::download( new UsersExport($users),'users.xlsx');
+    public function exportStudents()
+    {
+        $studentsQuery = User::where('role', UserRole::STUDENT->value)
+                    ->orderBy('last_name')
+                    ->orderBy('first_name');
+    
+        return Excel::download(new StudentsExport($studentsQuery), 'students.xlsx');
     }
 
     public function exportLibrarians(){
-        $users = User::where('role', UserRole::LIBRARIAN->value)->get('id');
-        return Excel::download( new UsersExport($users),'users.xlsx');
+            $librariansQuery = User::where('role', UserRole::STUDENT->value)
+                            ->orderBy('last_name')
+                            ->orderBy('first_name');
+            
+            return Excel::download(new LibrariansExport($librariansQuery), 'students.xlsx');
     }
 
     public function exportBooks(){
