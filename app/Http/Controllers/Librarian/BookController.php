@@ -126,7 +126,7 @@ class BookController extends Controller
             $validated = $request->validate([
                 'title' => 'required | string',
                 'isbn' => 'required | string | unique:books', /* the validation process should be stopped if isbn not valide */
-                'image_url' => 'url',
+                'image_url' => 'nullable | url',
                 'description' => 'string',
                 'publication_date' => 'date',
                 'number_of_pages' => 'integer',
@@ -153,7 +153,7 @@ class BookController extends Controller
             return redirect('librarian/books')->with(['success' => 'the book created successefuly']);
 
         } catch (ValidationException $e) {
-            return view('errors.dataValidation');
+            return back()->with(['error' => 'The ISBN field is required.']);
         } catch (Exception $e) {
             return view('errors.databaseException');
         }
