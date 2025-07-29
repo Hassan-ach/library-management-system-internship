@@ -75,7 +75,7 @@
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
                             <button type="reset" class="btn btn-outline-secondary me-md-2">
-                                <i class="fas fa-undo me-1"></i> Réinitialiser
+                                <i class="fas fa-undo me-1"></i> Annuler les modifications
                             </button>
                             <button type="submit" class="btn btn-primary px-4">
                                 <i class="fas fa-save me-1"></i> Enregistrer les modifications
