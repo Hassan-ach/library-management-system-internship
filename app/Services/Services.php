@@ -30,21 +30,21 @@ class Services
     {
         $book = $this->book_service->getBook($id);
 
-        $tags = [];
+        $old_tags = [];
         foreach ($book->tags as $tag) {
-            array_push($tags, ['id' => $tag->id, 'name' => $tag->label]);
+            array_push($old_tags, ['id' => $tag->id, 'name' => $tag->label]);
         }
-        $categories = [];
+        $old_categories = [];
         foreach ($book->categories as $cat) {
-            array_push($categories, ['id' => $cat->id, 'name' => $cat->label]);
+            array_push($old_categories, ['id' => $cat->id, 'name' => $cat->label]);
         }
-        $publishers = [];
+        $old_publishers = [];
         foreach ($book->publishers as $publisher) {
-            array_push($publishers, ['id' => $publisher->id, 'name' => $publisher->name]);
+            array_push($old_publishers, ['id' => $publisher->id, 'name' => $publisher->name]);
         }
-        $authors = [];
+        $old_authors = [];
         foreach ($book->authors as $author) {
-            array_push($authors, ['id' => $author->id, 'name' => $author->name]);
+            array_push($old_authors, ['id' => $author->id, 'name' => $author->name]);
         }
 
         $book_data = [
@@ -54,12 +54,24 @@ class Services
             'publication_date' => $book->publication_date->format('Y-m-d'),
             'number_of_pages' => $book->number_of_pages,
             'total_copies' => $book->total_copies,
-            'available_copies' => $book->total_copies - get_borrowed_copies($book),
+            'available_copies' => $book->total_copies - get_borrowed_copies($book->id),
             'description' => $book->description,
-            'tags' => $tags,
-            'categories' => $categories,
-            'publishers' => $publishers,
-            'authors' => $authors,
+            'tags' => [
+                'old' => $old_tags,
+                'new' => [],
+            ],
+            'categories' => [
+                'old' => $old_categories,
+                'new' => [],
+            ],
+            'publishers' => [
+                'old' => $old_publishers,
+                'new' => [],
+            ],
+            'authors' => [
+                'old' => $old_authors,
+                'new' => [],
+            ],
         ];
 
         return $book_data;

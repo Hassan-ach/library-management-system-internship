@@ -99,7 +99,7 @@
                                                 <x-status-badge :status="$request->status->value" />
                                             </td>
                                             <td>
-                                                <a href="{{ route('librarian.requests.show', $request->id) }}" class="btn btn-xs btn-info" title="Voir les détails">
+                                                <a href="{{ route('librarian.requests.show', $request->bookRequest->id) }}" class="btn btn-xs btn-info" title="Voir les détails">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                             </td>

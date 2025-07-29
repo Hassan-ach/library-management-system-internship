@@ -60,21 +60,7 @@
             <td>{{ $request->user->first_name.' '.$request->user->last_name ?? 'Utilisateur inconnu' }}</td>
             <td>{{ $request->created_at->format('d/m/Y H:i') }}</td>
             <td>
-                @php
-                    $status = $request->latestRequestInfo->status->value ?? 'N/A';
-                    $badgeClass = '';
-                    switch ($status) {
-                        case 'pending': $badgeClass = 'badge-warning'; break;
-                        case 'approved': $badgeClass = 'badge-info'; break;
-                        case 'borrowed': $badgeClass = 'badge-primary'; break;
-                        case 'returned': $badgeClass = 'badge-success'; break;
-                        case 'rejected': $badgeClass = 'badge-danger'; break;
-                        case 'cancelled': $badgeClass = 'badge-secondary'; break;
-                        case 'overdue': $badgeClass = 'badge-danger'; break;
-                        default: $badgeClass = 'badge-secondary'; break;
-                    }
-                @endphp
-                <span class="badge {{ $badgeClass }}">{{ ucfirst($status) }}</span>
+                                                <x-status-badge :status="$request->latestRequestInfo->status->value" />
             </td>
             <td>
                     {{ $request->return_date() ? $request->return_date()->format('d/m/Y') : 'N/A' }}

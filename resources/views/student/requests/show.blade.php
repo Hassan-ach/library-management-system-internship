@@ -44,7 +44,7 @@
                                 <dd class="col-sm-8">
                                     @if($bookReq->book && $bookReq->book?->categories->isNotEmpty())
                                         @foreach($bookReq->book?->categories as $category)
-                                            <span class="badge badge-info">{{ $category->name }}</span>{{ !$loop->last ? ' ' : '' }}
+                                            <span class="badge badge-info">{{ $category->label }}</span>{{ !$loop->last ? ' ' : '' }}
                                         @endforeach
                                     @else
                                         N/A
@@ -67,20 +67,47 @@
                                      <x-status-badge :status="$reqInfo->status->value" />
                                 </dd>
 
-                                @if($reqInfo->status === 'borrowed' || $reqInfo->status === 'overdue')
-                                    <dt class="col-sm-4">Date d'échéance:</dt>
-                                    <dd class="col-sm-8">{{ $reqInfo->created_at ? \Carbon\Carbon::parse($reqInfo->created_at)->format('d/m/Y') : 'N/A' }}</dd>
-                                @endif
+                            @if($reqInfo->status->value === 'pending')
+    <dt class="col-sm-4">Date de demande:</dt>
+    <dd class="col-sm-8">{{ $reqInfo->created_at ? \Carbon\Carbon::parse($reqInfo->created_at)->format('d/m/Y H:i') : 'N/A' }}</dd>
+@endif
 
-                                @if($reqInfo->status === 'returned')
-                                    <dt class="col-sm-4">Date de retour:</dt>
-                                    <dd class="col-sm-8">{{ $reqInfo->created_at ? \Carbon\Carbon::parse($reqInfo->created_at)->format('d/m/Y H:i') : 'N/A' }}</dd>
-                                @endif
+@if($reqInfo->status->value === 'approved')
+    <dt class="col-sm-4">Approuvée le:</dt>
+    <dd class="col-sm-8">{{ $reqInfo->created_at ? \Carbon\Carbon::parse($reqInfo->created_at)->format('d/m/Y H:i') : 'N/A' }}</dd>
+@endif
 
-                                @if($reqInfo->created_at)
-                                    <dt class="col-sm-4">Traitée le:</dt>
-                                    <dd class="col-sm-8">{{ \Carbon\Carbon::parse($reqInfo->created_at)->format('d/m/Y H:i') }}</dd>
-                                @endif
+@if($reqInfo->status->value === 'rejected')
+    <dt class="col-sm-4">Rejetée le:</dt>
+    <dd class="col-sm-8">{{ $reqInfo->created_at ? \Carbon\Carbon::parse($reqInfo->created_at)->format('d/m/Y H:i') : 'N/A' }}</dd>
+@endif
+
+@if($reqInfo->status->value === 'borrowed' || $reqInfo->status === 'overdue')
+    <dt class="col-sm-4">Empruntée le:</dt>
+    <dd class="col-sm-8">{{ $reqInfo->created_at ? \Carbon\Carbon::parse($reqInfo->created_at)->format('d/m/Y H:i') : 'N/A' }}</dd>
+
+    <dt class="col-sm-4">Date d'échéance:</dt>
+    <dd class="col-sm-8">
+        @if($reqInfo->status->value === 'overdue')
+            {{ \Carbon\Carbon::parse($reqInfo->created_at)->addDays(14)->format('d/m/Y') }} (En retard)
+        @else
+            {{ \Carbon\Carbon::parse($reqInfo->created_at)->addDays(14)->format('d/m/Y') }}
+        @endif
+    </dd>
+@endif
+
+@if($reqInfo->status->value === 'returned')
+    <dt class="col-sm-4">Empruntée le:</dt>
+    <dd class="col-sm-8">{{ \Carbon\Carbon::parse($reqInfo->created_at)->format('d/m/Y H:i') }}</dd>
+
+    <dt class="col-sm-4">Retournée le:</dt>
+    <dd class="col-sm-8">{{ \Carbon\Carbon::parse($reqInfo->created_at)->addDays(7)->format('d/m/Y H:i') }}</dd>
+@endif
+
+@if($reqInfo->status->value === 'canceled')
+    <dt class="col-sm-4">Annulée le:</dt>
+    <dd class="col-sm-8">{{ $reqInfo->created_at ? \Carbon\Carbon::parse($reqInfo->created_at)->format('d/m/Y H:i') : 'N/A' }}</dd>
+@endif
                             </dl>
                         </div>
                     </div>
@@ -106,9 +133,6 @@
 
 @section('js')
     @parent
-    {{-- Include SweetAlert2 JS --}}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
         $(document).ready(function() {
             // SweetAlert for Cancel Request confirmation

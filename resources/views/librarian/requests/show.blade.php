@@ -185,10 +185,8 @@
 </div>
 @stop
 
-@push('js')
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.4.8/sweetalert2.min.js"></script>
+@section('js')
+@parent
 <script>
     $(document).ready(function() {
         // Initialiser Select2 si utilisé
@@ -235,4 +233,4 @@
         });
     });
 </script>
-@endpush
+@stop

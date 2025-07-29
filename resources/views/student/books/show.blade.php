@@ -54,7 +54,7 @@
                                 <dt class="col-sm-4">Catégorie(s):</dt>
                                 <dd class="col-sm-8">
                                     @foreach($book?->categories as $category)
-                                        <span class="badge badge-info">{{ $category->name }}</span>{{ !$loop->last ? ' ' : '' }}
+                                        <span class="badge badge-info">{{ $category->label }}</span>{{ !$loop->last ? ' ' : '' }}
                                     @endforeach
                                     @if($book?->categories->isEmpty()) N/A @endif
                                 </dd>
@@ -68,10 +68,7 @@
                                 </dd>
 
                                 <dt class="col-sm-4">Année de publication:</dt>
-                                <dd class="col-sm-8">{{ $book?->publication_year ?? 'N/A' }}</dd>
-
-                                <dt class="col-sm-4">Date de publication:</dt>
-                                <dd class="col-sm-8">{{ $book?->publication_date ? $book?->publication_date->format('d/m/Y') : 'N/A' }}</dd>
+                                <dd class="col-sm-8">{{ $book?->publication_date->format('Y') ?? 'N/A' }}</dd>
 
                                 <dt class="col-sm-4">Nombre de pages:</dt>
                                 <dd class="col-sm-8">{{ $book?->pages ?? $book?->number_of_pages ?? 'N/A' }}</dd>
@@ -119,5 +116,8 @@
             </x-adminlte-card>
         </div>
     </div>
+@stop
+@section('js')
+    @parent
 @stop
 

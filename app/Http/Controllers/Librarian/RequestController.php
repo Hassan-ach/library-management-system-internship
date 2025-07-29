@@ -54,7 +54,7 @@ class RequestController extends Controller
         try {
             // 2. Fetch the request with related book
             /** @var BookRequest $bookRequest */
-            $bookRequest = BookRequest::with('book')->findOrFail($reqId);
+            $bookRequest = BookRequest::with('book', 'user')->findOrFail($reqId);
 
             // 3. Validate input data
             $validatedData = $req->validate([

@@ -34,7 +34,7 @@ class Book extends Model
 
     public function available_copies(): int
     {
-        return $this->total_copies - get_borrowed_copies($this);
+        return $this->total_copies - get_borrowed_copies($this->id);
     }
 
     public function categories(): BelongsToMany

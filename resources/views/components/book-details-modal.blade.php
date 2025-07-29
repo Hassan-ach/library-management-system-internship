@@ -44,14 +44,14 @@
                     if (response.book) {
                         var book = response.book;
                         var authors = book.authors.map(a => a.name).join(', ') || 'N/A';
-                        var categories = book.categories.map(c => c.name).join(', ') || 'N/A';
+                        var categories = book.categories.map(c => c.label).join(', ') || 'N/A';
                         var publishers = book.publishers.map(p => p.name).join(', ') || 'N/A';
                         var tags = book.tags.map(t => t.name).join(', ') || 'N/A';
 
                         var modalBodyContent = `
                             <div class="row">
                                 <div class="col-md-4 text-center">
-                                    <img src="${book.image_link || '{{ asset('images/default-book.png') }}'}" alt="${book.title}" class="img-fluid mb-3" style="max-height: 200px; border: 1px solid #ddd; padding: 5px;">
+                                    <img src="${book.image_url || '{{ asset('images/default-book.png') }}'}" alt="${book.title}" class="img-fluid mb-3" style="max-height: 200px; border: 1px solid #ddd; padding: 5px;">
                                 </div>
                                 <div class="col-md-8">
                                     <h4>${book.title}</h4>
@@ -59,7 +59,7 @@
                                     <p><strong>Catégorie(s):</strong> ${categories}</p>
                                     <p><strong>Éditeur(s):</strong> ${publishers}</p>
                                     <p><strong>Tags:</strong> ${tags}</p>
-                                    <p><strong>Date de publication:</strong> ${book.publication_date ? new Date(book.publication_date).toLocaleDateString('fr-FR') : 'N/A'}</p>
+<p><strong>Date de publication:</strong> ${book.publication_date ? new Date(book.publication_date).getFullYear() : 'N/A'}</p>
                                     <p><strong>Nombre de pages:</strong> ${book.number_of_pages || 'N/A'}</p>
                                     <p><strong>Copies disponibles:</strong> <span class="badge ${book.available_copies > 0 ? 'badge-success' : 'badge-danger'}">${book.available_copies}</span></p>
                                 </div>
