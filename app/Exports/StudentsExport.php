@@ -36,13 +36,13 @@ class StudentsExport implements FromQuery, WithHeadings, WithMapping, WithStyles
     {
         return [
             'ID',
-            'Prénom / First Name',
-            'Nom / Last Name',
+            'Prénom',
+            'Nom',
             'Email',
-            'Date d\'inscription / Registration Date',
-            'Statut / Status',
-            'Rôle / Role',
-            'Dernière Activité / Last Activity'
+            'Date d\'inscription',
+            'Statut',
+            'Rôle',
+            'Dernière Activité'
         ];
     }
 

@@ -30,12 +30,12 @@ class LibrariansExport implements FromQuery, WithHeadings, WithMapping,  ShouldA
     {
         return [
             'ID',
-            'Prénom / First Name',
-            'Nom / Last Name',
+            'Prénom',
+            'Nom',
             'Email',
-            'Rôle / Role',
-            'Statut / Status',
-            'Dernière Activité / Last Activity'
+            'Rôle',
+            'Statut',
+            'Dernière Activité'
         ];
     }
 

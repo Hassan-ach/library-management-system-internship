@@ -32,40 +32,42 @@
             <h5 class="mb-0">Chercher des étudiants</h5>
         </div>
         <div class="card-body">
-            <form action="{{ route('admin.users.search') }}" method="GET" class="row g-3">
-                <div class="col-md-4">
-                    <label for="search" class="form-label">Teremes de recherches</label>
-                    <input type="text" class="form-control" id="search" name="search" 
-                        placeholder="Chercher par id, nom, email, etc..." value="{{ request('search') }}">
-                </div>
-                <div class="col-md-4">
-                    <label for="role" class="form-label">Rôle</label>
-                    <select class="form-select" id="role" name="role" style="cursor: pointer;">
-                        <option value="">Tous les rôles</option>
-                        <option value="student" {{ request('role') == 'student' ? 'selected' : '' }}>Étudiant</option>
-                        <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                        <option value="librarian" {{ request('role') == 'librarian' ? 'selected' : '' }}>Bibliothecaires</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label for="status" class="form-label">Statut</label>
-                    <select class="form-select" id="status" name="status" style="cursor: pointer;">
-                        <option value="">All Statuses</option>
-                        <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Actif</option>
-                        <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactif</option>
-                    </select>
-                </div>
-                <div class="col-md-6 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="fas fa-search me-2"></i> Search
-                    </button>
-                </div>
-                <div class="col-md-6 d-flex align-items-end">
-                    <a href="{{ route('admin.users.all') }}" class="btn btn-outline-secondary w-100">
-                        <i class="fas fa-times me-2"></i> Clear
-                    </a>
-                </div>
-            </form>
+            <div class="container col-11">
+                <form action="{{ route('admin.users.search') }}" method="GET" class="row g-3">
+                    <div class="col-md-4">
+                        <label for="search" class="form-label">Teremes de recherches</label>
+                        <input type="text" class="form-control" id="search" name="search" 
+                            placeholder="Chercher par id, nom, email, etc..." value="{{ request('search') }}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="role" class="form-label">Rôle</label>
+                        <select class="form-select" id="role" name="role" style="cursor: pointer;">
+                            <option value="">Tous les rôles</option>
+                            <option value="student" {{ request('role') == 'student' ? 'selected' : '' }}>Étudiant</option>
+                            <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                            <option value="librarian" {{ request('role') == 'librarian' ? 'selected' : '' }}>Bibliothecaires</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="status" class="form-label">Statut</label>
+                        <select class="form-select" id="status" name="status" style="cursor: pointer;">
+                            <option value="">All Statuses</option>
+                            <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Actif</option>
+                            <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactif</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search me-2"></i> Search
+                        </button>
+                    </div>
+                    <div class="col-md-6 d-flex align-items-end">
+                        <a href="{{ route('admin.users.all') }}" class="btn btn-outline-secondary w-100">
+                            <i class="fas fa-times me-2"></i> Clear
+                        </a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
