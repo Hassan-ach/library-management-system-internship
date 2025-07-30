@@ -189,7 +189,7 @@
                     <x-adminlte-button theme="outline-info" icon="fas fa-plus-circle" label="Ajouter un livre"
                         class="btn-block" data-toggle="modal" data-target="#BookModal"/>
 
-                    <x-adminlte-button theme="outline-secondary" icon="fas fa-cog" label="Paramètres" class="btn-block"
+                    <x-adminlte-button theme="outline-secondary" icon="fas fa-user ml-2" label="Profil" class="btn-block"
                         onclick="window.location.href='{{ route('profile.show') }}'" />
 
                 </div>

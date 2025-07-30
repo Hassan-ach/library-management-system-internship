@@ -83,7 +83,7 @@
                                         <th>Id demande</th>
                                         <th>Etudiant</th>
                                         <th>Titre du livre</th>
-                                        <th>Date de demande</th>
+                                        <th>Date de l'action</th>
                                         <th>Statut</th>
                                         <th>Actions</th>
                                     </tr>
@@ -109,7 +109,7 @@
                             </table>
                         </div>
                         <div class="card-footer text-center">
-                            <a href="{{ route('librarian.requests.index') }}" class="btn btn-sm btn-outline-primary">Voir toutes mes demandes</a>
+                            <a href="{{ route('librarian.requests.index') }}" class="btn btn-sm btn-outline-primary">Voir toutes les demandes</a>
                         </div>
                     @endif
                 </div>
