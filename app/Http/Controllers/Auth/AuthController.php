@@ -17,14 +17,14 @@ class AuthController extends Controller
         ]);
 
         if (! Auth::attempt($credentials)) {
-            return back()->withErrors([
-                'failed' => 'The provided credentials do not match our records.',
+            return back()->with([
+                'error' => 'Les identifiants fournis ne correspondent pas à nos enregistrements.', // Translated
             ]);
         }
 
         $req->session()->regenerate();
 
-        return redirect()->intended('/')->with('message', 'Logged in successfully');
+        return redirect()->intended('/')->with('message', 'Connecté avec succès.'); // Translated
     }
 
     public function logout(Request $request)
@@ -33,6 +33,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login')->with('message', 'Logged out successfully');
+        return redirect('/login')->with('message', 'Déconnecté avec succès.'); // Translated
     }
 }
