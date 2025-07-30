@@ -32,7 +32,7 @@ class RequestController extends Controller
 
     public function create(Request $req, $bookId)
     {
-        $user = Student::findOrFail(Auth::user()->id);
+        $user = Auth::user();
         // $user = Auth::user();
         $book = Book::findOrFail($bookId);
 

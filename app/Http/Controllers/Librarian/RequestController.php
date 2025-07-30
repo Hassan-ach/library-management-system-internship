@@ -6,6 +6,7 @@ use App\Enums\RequestStatus;
 use App\Http\Controllers\Controller;
 use App\Models\BookRequest;
 use App\Models\RequestInfo;
+use App\Models\Student;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,54 +15,26 @@ use Illuminate\Validation\Rules\Enum;
 
 class RequestController extends Controller
 {
-    //
-    // public function process(Request $req, $reqId)
-    // {
-    //     if (! Gate::allows('processe_req')) {
-    //         return back()
-    //             ->with(['error' => 'You\'re not allowed to process this request']);
-    //     }
-    //     try {
-    //         if (! BookRequest::where('id', $reqId)->exists()) {
-    //             return back()->with('error', 'Invalid request ID');
-    //         }
-    //
-    //         $status = $req->validate([
-    //             'status' => ['required', new Enum(RequestStatus::class)],
-    //         ]);
-    //
-    //         RequestInfo::create([
-    //             'user_id' => Auth::user()->id,
-    //             'request_id' => $reqId,
-    //             'status' => $status['status'],
-    //         ]);
-    //
-    //         return back()->with(['message' => 'status updated successfully']);
-    //
-    //     } catch (\Throwable $th) {
-    //         return back()
-    //             ->with(['error' => 'Error while updating request']);
-    //     }
-    //
-    // }
     public function process(Request $req, $reqId)
     {
-        // 1. Authorization check
-        if (! Gate::allows('processe_req')) { // Verify permission name
-            return back()->with(['error' => 'You\'re not allowed to process this request']);
-        }
 
         try {
-            // 2. Fetch the request with related book
+            // 1. Fetch the request with related book
             /** @var BookRequest $bookRequest */
-            $bookRequest = BookRequest::with('book')->findOrFail($reqId);
+            $bookRequest = BookRequest::with('book', 'user')->findOrFail($reqId);
 
-            // 3. Validate input data
+            // 2. Validate input data
             $validatedData = $req->validate([
                 'status' => ['required', new Enum(RequestStatus::class)],
             ]);
-
             $newStatusEnum = RequestStatus::from($validatedData['status']); // Convert to Enum
+
+            // 3. Authorization check
+            $student = Student::findOrFail($bookRequest?->user?->id);
+            if (! Gate::allows('processe_req', [$student, $newStatusEnum])) { // Verify permission name
+                return back()->with(['error' => 'You\'re not allowed to process this request']);
+            }
+
             $newStatusValue = $newStatusEnum->value;
 
             // 4. Get the current status

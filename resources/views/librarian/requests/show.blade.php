@@ -11,7 +11,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            {{-- Afficher les messages de session --}}
+            {{-- Display success/error messages
             @if(session('success'))
                 <x-adminlte-alert theme="success" title="Succès">
                     {{ session('success') }}
@@ -22,11 +22,7 @@
                     {{ session('error') }}
                 </x-adminlte-alert>
             @endif
-            @if(session('info')) {{-- Ajout pour les messages d'info --}}
-                <x-adminlte-alert theme="info" title="Information">
-                    {{ session('info') }}
-                </x-adminlte-alert>
-            @endif
+            --}}
 
             <x-adminlte-card title="Informations sur la Demande" theme="primary" icon="fas fa-info-circle">
                 <div class="row">
@@ -185,10 +181,8 @@
 </div>
 @stop
 
-@push('js')
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.4.8/sweetalert2.min.js"></script>
+@section('js')
+@parent
 <script>
     $(document).ready(function() {
         // Initialiser Select2 si utilisé
@@ -235,4 +229,4 @@
         });
     });
 </script>
-@endpush
+@stop

@@ -7,35 +7,30 @@ use App\Enums\UserRole;
 use App\Exports\BooksExport;
 use App\Exports\LibrariansExport;
 use App\Exports\StudentsExport;
+
 use App\Http\Controllers\Controller;
-use App\Models\Activity;
 use App\Models\Book;
 use App\Models\BookRequest;
 use App\Models\Librarian;
-use App\Models\Requestinfo;
-use App\Models\User;
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Http\Request;
-use App\Exports\UsersExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class StatisticsController extends Controller
 {
-    //
-    public function dashboard(){
-        return view('admin.statistics.index');
-    }
-
 
     public function users_stat(Request $request)
     {
         try {
             // Get students with their latest book request and related info
+
             $students = Student::with(['bookRequests' => function($query) {
                     $query->with(['latestRequestInfo', 'book'])
                         
                         ->limit(1);
                 }])
+
                 ->latest()
                 ->paginate(22);
 
@@ -46,6 +41,7 @@ class StatisticsController extends Controller
         }
 }
 
+
     public function search(Request $request)
     {
         $search = $request->input('search');
@@ -54,6 +50,7 @@ class StatisticsController extends Controller
 
         $users = Student::query()
             ->with(['bookRequests' => function($query) {
+
                 $query->with(['latestRequestInfo', 'book'])
                     ->latest()
                     ->limit(1);
@@ -61,9 +58,9 @@ class StatisticsController extends Controller
             ->when($search, function ($query, $search) {
                 return $query->where(function ($q) use ($search) {
                     $q->where('first_name', 'like', "%{$search}%")
-                    ->orWhere('last_name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('id', 'like', "%{$search}%");
+                        ->orWhere('last_name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('id', 'like', "%{$search}%");
                 });
             })
             ->when($status, function ($query, $status) {
@@ -96,6 +93,7 @@ class StatisticsController extends Controller
                         ->orWhere('last_name', 'like', "%{$search}%")
                         ->orWhere('email', 'like', "%{$search}%")
                         ->orWhere('id', 'like', "%{$search}%");
+
                     });
                 })
                 ->when($status, function ($query, $status) {
@@ -117,9 +115,9 @@ class StatisticsController extends Controller
     public function books_stat(Request $request)
     {
         // try {
-            $books = Book::latest()->paginate(20);
+        $books = Book::latest()->paginate(20);
 
-            return view('admin.statistics.books', compact('books'));
+        return view('admin.statistics.books', compact('books'));
 
     }
 
@@ -146,11 +144,10 @@ class StatisticsController extends Controller
     public function librarian_stat(Request $request)
     {
         try {
-            $users = User::where('role','librarian')->paginate(15);
+            $users = User::where('role', 'librarian')->paginate(15);
 
             return view('admin.statistics.librarian', compact('users'));
-            }
-         catch (\Exception $e) {
+        } catch (\Exception $e) {
             return redirect()->back()
                 ->with('error', 'Impossible de charger les utilisateurs: '.$e->getMessage());
         }
@@ -198,16 +195,15 @@ class StatisticsController extends Controller
             ->paginate(5) // Changed to paginate
             ->through(function ($request) {
                 $latestInfo = $request->RequestInfo->sortByDesc('created_at')->first();
-                
+
                 $librarian = 'En attente de traitement';
                 $isPending = $latestInfo?->status === 'pending';
                 $processed_at = null;
-                
-                if (!$isPending && $latestInfo?->user && $latestInfo->user->role->value === UserRole::LIBRARIAN->value) {
-                    $librarian = $latestInfo->user->first_name . ' ' . $latestInfo->user->last_name;
+
+                if (! $isPending && $latestInfo?->user && $latestInfo->user->role->value === UserRole::LIBRARIAN->value) {
+                    $librarian = $latestInfo->user->first_name.' '.$latestInfo->user->last_name;
                     $processed_at = $latestInfo?->created_at ?? null;
                 }
-
 
                 return [
                     'id' => $request->id,
@@ -218,7 +214,7 @@ class StatisticsController extends Controller
                     'processed_by' => $librarian,
                     'created_diff' => "il y'a " . str_replace([' hours ago', 'hour ago'], 'h', $latestInfo?->created_at->diffForHumans()),
                     'processed_diff' => $latestInfo->processed_at ? $latestInfo->processed_at->diffForHumans() : null,
-                    'is_first' => false // We'll set this for the first item
+                    'is_first' => false, // We'll set this for the first item
                 ];
             });
 
@@ -267,10 +263,32 @@ class StatisticsController extends Controller
                         ];
                     });
 
-            // Mark the first request for special display
-            if ($requests->count() > 0) {
-                $requests->first()['is_first'] = true;
-            }
+                // Gestion du bibliothécaire
+                $librarian = 'Pending processing';
+                $responseDate = null;
+
+                if ($latestInfo && $latestInfo->status !== 'pending' && $latestInfo->user && $latestInfo->user->role === UserRole::LIBRARIAN->value) {
+                    $librarian = $latestInfo->user->first_name.' '.$latestInfo->user->last_name;
+                    $responseDate = $latestInfo?->created_at ?? null;
+                }
+
+                return [
+                    'id' => $request->id,
+                    'created_at' => $request->created_at,
+                    'created_diff' => $latestInfo?->created_at->format('d/m/Y H:i'),
+                    'response_date' => $responseDate,
+                    'book_title' => $request->book->title ?? 'N/A',
+                    'status' => $latestInfo?->status ?? 'pending',
+                    'requested_at' => $request->created_at->format('d/m/Y H:i'),
+                    'requested_by' => $request->user->first_name.' '.$request->user->last_name,
+                    'librarian' => $librarian,
+                ];
+            });
+
+        // Mark the first request for special display
+        if ($requests->count() > 0) {
+            $requests->first()['is_first'] = true;
+        }
 
         // if($requests[])
 
@@ -286,7 +304,7 @@ class StatisticsController extends Controller
     {
         $borrowings = BookRequest::with(['user', 'requestInfo.user'])
             ->where('book_id', $book->id)
-            ->whereHas('requestInfo', function($query) {
+            ->whereHas('requestInfo', function ($query) {
                 $query->where('status', 'borrowed');
             })
             ->orderByDesc('created_at')
@@ -296,7 +314,7 @@ class StatisticsController extends Controller
                     ->where('status', 'borrowed')
                     ->sortByDesc('created_at')
                     ->first();
-                    
+
                 $returnInfo = $request->requestInfo
                     ->where('status', 'returned')
                     ->sortByDesc('created_at')
@@ -311,13 +329,13 @@ class StatisticsController extends Controller
                     'is_returned' => !is_null($returnInfo),
                     'duration' => $returnInfo 
                         ? $borrowInfo->created_at->diffForHumans($returnInfo->created_at, true)
-                        : $borrowInfo->created_at->diffForHumans(now(), true)
+                        : $borrowInfo->created_at->diffForHumans(now(), true),
                 ];
             });
 
         return view('admin.statistics.book_history', [
             'book' => $book,
-            'borrowings' => $borrowings
+            'borrowings' => $borrowings,
         ]);
     }
 }

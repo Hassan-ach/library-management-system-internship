@@ -6,17 +6,6 @@
 @section('content_header')
     {{-- Breadcrumbs will go here, AdminLTE handles this via config or @section('plugins.Datatables', true) --}}
     <h1>{{ isset($page_title) ? $page_title : 'Dashboard' }}</h1>
-    @if(isset($breadcrumbs))
-        <ol class="breadcrumb float-sm-right">
-            @foreach($breadcrumbs as $label => $url)
-                @if($loop->last)
-                    <li class="breadcrumb-item active">{{ $label }}</li>
-                @else
-                    <li class="breadcrumb-item"><a href="{{ $url }}">{{ $label }}</a></li>
-                @endif
-            @endforeach
-        </ol>
-    @endif
 @stop
 
 @section('content')
@@ -35,9 +24,12 @@
 @stop
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.4.8/sweetalert2.min.js"></script>
     {{-- Add any page-specific JS here if needed --}}
     <script>
-        // Example for Toastr notifications
         @if(Session::has('success'))
             toastr.success("{{ Session::get('success') }}");
         @endif

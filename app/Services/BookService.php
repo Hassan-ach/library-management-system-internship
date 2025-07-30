@@ -6,7 +6,7 @@ use App\Models\Book;
 
 class BookService
 {
-    public function createBook(string $title, string $isbn, string $image_url, string $description, string $publication_date,
+    public function createBook(string $title, string $isbn, string|null $image_url, string $description, string $publication_date,
         int $pages, int $total_copies): Book
     {
 

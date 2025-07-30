@@ -9,7 +9,7 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            {{-- Display success/error messages --}}
+            {{-- Display success/error messages
             @if(session('success'))
                 <x-adminlte-alert theme="success" title="Succès">
                     {{ session('success') }}
@@ -20,7 +20,7 @@
                     {{ session('error') }}
                 </x-adminlte-alert>
             @endif
-
+--}}
             <x-adminlte-card title="Informations sur le livre" theme="primary" icon="fas fa-book-reader" >
                 <div class="card-body" style="//border: black solid 1px,">
                     <div class="row">
@@ -46,8 +46,8 @@
 
                                 <dt class="col-sm-4">Auteur(s):</dt>
                                 <dd class="col-sm-8">
-                                    @if( $authors)
-                                        @foreach($authors as $author)
+                                    @if( $authors["old"])
+                                        @foreach($authors['old'] as $author)
                                             {{ $author['name'] }}{{ !$loop->last ? ', ' : '' }}
                                         @endforeach
                                     @else
@@ -57,8 +57,8 @@
 
                                 <dt class="col-sm-4">Éditeur(s):</dt>
                                 <dd class="col-sm-8">
-                                    @if( $publishers)
-                                        @foreach($publishers as $publisher)
+                                    @if( $publishers['old'])
+                                        @foreach($publishers['old'] as $publisher)
                                             {{ $publisher['name'] }}{{ !$loop->last ? ', ' : '' }}
                                         @endforeach
                                     @else
@@ -67,15 +67,15 @@
                                 </dd>
 
                                 <dt class="col-sm-4">Année de publication:</dt>
-                                <dd class="col-sm-8">{{ $publication_date ?? 'N/A' }}</dd>
+                                <dd class="col-sm-8">{{ $publication_date->format('Y') ?? 'N/A' }}</dd>
 
                                 <dt class="col-sm-4">Nombre de pages:</dt>
                                 <dd class="col-sm-8">{{ $number_of_pages ?? 'N/A' }}</dd>
 
                                 <dt class="col-sm-4">Catégorie(s):</dt>
                                 <dd class="col-sm-8">
-                                    @if( $categories)
-                                        @foreach($categories as $category)
+                                    @if( $categories['old'])
+                                        @foreach($categories['old'] as $category)
                                             <span class="badge badge-info">{{ $category['name'] }}</span>{{ !$loop->last ? ' ' : '' }}
                                         @endforeach
                                     @else
@@ -85,8 +85,8 @@
 
                                 <dt class="col-sm-4">Etiquettes:</dt>
                                 <dd class="col-sm-8">
-                                    @if( $tags)
-                                        @foreach($tags as $tag)
+                                    @if( $tags['old'])
+                                        @foreach($tags['old'] as $tag)
                                             <span class="badge badge-secondary">{{ $tag['name'] }}</span>{{ !$loop->last ? ' ' : '' }}
                                         @endforeach
                                     @else
@@ -158,4 +158,6 @@
         </div>
     </div>
 @stop
-
+@section('js')
+@parent
+@endsection

@@ -21,7 +21,7 @@
 
 @section('content')
     <div class="container-fluid">
-           {{-- Display success/error messages --}}
+           {{-- Display success/error messages
         @if(session('success'))
             <x-adminlte-alert theme="success" title="Succès">
                 {{ session('success') }}
@@ -32,6 +32,7 @@
                 {{ session('error') }}
             </x-adminlte-alert>
         @endif
+--}}
         @if( $books)
             <div class="row">
                 @forelse ($books as $book)
@@ -140,6 +141,7 @@
 @stop
 
 @section('js')
+@parent
 <script>
 
     $('#deleteModal').on('show.bs.modal', function (event) {

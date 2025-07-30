@@ -36,7 +36,7 @@ class GoogleBookService
             'title' => $item['title'] ?? '',
             'isbn' => $isbn,
             'description' => $item['description'] ?? '',
-            'publication_date' => Carbon::createFromFormat('Y', $item['publishedDate'] ?? null)->format('Y-m-d'),
+            'publication_date' => Carbon::createFromFormat('Y', $item['publishedDate'] ?? null)->month(1)->day(1)->format('Y-m-d'),
             'number_of_pages' => $item['pageCount'] ?? null,
             'total_copies' => 1, // Default value as in original
             'image_url' => $item['imageLinks']['thumbnail'] ?? null,
@@ -59,21 +59,17 @@ class GoogleBookService
 
             // Add existing categories to 'old' array
             foreach ($existingCategories as $category) {
-                // $categories['old'][] = [
-                //     'id' => $category->id,
-                //     'label' => $category->label,
-                //     'description' => $category->description ?? '',
-                // ];
-                array_push($categories['old'], [$category->id, $category->label]);
+                $categories['old'][] = [
+                    'id' => $category->id,
+                    'name' => $category->label,
+                ];
+
             }
 
             // Add new categories to 'new' array
             foreach ($categoryLabels as $label) {
                 if (! in_array($label, $existingCategoryLabels)) {
-                    // $categories['new'][] = [
-                    //     'label' => $label,
-                    //     'description' => '', // Empty for now; can be filled later
-                    // ];
+
                     array_push($categories['new'], [$label, 'no descritpion']);
 
                 }

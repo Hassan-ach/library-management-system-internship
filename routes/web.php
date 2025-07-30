@@ -49,6 +49,7 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth:web')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
 
     Route::prefix('student')->name('student.')->middleware('role:student')->group(function () {
@@ -108,11 +109,11 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/requests', [AdminDashboardController::class, 'all_requests'])->name('requests.index');
         Route::get('/requests/{id}', [AdminDashboardController::class, 'show'])->name('requests.show');
 
-        Route::get('/profile', [AdminDashboardController::class,'profile'])->name('profile');
-        
+        Route::get('/profile', [AdminDashboardController::class, 'profile'])->name('profile');
+
         Route::get('/settings', [SettingsController::class, 'edit'])->name('settings.edit');
         Route::put('/settings/update', [SettingsController::class, 'update'])->name('settings.update');
-        
+
         // Route::get('/users', [UserController::class, 'create_page'])->name('users.create');
         Route::post('/users', [UserController::class, 'create'])->name('create');
         Route::get('/users/index', [UserController::class, 'index'])->name('users.all');

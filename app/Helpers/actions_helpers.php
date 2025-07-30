@@ -7,18 +7,23 @@ use App\Models\RequestInfo;
 use Illuminate\Support\Facades\Auth;
 
 if (! function_exists('get_borrowed_copies')) {
-    function get_borrowed_copies(Book $book): int
+    function get_borrowed_copies($bookId): int
     {
-        // Load all book requests with their latest request info eager loaded
-        $bookRequests = BookRequest::with('latestRequestInfo')
-            ->where('book_id', $book->id)
-            ->get();
-
-        // Count how many have latestRequestInfo with status BORROWED or APPROVED
-        return $bookRequests->filter(function ($request) {
-            return $request->latestRequestInfo
-                && in_array($request->latestRequestInfo->status, [RequestStatus::BORROWED, RequestStatus::APPROVED, RequestStatus::OVERDUE]);
-        })->count();
+        return BookRequest::join('request_infos', function ($join) {
+            $join->on('book_requests.id', '=', 'request_infos.request_id')
+                ->whereRaw('request_infos.id = (
+                 SELECT MAX(ri.id)
+                 FROM request_infos ri
+                 WHERE ri.request_id = book_requests.id
+             )');
+        })
+            ->where('book_requests.book_id', $bookId)
+            ->whereIn('request_infos.status', [
+                RequestStatus::BORROWED,
+                RequestStatus::APPROVED,
+                RequestStatus::OVERDUE,
+            ])
+            ->count();
     }
 }
 
@@ -87,15 +92,20 @@ if (! function_exists('get_request_status_text')) {
 if (! function_exists('get_non_available_books')) {
     function get_non_available_books(): int
     {
-        // To find non available books, we check just the BookRequest table
-        $book_requests = BookRequest::all();
-        $count = 0;
-        foreach ($book_requests as $request) {
-            $book = Book::find($request->book_id);
-            $count += get_borrowed_copies($book);
-        }
-
-        return $count;
+        return BookRequest::join('request_infos', function ($join) {
+            $join->on('book_requests.id', '=', 'request_infos.request_id')
+                ->whereRaw('request_infos.id = (
+                 SELECT MAX(ri.id)
+                 FROM request_infos ri
+                 WHERE ri.request_id = book_requests.id
+             )');
+        })
+            ->whereIn('request_infos.status', [
+                RequestStatus::BORROWED,
+                RequestStatus::APPROVED,
+                RequestStatus::OVERDUE,
+            ])
+            ->count();
     }
 }
 
