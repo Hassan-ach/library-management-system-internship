@@ -163,36 +163,31 @@ class UserController extends Controller
 
 
     public function delete($id) // Change parameter to $id for consistency with route
-{
-    $authUser = Auth::user();
-    $userToDelete = User::findOrFail($id);
+    {
+        $authUser = Auth::user();
+        $userToDelete = User::findOrFail($id);
 
-    // Prevent self-deletion
-    if ($userToDelete->id === $authUser->id) {
-        return redirect()->back()
-            ->with('error', 'You cannot delete your own account!');
-    }
+        // Prevent self-deletion
+        if ($userToDelete->id === $authUser->id) {
+            return redirect()->back()
+                ->with('error', 'You cannot delete your own account!');
+        }
 
-    // Protection against deleting admin accounts
-    if ($userToDelete->role === UserRole::ADMIN->value) {
-        return redirect()->back()
-            ->with('error', 'Admin accounts cannot be deleted!');
-    }
+        // Protection against deleting admin accounts
+        if ($userToDelete->role === UserRole::ADMIN->value) {
+            return redirect()->back()
+                ->with('error', 'Admin accounts cannot be deleted!');
+        }
 
-    try {
-        $userToDelete->delete();
-        
-        return redirect()->route('admin.users.all')
-            ->with('success', "User #{$id} deleted successfully");
+        try {
+            $userToDelete->delete();
             
-    } catch (\Exception $e) {
-        return redirect()->back()
-            ->with('error', 'Error deleting user: '.$e->getMessage());
-    }
-}
-
-    public function exportExcel(){
-        $users = User::all();
-        return Excel::download( new UsersExport($users),'users.xlsx');
+            return redirect()->route('admin.users.all')
+                ->with('success', "User #{$id} deleted successfully");
+                
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Error deleting user: '.$e->getMessage());
+        }
     }
 }
