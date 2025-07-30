@@ -18,7 +18,9 @@ class BookController extends Controller
             return view('student.books.index', compact('books'));
         } catch (\Exception $e) {
 
-            return view('student.books.index')->with('error', 'Unable to load books at the moment. Please try again later.');
+            return view('student.books.index')->with([
+                'error' => 'Impossible de charger les livres pour le moment. Veuillez réessayer plus tard.',
+            ]);
         }
     }
 
@@ -30,7 +32,10 @@ class BookController extends Controller
             // Return to a view with book data
             return view('student.books.show', compact('book'));
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Something went wrong.');
+            return redirect()->back()->with([
+                'error' => 'Une erreur est survenue.',
+            ]);
+
         }
     }
 
@@ -70,7 +75,9 @@ class BookController extends Controller
             return view('student.books.search', compact('books', 'query'));
         } catch (\Throwable $th) {
             // throw $th;
-            return view('student.books.search')->with('error', 'Unable to load books at the moment. Please try again later.');
+            return view('student.books.search')->with([
+                'error' => 'Impossible de charger les livres pour le moment. Veuillez réessayer plus tard.',
+            ]);
 
         }
     }
