@@ -31,6 +31,7 @@ class GoogleApiServiceController extends Controller
             if (! $data) {
                 // In case Google API doesn't return valid book data
                 return redirect(route('librarian.books.create'))->with(['info'=>'Aucun livre trouvé pour cet ISBN.']);
+
             }
 
             return view('librarian.books.form', $data);

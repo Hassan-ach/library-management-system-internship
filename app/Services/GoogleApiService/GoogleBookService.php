@@ -36,7 +36,7 @@ class GoogleBookService
             'title' => $item['title'] ?? '',
             'isbn' => $isbn,
             'description' => $item['description'] ?? '',
-            'publication_date' => Carbon::createFromFormat('Y', $item['publishedDate'] ?? null)->format('Y-m-d'),
+            'publication_date' => Carbon::createFromFormat('Y', $item['publishedDate'] ?? null)->month(1)->day(1)->format('Y-m-d'),
             'number_of_pages' => $item['pageCount'] ?? null,
             'total_copies' => 1, // Default value as in original
             'image_url' => $item['imageLinks']['thumbnail'] ?? null,
@@ -61,9 +61,9 @@ class GoogleBookService
             foreach ($existingCategories as $category) {
                 $categories['old'][] = [
                     'id' => $category->id,
-                    'name' => $category->label
+                    'name' => $category->label,
                 ];
-                
+
             }
 
             // Add new categories to 'new' array

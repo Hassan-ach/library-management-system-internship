@@ -37,7 +37,10 @@ class RequestController extends Controller
         $book = Book::findOrFail($bookId);
 
         if (! Gate::allows('borrow_books', $book)) {
-            return back()->with(['error' => 'You\'re not allowed to borrow this book']);
+            return back()->with([
+                'error' => 'Vous n\'êtes pas autorisé à emprunter ce livre.',
+            ]);
+
         }
 
         DB::beginTransaction();
@@ -56,14 +59,17 @@ class RequestController extends Controller
 
             DB::commit();
 
-            return back()->with(['success' => 'Request submitted successfully']);
+            return back()->with([
+                'success' => 'Demande soumise avec succès.',
+            ]);
 
         } catch (\Throwable $th) {
             DB::rollBack();
 
             return back()
-                ->with(['error' => 'Error while submitting request'])
-                ->setStatusCode(422);
+                ->with([
+                    'error' => 'Erreur lors de la soumission de la demande.',
+                ]);
         }
     }
 
@@ -73,7 +79,9 @@ class RequestController extends Controller
         $user = Student::findOrFail(Auth::user()->id);
 
         if (! Gate::allows('cancel_req', $bookReq)) {
-            return back()->with(['error' => 'You\'re not allowed to cancel this book request']);
+            return back()->with([
+                'error' => 'Vous n\'êtes pas autorisé à annuler cette demande de livre.',
+            ]);
         }
 
         try {
@@ -83,14 +91,17 @@ class RequestController extends Controller
                 'status' => RequestStatus::CANCELED,
             ]);
 
-            return back()->with(['success' => 'Request canceled successfully']);
+            return back()->with([
+                'success' => 'Demande annulée avec succès.',
+            ]);
 
         } catch (\Throwable $th) {
             // throw $th;
 
             return back()
-                ->with(['error' => 'Error while canceling request'])
-                ->setStatusCode(422);
+                ->with([
+                    'error' => 'Erreur lors de l\'annulation de la demande.',
+                ]);
         }
     }
 
@@ -101,7 +112,9 @@ class RequestController extends Controller
         $bookReq = BookRequest::with('latestRequestInfo')->findOrFail($reqId);
 
         if (! Gate::allows('show_req', $bookReq)) {
-            return back()->with(['error' => 'You\'re not allowed to see this book request']);
+            return back()->with([
+                'error' => 'Vous n\'êtes pas autorisé à consulter cette demande de livre.',
+            ]);
         }
 
         try {
@@ -114,8 +127,9 @@ class RequestController extends Controller
 
         } catch (\Throwable $th) {
             return back()
-                ->with(['error' => 'Error while querying request'])
-                ->setStatusCode(422);
+                ->with([
+                    'error' => 'Erreur lors de la récupération de la demande.',
+                ]);
         }
 
     }

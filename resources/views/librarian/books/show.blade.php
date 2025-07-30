@@ -57,7 +57,7 @@
                                 </dd>
 
                                 <dt class="col-sm-4">Année de publication:</dt>
-                                <dd class="col-sm-8">{{ $publication_date ?? 'N/A' }}</dd>
+                                <dd class="col-sm-8">{{ $publication_date->format('Y') ?? 'N/A' }}</dd>
 
                                 <dt class="col-sm-4">Nombre de pages:</dt>
                                 <dd class="col-sm-8">{{ $number_of_pages ?? 'N/A' }}</dd>
@@ -148,4 +148,6 @@
         </div>
     </div>
 @stop
-
+@section('js')
+@parent
+@endsection

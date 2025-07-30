@@ -9,7 +9,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            {{-- Display success/error messages --}}
+            {{-- Display success/error messages
             @if(session('success'))
                 <x-adminlte-alert theme="success" title="Succès">
                     {{ session('success') }}
@@ -20,6 +20,7 @@
                     {{ session('error') }}
                 </x-adminlte-alert>
             @endif
+            --}}
 
             <x-adminlte-card title="Informations de profil" theme="primary" icon="fas fa-user" >
                 <div class="card-body">

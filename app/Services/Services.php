@@ -51,7 +51,7 @@ class Services
             'title' => $book->title,
             'isbn' => $book->isbn,
             'image_url' => $book->image_url,
-            'publication_date' => $book->publication_date->format('Y-m-d'),
+            'publication_date' => $book->publication_date,
             'number_of_pages' => $book->number_of_pages,
             'total_copies' => $book->total_copies,
             'available_copies' => $book->total_copies - get_borrowed_copies($book->id),

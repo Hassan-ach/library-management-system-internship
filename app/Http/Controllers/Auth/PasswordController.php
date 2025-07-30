@@ -16,6 +16,7 @@ class PasswordController extends Controller
      */
     public function forget_form()
     {
+
         return view('auth.passwords.forget');
     }
 
@@ -24,19 +25,18 @@ class PasswordController extends Controller
      */
     public function send(Request $req)
     {
-        $req->validate([
-            'email' => 'required|email',
-        ]);
 
         try {
+            $req->validate([
+                'email' => 'required|email|exist',
+            ]);
             $status = Password::sendResetLink(
                 $req->only('email')
             );
 
-            // Always show the same message for security
-            return back()->with('status', 'If your email is registered, we’ve sent you a reset link.');
+            return back()->with('status', 'Si votre adresse e-mail est enregistrée, nous vous avons envoyé un lien de réinitialisation.'); // Translated
         } catch (\Throwable $th) {
-            return back()->withErrors(['error' => 'Something went wrong. Please try again later.']);
+            return back()->with('error', 'Une erreur est survenue. Veuillez réessayer plus tard.'); // Translated
         }
     }
 
@@ -71,10 +71,10 @@ class PasswordController extends Controller
             );
 
             return $status === Password::PASSWORD_RESET
-                ? redirect()->route('login')->with('status', 'Your password has been reset successfully.')
-                : back()->withErrors(['error' => $status]);
+                       ? redirect()->route('login')->with('status', 'Votre mot de passe a été réinitialisé avec succès.') // Translated
+                       : back()->withErrors(['error' => $status]);
         } catch (\Throwable $th) {
-            return back()->withErrors(['error' => 'Something went wrong. Please try again later.']);
+            return back()->withErrors(['error' => 'Une erreur est survenue. Veuillez réessayer plus tard.']); // Translated
         }
     }
 }

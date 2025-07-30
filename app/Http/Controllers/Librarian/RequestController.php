@@ -15,36 +15,6 @@ use Illuminate\Validation\Rules\Enum;
 
 class RequestController extends Controller
 {
-    //
-    // public function process(Request $req, $reqId)
-    // {
-    //     if (! Gate::allows('processe_req')) {
-    //         return back()
-    //             ->with(['error' => 'You\'re not allowed to process this request']);
-    //     }
-    //     try {
-    //         if (! BookRequest::where('id', $reqId)->exists()) {
-    //             return back()->with('error', 'Invalid request ID');
-    //         }
-    //
-    //         $status = $req->validate([
-    //             'status' => ['required', new Enum(RequestStatus::class)],
-    //         ]);
-    //
-    //         RequestInfo::create([
-    //             'user_id' => Auth::user()->id,
-    //             'request_id' => $reqId,
-    //             'status' => $status['status'],
-    //         ]);
-    //
-    //         return back()->with(['message' => 'status updated successfully']);
-    //
-    //     } catch (\Throwable $th) {
-    //         return back()
-    //             ->with(['error' => 'Error while updating request']);
-    //     }
-    //
-    // }
     public function process(Request $req, $reqId)
     {
 
@@ -62,7 +32,9 @@ class RequestController extends Controller
             // 3. Authorization check
             $student = Student::findOrFail($bookRequest?->user?->id);
             if (! Gate::allows('processe_req', [$student, $newStatusEnum])) { // Verify permission name
-                return back()->with(['error' => 'You\'re not allowed to process this request']);
+                return back()->with([
+                    'error' => 'Vous n\'êtes pas autorisé à traiter cette demande.',
+                ]);
             }
 
             $newStatusValue = $newStatusEnum->value;
@@ -73,7 +45,9 @@ class RequestController extends Controller
 
             // 5. Prevent setting the same status
             if ($currentStatusValue && $currentStatusValue === $newStatusValue) {
-                return back()->with(['info' => 'The request is already in the status: '.ucfirst($newStatusValue)]);
+                return back()->with([
+                    'info' => 'La demande est déjà dans l\'état : '.ucfirst($newStatusValue),
+                ]);
             }
 
             // 6. Define allowed status transitions
@@ -101,7 +75,9 @@ class RequestController extends Controller
 
             // Handle transitions from terminal states or disallowed transitions
             if (! $isTransitionAllowed) {
-                return back()->with(['error' => "Invalid status transition from '$currentStatusValue' to '$newStatusValue'."]);
+                return back()->with([
+                    'error' => "Transition d'état invalide de '$currentStatusValue' vers '$newStatusValue'.",
+                ]);
             }
 
             // 8. Specific check: Before approving, ensure book copies are available
@@ -110,7 +86,9 @@ class RequestController extends Controller
                 $availableCopies = $bookRequest->book->available_copies();
 
                 if ($availableCopies <= 0) {
-                    return back()->with(['error' => 'Cannot approve request. No copies of the book are currently available.']);
+                    return back()->with([
+                        'error' => 'Impossible d\'approuver la demande. Aucune copie du livre n\'est actuellement disponible.',
+                    ]);
                 }
             }
 
@@ -122,15 +100,21 @@ class RequestController extends Controller
             ]);
 
             // 10. Success response
-            return back()->with(['success' => 'Status updated successfully to '.ucfirst($newStatusValue)]);
+            return back()->with([
+                'success' => 'Statut mis à jour avec succès vers '.ucfirst($newStatusValue),
+            ]);
 
         } catch (ModelNotFoundException $e) {
             // 11. Handle case where request ID is invalid
-            return back()->with(['error' => 'Invalid request ID']);
+            return back()->with([
+                'error' => 'ID de demande invalide.',
+            ]);
         } catch (\Exception $e) {
             // 12. Handle any other unexpected errors
 
-            return back()->with(['error' => 'An error occurred while updating the request. Please try again.']);
+            return back()->with([
+                'error' => 'Une erreur est survenue lors de la mise à jour de la demande. Veuillez réessayer.',
+            ]);
         }
     }
 
@@ -147,7 +131,9 @@ class RequestController extends Controller
             return view('librarian.requests.index', compact('requests', 'statuses'));
 
         } catch (\Throwable $th) {
-            return back()->with(['error' => 'Error while fetching requests']);
+            return back()->with([
+                'error' => 'Erreur lors de la récupération des demandes.',
+            ]);
 
         }
     }
@@ -202,7 +188,9 @@ class RequestController extends Controller
             return view('librarian.requests.show', compact('request'));
 
         } catch (\Throwable $th) {
-            return back()->with(['error' => 'Error while fetching the request information']);
+            return back()->with([
+                'error' => 'Erreur lors de la récupération des informations de la demande.',
+            ]);
         }
     }
 }

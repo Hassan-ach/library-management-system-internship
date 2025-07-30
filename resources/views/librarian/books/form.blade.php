@@ -716,7 +716,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
                     </div>
-                    <input type="date" class="form-control" name="publication_date" value="{{ old('publication_date', $publication_date ?? '') }}" placeholder="">
+                    <input type="date" class="form-control" name="publication_date" value="{{ old('publication_date', $publication_date?->format('Y-m-d') ?? '') }}" placeholder="">
                 </div>
 
                 <label>Nombre des pages</label>

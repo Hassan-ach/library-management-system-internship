@@ -4,25 +4,25 @@ namespace App\Http\Controllers\Librarian;
 
 use App\Http\Controllers\Controller;
 use App\Models\Student;
-use Illuminate\Http\Request;
+
+
 
 class StudentStatisticsController extends Controller
 {
-    //
-    public function index(Request $req, $studentId)
-    {
-        //
-        try {
-            $student = Student::with('bookRequests.latestRequestInfo')
-                ->findOrFail($studentId);
+    public function index(Student $student){
+        try{
+            $user = Student::findOrFail($student->id);
+            $requests = $user->bookRequests()
+                ->with('latestRequestInfo', 'book')
+                ->get();
+            $nbr_request = $requests->count();
 
-            return view('librarian.statistics.index', compact('student'));
+            return view('librarian.student.studentStatistics', compact('user', 'requests', 'nbr_request'));
 
-        } catch (\Throwable $th) {
-            // throw $th;
-            return back()
-                ->with(['error' => 'Error while querying Student profile']);
+        }catch(\Throwable $th){
+            return $th;
         }
-
+        
+        
     }
 }

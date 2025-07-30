@@ -124,18 +124,36 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         
+            $rules = [
+            'first_name' => 'sometimes|string|max:255',
+            'last_name' => 'sometimes|string|max:255',
+            'email' => 'sometimes|email|unique:users,email,'.$user->id,
+            'is_active' => 'sometimes|boolean',
+            'role' => 'sometimes|string|in:student,admin,librarian',
+        ];
+        
         try {
-            $validated = $request->validate([
-                'first_name' => 'sometimes|string|max:255',
-                'last_name' => 'sometimes|string|max:255',
-                'email' => 'sometimes|email|unique:users,email,'.$user->id,
-                'password' => ['sometimes', 'nullable', Password::min(8)->mixedCase()->numbers()],
-                'is_active' => 'sometimes|boolean',
-                'role' => 'sometimes|string|in:student,admin,librarian',
-            ]);
+
+            // Add password validation rules only if password change is attempted
+            if ($request->filled('password') || $request->filled('current_password')) {
+                $rules['current_password'] = 'required|string';
+                $rules['password'] = ['required', 'string', Password::min(8)->mixedCase()->numbers(), 'confirmed'];
+                $rules['password_confirmation'] = 'required|string';
+            }
+
+            $validated = $request->validate($rules);
+
+            // Validate current password if password change is requested
+            if ($request->filled('password') || $request->filled('current_password')) {
+                if (!Hash::check($request->current_password, $user->password)) {
+                    return redirect()->back()
+                        ->withErrors(['current_password' => 'Le mot de passe actuel est incorrect.'])
+                        ->withInput();
+                }
+            }
 
             // Update only if the field exists in request and is different
-            $updatableFields = ['first_name', 'last_name', 'is_active'];
+            $updatableFields = ['first_name', 'last_name', 'email','is_active'];
             $changesMade = false;
             
             foreach ($updatableFields as $field) {
@@ -145,6 +163,10 @@ class UserController extends Controller
                 }
             }
 
+            if ($request->filled('password')) {
+                $user->password = Hash::make($request->password);
+                $changesMade = true;
+            }
 
             if ($changesMade) {
                 $user->save();
@@ -163,36 +185,31 @@ class UserController extends Controller
 
 
     public function delete($id) // Change parameter to $id for consistency with route
-{
-    $authUser = Auth::user();
-    $userToDelete = User::findOrFail($id);
+    {
+        $authUser = Auth::user();
+        $userToDelete = User::findOrFail($id);
 
-    // Prevent self-deletion
-    if ($userToDelete->id === $authUser->id) {
-        return redirect()->back()
-            ->with('error', 'You cannot delete your own account!');
-    }
+        // Prevent self-deletion
+        if ($userToDelete->id === $authUser->id) {
+            return redirect()->back()
+                ->with('error', 'Vous ne pouvez pas supprimer votre propre compte!');
+        }
 
-    // Protection against deleting admin accounts
-    if ($userToDelete->role === UserRole::ADMIN->value) {
-        return redirect()->back()
-            ->with('error', 'Admin accounts cannot be deleted!');
-    }
+        // Protection against deleting admin accounts
+        if ($userToDelete->role->value === UserRole::ADMIN->value) {
+            return redirect()->back()
+                ->with('error', 'Les comptes administrateurs ne peuvent pas être supprimés!');
+        }
 
-    try {
-        $userToDelete->delete();
-        
-        return redirect()->route('admin.users.all')
-            ->with('success', "User #{$id} deleted successfully");
+        try {
+            $userToDelete->delete();
             
-    } catch (\Exception $e) {
-        return redirect()->back()
-            ->with('error', 'Error deleting user: '.$e->getMessage());
-    }
-}
-
-    public function exportExcel(){
-        $users = User::all();
-        return Excel::download( new UsersExport($users),'users.xlsx');
+            return redirect()->route('admin.users.all')
+                ->with('success', "User #{$id} deleted successfully");
+                
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Error deleting user: '.$e->getMessage());
+        }
     }
 }

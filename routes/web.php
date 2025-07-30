@@ -73,7 +73,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/requests/{id}', [LibrarianRequestController::class, 'show'])->name('requests.show');
         Route::get('/requests/{reqId}/details', [LibrarianRequestController::class, 'showDetails'])->name('requests.details');
         Route::post('/requests/{id}', [LibrarianRequestController::class, 'process'])->name('requests.process');
-        Route::get('/students/{id}', [StudentStatisticsController::class, 'index'])->name('students.statistics');
+        Route::get('/students/{student}', [StudentStatisticsController::class, 'index'])->name('students.statistics');
 
         // display a list of all books
         Route::get('/books', [LibrarianBookController::class, 'index'])->name('books.index');
@@ -106,6 +106,8 @@ Route::middleware('auth:web')->group(function () {
         //
 
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/requests', [AdminDashboardController::class, 'all_requests'])->name('requests.index');
+        Route::get('/requests/{id}', [AdminDashboardController::class, 'show'])->name('requests.show');
 
         Route::get('/profile', [AdminDashboardController::class, 'profile'])->name('profile');
 
@@ -124,17 +126,17 @@ Route::middleware('auth:web')->group(function () {
             Route::get('/users', [StatisticsController::class, 'users_stat'])->name('users');
             Route::get('/students/search', [StatisticsController::class, 'search'])->name('users.search');
             Route::get('/librarian/search', [StatisticsController::class, 'search_librarian'])->name('librarians.search');
-            Route::get('/users/export', [StatisticsController::class, 'exportUsers'])->name('users.export');
+            Route::get('/users/export', [StatisticsController::class, 'exportStudents'])->name('users.export');
             // Route::get('/users/history/{user}', [StatisticsController::class, 'user_history'])->name('users.history');
             Route::get('/student/history/{user}/{status?}/{color?}', [StatisticsController::class, 'user_history'])->name('users.history');
             Route::resource('user_history', UserController::class)->names('user.hitory');
 
             Route::get('/librarian', [StatisticsController::class, 'librarian_stat'])->name('librarian');
             Route::get('/librarian/history/{user}/{status?}/{color?}', [StatisticsController::class, 'librarian_history'])->name('librarian_history');
-            Route::get('/librarian/export', [StatisticsController::class, 'exportlibrarian'])->name('librarian.export');
+            Route::get('/librarian/export', [StatisticsController::class, 'exportLibrarians'])->name('librarian.export');
 
             Route::get('/books', [StatisticsController::class, 'books_stat'])->name('books');
-            // routes/web.php
+            Route::get('/books/search', [StatisticsController::class, 'search_book'])->name('books.search');
             Route::get('/books/{book}/history', [StatisticsController::class, 'history'])->name('book.history');
             Route::get('/books/export', [StatisticsController::class, 'exportBooks'])->name('books.export');
         });

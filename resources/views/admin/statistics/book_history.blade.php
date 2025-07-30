@@ -3,6 +3,7 @@
 
 @section('content')
 <div class="container">
+    <br>
     <div class="card shadow">
         <div class="card-header bg-primary text-white">
             <div class="d-flex justify-content-between align-items-center">
@@ -21,12 +22,12 @@
                     <thead class="thead-light">
                         <tr>
                             <th>Utilisateur</th>
-                            <th>Date d'emprunt</th>
+                            <th>Date de sortie</th>
                             <th>Bibliothécaire (emprunt)</th>
                             <th>Retourné</th>
                             <th>Date de retour</th>
                             <th>Bibliothécaire (retour)</th>
-                            <th>Durée</th>
+                            <th>Durée d'emprint</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,7 +40,7 @@
                                 @if($borrowing['is_returned'])
                                     <span class="badge bg-success">Retourné</span>
                                 @else
-                                    <span class="badge bg-warning text-dark">En cours</span>
+                                    <span class="badge bg-warning text-dark">Emprunté</span>
                                 @endif
                             </td>
                             <td>{{ $borrowing['return_date'] ?? '-' }}</td>
@@ -54,11 +55,11 @@
                     </tbody>
                 </table>
             </div>
-            
-            <div class="d-flex justify-content-center mt-3">
-                {{ $borrowings->links() }}
+            <div >
+                {{ $borrowings->withQueryString()->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 @endsection
