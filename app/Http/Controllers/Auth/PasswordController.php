@@ -16,6 +16,7 @@ class PasswordController extends Controller
      */
     public function forget_form()
     {
+
         return view('auth.passwords.forget');
     }
 
@@ -24,11 +25,11 @@ class PasswordController extends Controller
      */
     public function send(Request $req)
     {
-        $req->validate([
-            'email' => 'required|email',
-        ]);
 
         try {
+            $req->validate([
+                'email' => 'required|email',
+            ]);
             $status = Password::sendResetLink(
                 $req->only('email')
             );
@@ -36,7 +37,7 @@ class PasswordController extends Controller
             // Always show the same message for security
             return back()->with('status', 'If your email is registered, we’ve sent you a reset link.');
         } catch (\Throwable $th) {
-            return back()->withErrors(['error' => 'Something went wrong. Please try again later.']);
+            return back()->with('error', 'Something went wrong. Please try again later.');
         }
     }
 
