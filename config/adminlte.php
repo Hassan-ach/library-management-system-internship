@@ -330,6 +330,13 @@ return [
             'can' => 'admin',
         ],
         [
+            'text' => 'Demandes d\'emprunt',
+            'url' => 'admin/requests',
+            'icon' => 'fas fa-fw fa-clipboard-list',
+            'active' => ['admin/requests*'],
+            'can' => 'admin',
+        ],
+        [
             'text' => 'Statistiques globales',
             'url' => 'admin/statistics',
             'icon' => 'fas fa-fw fa-chart-line',
@@ -349,6 +356,7 @@ return [
                 [
                     'text' => 'Les livres',
                     'url' => 'admin/statistics/books',
+                    'active' => ['admin/statistics/books*'],
                 ],
             ],
         ],

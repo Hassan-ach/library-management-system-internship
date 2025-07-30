@@ -166,7 +166,7 @@
             </div>
 
             <div class="mt-2 mr-1 text-right">
-                <a href="{{ route('librarian.requests.index') }}" class="btn btn-sm btn-primary"
+                <a href="{{ route('admin.requests.index') }}" class="btn btn-sm btn-primary"
                     style="font-weight:600; ;">
                     voir plus<i style='font-size:13px; vertical-align: middle' class='fas ml-1'>&#xf101;</i>
                 </a>
@@ -175,48 +175,6 @@
         </div>
     </div>
 </div>
-<x-adminlte-modal id="BookModal" title="Ajouter un livre" theme="info" icon="fas fa-plus">
-    <form id="customForm" action="{{ route('librarian.books.isbn.getInfo') }}" method="GET">
-        @csrf
-
-        <div class="form-group">
-            <label for="item_name">ISBN du livre</label>
-            <div class="input-group">
-                <input type="text"
-                       class="form-control"
-                       id="item_name"
-                       name="isbn"
-                       placeholder="Saisir ici ..."
-                       required>
-                <div class="input-group-append">
-                    <button type="submit" class="btn" style="background-color:#00b6d3;">
-                        <i class="fas fa-magic"></i> Ajouter
-                    </button>
-                </div>
-            </div>
-            <small class="form-text text-muted">
-                Ce livre sera recherché via l'API Google Books
-            </small>
-        </div>
-    </form>
-
-    <hr class="my-3">
-
-    <div class="text-center">
-        <p class="text-muted mb-3">Ou choisissez une autre manière :</p>
-        <a href="{{route('librarian.books.create')}}">
-            <button type="button" class="btn btn-secondary btn-lg btn-block" >
-                <i class="fas fa-pen"></i> Ajouter le livre manuellement
-            </button>
-        </a>
-    </div>
-
-    <x-slot name="footerSlot">
-        <button type="button" class="btn btn-default" data-dismiss="modal">
-            <i class="fas fa-times"></i> Annuler
-        </button>
-    </x-slot>
-</x-adminlte-modal>
 </div>
 
 @stop

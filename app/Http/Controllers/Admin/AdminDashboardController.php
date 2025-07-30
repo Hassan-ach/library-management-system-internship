@@ -8,6 +8,7 @@ use App\Models\Book;
 use App\Models\BookRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class AdminDashboardController extends Controller
 {
@@ -62,5 +63,36 @@ class AdminDashboardController extends Controller
                 ->with('error', 'User not found: '.$e->getMessage());
         }
 
+    }
+
+    public function all_requests(Request $req)
+    {
+        //
+        try {
+            $requests = BookRequest::with('requestInfo', 'user', 'book')
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
+            // Get all possible statuses for the filter dropdown
+            $statuses = collect(\App\Enums\RequestStatus::cases())->filter(fn ($status) => $status->value !== 'canceled' && $status->value !== 'pending');
+
+            return view('admin.requests.index', compact('requests', 'statuses'));
+
+        } catch (\Throwable $th) {
+            return back()->with(['error' => 'Error while fetching requests']);
+
+        }
+    }
+
+    public function show(Request $req, $reqId)
+    {
+        try {
+            $request = BookRequest::with('requestInfo.user', 'user', 'book')
+                ->findOrFail($reqId);
+
+            return view('admin.requests.show', compact('request'));
+
+        } catch (\Throwable $th) {
+            return back()->with(['error' => 'Error while fetching the request information']);
+        }
     }
 }

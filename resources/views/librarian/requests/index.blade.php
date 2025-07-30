@@ -61,7 +61,7 @@
             <td>{{ $request->user->first_name.' '.$request->user->last_name ?? 'Utilisateur inconnu' }}</td>
             <td>{{ $request->created_at->format('d/m/Y H:i') }}</td>
             <td>
-                                                <x-status-badge :status="$request->latestRequestInfo->status->value" />
+                <x-status-badge :status="$request->latestRequestInfo->status->value" />
             </td>
             <td>
                     {{ $request->return_date() ? $request->return_date()->format('d/m/Y') : 'N/A' }}
