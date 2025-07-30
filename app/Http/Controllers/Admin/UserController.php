@@ -124,18 +124,36 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         
+            $rules = [
+            'first_name' => 'sometimes|string|max:255',
+            'last_name' => 'sometimes|string|max:255',
+            'email' => 'sometimes|email|unique:users,email,'.$user->id,
+            'is_active' => 'sometimes|boolean',
+            'role' => 'sometimes|string|in:student,admin,librarian',
+        ];
+        
         try {
-            $validated = $request->validate([
-                'first_name' => 'sometimes|string|max:255',
-                'last_name' => 'sometimes|string|max:255',
-                'email' => 'sometimes|email|unique:users,email,'.$user->id,
-                'password' => ['sometimes', 'nullable', Password::min(8)->mixedCase()->numbers()],
-                'is_active' => 'sometimes|boolean',
-                'role' => 'sometimes|string|in:student,admin,librarian',
-            ]);
+
+            // Add password validation rules only if password change is attempted
+            if ($request->filled('password') || $request->filled('current_password')) {
+                $rules['current_password'] = 'required|string';
+                $rules['password'] = ['required', 'string', Password::min(8)->mixedCase()->numbers(), 'confirmed'];
+                $rules['password_confirmation'] = 'required|string';
+            }
+
+            $validated = $request->validate($rules);
+
+            // Validate current password if password change is requested
+            if ($request->filled('password') || $request->filled('current_password')) {
+                if (!Hash::check($request->current_password, $user->password)) {
+                    return redirect()->back()
+                        ->withErrors(['current_password' => 'Le mot de passe actuel est incorrect.'])
+                        ->withInput();
+                }
+            }
 
             // Update only if the field exists in request and is different
-            $updatableFields = ['first_name', 'last_name', 'is_active'];
+            $updatableFields = ['first_name', 'last_name', 'email','is_active'];
             $changesMade = false;
             
             foreach ($updatableFields as $field) {
@@ -145,6 +163,10 @@ class UserController extends Controller
                 }
             }
 
+            if ($request->filled('password')) {
+                $user->password = Hash::make($request->password);
+                $changesMade = true;
+            }
 
             if ($changesMade) {
                 $user->save();
