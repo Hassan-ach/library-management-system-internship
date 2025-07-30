@@ -99,7 +99,7 @@
                                             <label for="password" class="form-label">noveau mot de passe</label>
                                             <input type="password" class="form-control @error('password') is-invalid @enderror" 
                                                 id="password" name="password">
-                                            <div class="form-text">If changing, must be at least 8 characters with numbers and mixed case</div>
+                                            <div class="form-text"><small>En cas de modification, doit comporter au moins 8 caractères avec des chiffres et des majuscules et des minuscules</small></div>
                                             @error('password')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
