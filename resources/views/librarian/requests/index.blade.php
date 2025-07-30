@@ -9,19 +9,6 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            {{-- Display success/error messages
-            @if(session('success'))
-                <x-adminlte-alert theme="success" title="Succès">
-                    {{ session('success') }}
-                </x-adminlte-alert>
-            @endif
-            @if(session('error'))
-                <x-adminlte-alert theme="danger" title="Erreur">
-                    {{ session('error') }}
-                </x-adminlte-alert>
-            @endif
-            --}}
-
             <x-adminlte-card title="Liste des demandes" theme="primary" icon="fas fa-clipboard-list" >
                 <div class="card-body">
                     <div class="form-group row mb-3">

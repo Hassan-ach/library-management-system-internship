@@ -1,1 +1,0 @@
-<h1>the cathegory was deleted</h1>

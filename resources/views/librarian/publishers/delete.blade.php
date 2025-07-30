@@ -1,1 +1,0 @@
-<h1>the publisher was deleted</h1>

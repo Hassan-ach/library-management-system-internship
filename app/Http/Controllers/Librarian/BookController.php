@@ -30,8 +30,7 @@ class BookController extends Controller
             return view('librarian.books.index')->with('books', $books);
 
         } catch (\Throwable $th) {
-            throw $th;
-            // return view('librarian.books.index')->with('error', 'Unable to load categories at the moment. Please try again later.');
+            return back()->with(['error'=>'Une erreur s\'est produite']);
         }
     }
 
@@ -51,12 +50,11 @@ class BookController extends Controller
                     ->with('books', null);
             }
 
-            return view('librarian.books.index')->with('books', $books);
+            return view('librarian.books.index')->with('books', $books)
+                    ->with('header', 'Résultats trouvés pour « '.$query.' »');
 
         } catch (\Throwable $th) {
-            throw $th;
-            // return view('librarian.books.index')->with('error', 'Unable to load categories at the moment. Please try again later.');
-
+            return back()->with(['error'=>'Une erreur s\'est produite']);
         }
     }
 
@@ -67,7 +65,7 @@ class BookController extends Controller
 
             return view('librarian.books.show', $data)->with('book', $book);
         } catch (Exception $e) {
-            return view('errors.databaseException');
+            return back()->with(['error'=>'Une erreur s\'est produite']);
         }
     }
 
@@ -93,8 +91,8 @@ class BookController extends Controller
                 ->with('method', $method)
                 ->with('page_title', 'Modifier les détails du livre')
                 ->with('page_header', 'Modifier les détails du livre');
-        } catch (Exception $e) {
-            return view('errors.databaseException');
+        } catch (\Throwable $th) {
+            return back()->with(['error'=>'Une erreur s\'est produite']);
         }
     }
 
@@ -150,12 +148,13 @@ class BookController extends Controller
 
             // return a View showed that the book was created
             // should change to books.show if successe and return back if fail
-            return redirect('librarian/books')->with(['success' => 'the book created successefuly']);
+            return redirect('librarian/books')->with(['success' => 'Livre ajouté avec succès !']);
 
         } catch (ValidationException $e) {
-            return back()->with(['error' => 'The ISBN field is required.']);
-        } catch (Exception $e) {
-            return view('errors.databaseException');
+            // return $e;
+            return back()->with(['error'=>'les informations que vous avez saisi ne sont pas valides']);
+        } catch (\Throwable $th) {
+            return back()->with(['error'=> 'Une erreur s\'est produite lors de l\'ajout du livre']);
         }
     }
 
@@ -192,13 +191,13 @@ class BookController extends Controller
             ]);
             $this->services->updateBook($book->id, $validated);
 
-            return redirect('librarian/books')->with(['success' => 'the book updated successefuly']);
+            return redirect(route('librarian.books.show',$book))->with(['success' => 'Livre mis à jour avec succès !']);
 
         } catch (ValidationException $e) {
             // return $e;
-            return view('errors.dataValidation');
-        } catch (Exception $e) {
-            return view('errors.databaseException');
+            return back()->with(['error'=>'les informations que vous avez saisi ne sont pas valides']);
+        } catch (\Throwable $th) {
+            return back()->with(['error'=> 'Une erreur s\'est produite lors de la mise à jour des informations']);
         }
     }
 
@@ -207,11 +206,12 @@ class BookController extends Controller
         try {
             $this->services->deleteBook($book->id);
 
-            return redirect('librarian/books')->with(['success' => 'the book deleted successefuly']);
+            return redirect('librarian/books')->with(['success' => 'Livre supprimé avec succès']);
         } catch (ValidationException $e) {
-            return view('errors.dataValidation');
-        } catch (Exception $e) {
-            return view('errors.databaseException');
+            // return $e;
+            return back()->with(['error'=>'les informations que vous avez saisi ne sont pas valides']);
+        } catch (\Throwable $th) {
+            return back()->with(['error'=>'Une erreur s\'est produite lors de la suppression du livre.']);
         }
 
     }

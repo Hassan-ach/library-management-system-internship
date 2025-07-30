@@ -1,1 +1,0 @@
-<h1>the category is edited successfully</h1>

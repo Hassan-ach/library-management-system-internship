@@ -78,9 +78,9 @@ Route::middleware('auth:web')->group(function () {
         // display a list of all books
         Route::get('/books', [LibrarianBookController::class, 'index'])->name('books.index');
         Route::get('/books/search', [LibrarianBookController::class, 'search'])->name('books.search');
-        // show form to create book manually
+        
         Route::get('/books/create/isbn', [LibrarianBookController::class, 'create_isbn'])->name('books.create.isbn');
-
+        // show form to create book manually
         Route::get('/books/create', [LibrarianBookController::class, 'create'])->name('books.create');
         // add new book by isbn
         Route::get('/books/by-isbn', [GoogleApiServiceController::class, 'getBookInfo'])->name('books.isbn.getInfo');
