@@ -68,7 +68,7 @@ class AdminDashboardController extends Controller
     public function all_requests(Request $req)
     {
         //
-        // try {
+        try {
             $requests = BookRequest::with('requestInfo', 'user', 'book')
                 ->orderBy('created_at', 'desc')
                 ->paginate(10);
@@ -77,8 +77,22 @@ class AdminDashboardController extends Controller
 
             return view('admin.requests.index', compact('requests', 'statuses'));
 
-        // } catch (\Throwable $th) {
-        //     return back()->with(['error' => 'Error while fetching requests']);
+        } catch (\Throwable $th) {
+            return back()->with(['error' => 'Error while fetching requests']);
 
         }
+    }
+
+    public function show(Request $req, $reqId)
+    {
+        try {
+            $request = BookRequest::with('requestInfo.user', 'user', 'book')
+                ->findOrFail($reqId);
+
+            return view('admin.requests.show', compact('request'));
+
+        } catch (\Throwable $th) {
+            return back()->with(['error' => 'Error while fetching the request information']);
+        }
+    }
 }

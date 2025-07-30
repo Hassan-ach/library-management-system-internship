@@ -106,6 +106,7 @@ Route::middleware('auth:web')->group(function () {
 
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         Route::get('/requests', [AdminDashboardController::class, 'all_requests'])->name('requests.index');
+        Route::get('/requests/{id}', [AdminDashboardController::class, 'show'])->name('requests.show');
 
         Route::get('/profile', [AdminDashboardController::class,'profile'])->name('profile');
         
