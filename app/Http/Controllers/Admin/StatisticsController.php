@@ -27,69 +27,37 @@ class StatisticsController extends Controller
     }
 
 
-public function users_stat(Request $request)
-{
-    try {
-        // Get students with their latest book request and related info
-        $students = Student::with(['bookRequests' => function($query) {
-                $query->with(['latestRequestInfo', 'book'])
-                    
-                    ->limit(1);
-            }])
-            ->latest()
-            ->paginate(22);
+    public function users_stat(Request $request)
+    {
+        try {
+            // Get students with their latest book request and related info
+            $students = Student::with(['bookRequests' => function($query) {
+                    $query->with(['latestRequestInfo', 'book'])
+                        
+                        ->limit(1);
+                }])
+                ->latest()
+                ->paginate(22);
 
-        return view('admin.statistics.users', ['users' => $students]);
-    } catch (\Exception $e) {
-        return redirect()->back()
-            ->with('error', 'Error loading student data: ' . $e->getMessage());
-    }
+            return view('admin.statistics.users', ['users' => $students]);
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Error loading student data: ' . $e->getMessage());
+        }
 }
 
     public function search(Request $request)
-{
-    $search = $request->input('search');
-    $status = $request->input('status');
-    $activity = $request->input('activity');
-
-    $users = Student::query()
-        ->with(['bookRequests' => function($query) {
-            $query->with(['latestRequestInfo', 'book'])
-                ->latest()
-                ->limit(1);
-        }])
-        ->when($search, function ($query, $search) {
-            return $query->where(function ($q) use ($search) {
-                $q->where('first_name', 'like', "%{$search}%")
-                  ->orWhere('last_name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('id', 'like', "%{$search}%");
-            });
-        })
-        ->when($status, function ($query, $status) {
-            return $query->where('is_active', $status == 'active');
-        })
-        ->when($activity, function ($query, $activity) {
-            return $query->whereHas('bookRequests.latestRequestInfo', function($q) use ($activity) {
-                $q->where('status', RequestStatus::from($activity));
-            });
-        })
-        ->orderBy('id')
-        ->paginate(20);
-
-        if(!$users->count()) {
-            return redirect()->back()->with('info', 'No users found matching your criteria.');
-        }
-    return view('admin.statistics.users', compact('users'));
-}
-
-    public function search_librarian(Request $request)
-{
-    try{
+    {
         $search = $request->input('search');
         $status = $request->input('status');
+        $activity = $request->input('activity');
 
-        $users = Librarian::query()
+        $users = Student::query()
+            ->with(['bookRequests' => function($query) {
+                $query->with(['latestRequestInfo', 'book'])
+                    ->latest()
+                    ->limit(1);
+            }])
             ->when($search, function ($query, $search) {
                 return $query->where(function ($q) use ($search) {
                     $q->where('first_name', 'like', "%{$search}%")
@@ -101,17 +69,49 @@ public function users_stat(Request $request)
             ->when($status, function ($query, $status) {
                 return $query->where('is_active', $status == 'active');
             })
+            ->when($activity, function ($query, $activity) {
+                return $query->whereHas('bookRequests.latestRequestInfo', function($q) use ($activity) {
+                    $q->where('status', RequestStatus::from($activity));
+                });
+            })
             ->orderBy('id')
-            ->paginate(5);
+            ->paginate(20);
 
             if(!$users->count()) {
                 return redirect()->back()->with('info', 'No users found matching your criteria.');
             }
-        return view('admin.statistics.librarian', compact('users'));
-        }catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Error loading librarian data: ' . $e->getMessage());
-        }
+        return view('admin.statistics.users', compact('users'));
+}
+
+    public function search_librarian(Request $request)
+    {
+        try{
+            $search = $request->input('search');
+            $status = $request->input('status');
+
+            $users = Librarian::query()
+                ->when($search, function ($query, $search) {
+                    return $query->where(function ($q) use ($search) {
+                        $q->where('first_name', 'like', "%{$search}%")
+                        ->orWhere('last_name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('id', 'like', "%{$search}%");
+                    });
+                })
+                ->when($status, function ($query, $status) {
+                    return $query->where('is_active', $status == 'active');
+                })
+                ->orderBy('id')
+                ->paginate(5);
+
+                if(!$users->count()) {
+                    return redirect()->back()->with('info', 'No users found matching your criteria.');
+                }
+            return view('admin.statistics.librarian', compact('users'));
+            }catch (\Exception $e) {
+                return redirect()->back()
+                    ->with('error', 'Error loading librarian data: ' . $e->getMessage());
+            }
 }
 
     public function books_stat(Request $request)
@@ -123,7 +123,7 @@ public function users_stat(Request $request)
 
     }
 
-     public function search_book(Request $request)
+    public function search_book(Request $request)
     {
         try {
             $query = $request->input('search');
@@ -216,7 +216,7 @@ public function users_stat(Request $request)
                     'status' => $latestInfo->status,
                     'processed_at' => $processed_at,
                     'processed_by' => $librarian,
-                    'created_diff' => $request->created_at->diffForHumans(),
+                    'created_diff' => "il y'a " . str_replace([' hours ago', 'hour ago'], 'h', $latestInfo?->created_at->diffForHumans()),
                     'processed_diff' => $latestInfo->processed_at ? $latestInfo->processed_at->diffForHumans() : null,
                     'is_first' => false // We'll set this for the first item
                 ];

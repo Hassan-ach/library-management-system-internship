@@ -34,7 +34,7 @@
         <div class="card-body">
             <form action="{{ route('admin.users.search') }}" method="GET" class="row g-3">
                 <div class="col-md-4">
-                    <label for="search" class="form-label">Théremes de recherches</label>
+                    <label for="search" class="form-label">Teremes de recherches</label>
                     <input type="text" class="form-control" id="search" name="search" 
                         placeholder="Chercher par id, nom, email, etc..." value="{{ request('search') }}">
                 </div>

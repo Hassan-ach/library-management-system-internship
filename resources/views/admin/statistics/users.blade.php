@@ -25,23 +25,23 @@ use App\Enums\RequestStatus;
 
 @section('content')
     <div class="container">
-        <h1>Les etudiants</h1>
+        <h1>Les étudiants</h1>
 
         {{-- Search and filter --}}
         <div class="card mb-4">
             <div class="card-header">
-                <h5 class="mb-0">Chercher des etudiants</h5>
+                <h5 class="mb-0">Chercher des étudiants</h5>
             </div>
             <div class="card-body">
                 <div class="container col-11">
                     <form action="{{ route('admin.statistics.users.search') }}" method="GET" class="row g-3">
                         <div class="col-md-4">
-                            <label for="search" class="form-label">Search Term</label>
+                            <label for="search" class="form-label">Théremes de recherches</label>
                             <input type="text" class="form-control" id="search" name="search"
-                                placeholder="Search by name, email, etc." value="{{ request('search') }}">
+                                placeholder="Chercher par id, nom, email, etc..." value="{{ request('search') }}">
                         </div>
                         <div class="col-md-4">
-                            <label for="activity" class="form-label">Last activity</label>
+                            <label for="activity" class="form-label">Dernière activité</label>
                             <select class="form-select" id="activity" name="activity" style="cursor: pointer;">
                                 <option value="">Tous les statuts</option>
                                 @foreach(App\Enums\RequestStatus::cases() as $activity)
@@ -60,21 +60,21 @@ use App\Enums\RequestStatus;
                             </select>
                         </div>
                         <div class="col-md-4">
-                            <label for="status" class="form-label">Status</label>
+                            <label for="status" class="form-label">Statut</label>
                             <select class="form-select" id="status" name="status" style="cursor: pointer;">
-                                <option value="">All Statuses</option>
-                                <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
-                                <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                <option value="">Tout les status</option>
+                                <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Actif</option>
+                                <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactif</option>
                             </select>
                         </div>
                         <div class="col-md-6 d-flex align-items-end">
                             <button type="submit" class="btn btn-primary w-100">
-                                <i class="fas fa-search me-2"></i> Search
+                                <i class="fas fa-search me-2"></i> Chercher
                             </button>
                         </div>
                         <div class="col-md-6 d-flex align-items-end">
                             <a href="{{ route('admin.statistics.users') }}" class="btn btn-outline-secondary w-100">
-                                <i class="fas fa-times me-2"></i> Clear
+                                <i class="fas fa-times me-2"></i> Effacer
                             </a>
                         </div>
                     </form>
@@ -99,14 +99,14 @@ use App\Enums\RequestStatus;
                 <thead class="thead-dark sticky-header">
                     <tr>
                         <th>Id</th>
-                        <th>Firstname</th>
-                        <th>Lastname</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>Last activity</th>
-                        <th>Book title</th>
-                        <th>Status</th>
-                        <th>History</th>
+                        <th>Prénom</th>
+                        <th>Nom</th>
+                        <th>E-mail</th>
+                        <th>Rôle</th>
+                        <th>Dernière activité</th>
+                        <th>Titre du livre</th>
+                        <th style="text-align: center;">Statut</th>
+                        <th style="text-align: center;">Historique</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -140,12 +140,12 @@ use App\Enums\RequestStatus;
                                     @endif
                                 </td>
                                 <td>{{$latestRequest->book?->title ?? 'N/A'}}</td>
-                                <td>
+                                <td style="text-align: center;">
                                     <span class="badge {{ $user->is_active ? 'bg-success' : 'bg-danger' }}">
                                         {{ $user->is_active ? 'Active' : 'Inactive' }}
                                     </span>
                                 </td>
-                                <td>
+                                <td style="text-align: center;">
                                     <div class="btn-group" role="group">
                                         <a href="{{ route('admin.statistics.users.history', $user->id) }}"
                                         class="btn btn-secondary btn-sm"
@@ -163,7 +163,7 @@ use App\Enums\RequestStatus;
 
         <div class="mt-3">
             <a href="{{ route('admin.statistics.users.export') }}" class="btn btn-success mr-2">
-                <i class="fas fa-file-excel mr-2"></i> Export
+                <i class="fas fa-file-excel mr-2"></i> Exporter
             </a>
         </div>
 
