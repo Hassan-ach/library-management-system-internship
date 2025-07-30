@@ -1,1 +1,0 @@
-<h1>the category was created</h1>

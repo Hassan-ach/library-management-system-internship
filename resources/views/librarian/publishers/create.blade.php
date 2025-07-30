@@ -1,1 +1,0 @@
-<h1>the PUBLISHER was created</h1>
