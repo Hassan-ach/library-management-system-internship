@@ -170,13 +170,13 @@ class UserController extends Controller
         // Prevent self-deletion
         if ($userToDelete->id === $authUser->id) {
             return redirect()->back()
-                ->with('error', 'You cannot delete your own account!');
+                ->with('error', 'Vous ne pouvez pas supprimer votre propre compte!');
         }
 
         // Protection against deleting admin accounts
-        if ($userToDelete->role === UserRole::ADMIN->value) {
+        if ($userToDelete->role->value === UserRole::ADMIN->value) {
             return redirect()->back()
-                ->with('error', 'Admin accounts cannot be deleted!');
+                ->with('error', 'Les comptes administrateurs ne peuvent pas être supprimés!');
         }
 
         try {

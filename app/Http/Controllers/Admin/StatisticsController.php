@@ -42,7 +42,7 @@ class StatisticsController extends Controller
             return view('admin.statistics.users', ['users' => $students]);
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Error loading student data: ' . $e->getMessage());
+                ->with('error', 'Erreur lors du chargement des données des étudiants : ' . $e->getMessage());
         }
 }
 
@@ -78,7 +78,7 @@ class StatisticsController extends Controller
             ->paginate(20);
 
             if(!$users->count()) {
-                return redirect()->back()->with('info', 'No users found matching your criteria.');
+                return redirect()->back()->with('info', 'Aucun utilisateur trouvé correspondant à vos critères.');
             }
         return view('admin.statistics.users', compact('users'));
 }
@@ -105,12 +105,12 @@ class StatisticsController extends Controller
                 ->paginate(5);
 
                 if(!$users->count()) {
-                    return redirect()->back()->with('info', 'No users found matching your criteria.');
+                    return redirect()->back()->with('info', 'Aucun utilisateur trouvé correspondant à vos critères.');
                 }
             return view('admin.statistics.librarian', compact('users'));
             }catch (\Exception $e) {
                 return redirect()->back()
-                    ->with('error', 'Error loading librarian data: ' . $e->getMessage());
+                    ->with('error', 'Erreur lors du chargement des données des bibliothécaires: ' . $e->getMessage());
             }
 }
 
@@ -132,13 +132,13 @@ class StatisticsController extends Controller
                 ->paginate(20);
 
             if(!$books->count()) {
-                return redirect()->back()->with('info', 'No users found matching your criteria.');
+                return redirect()->back()->with('info', 'Aucun livre trouvé correspondant à vos critères.');
             }
             return view('admin.statistics.books')->with('books', $books);
 
         } catch (\Exception $e) {
              return redirect()->back()
-                ->with('error', 'Error loading librarian data: ' . $e->getMessage());
+                ->with('error', 'Erreur lors du chargement des données des livres: ' . $e->getMessage());
 
         }
     }
@@ -152,7 +152,7 @@ class StatisticsController extends Controller
             }
          catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Unable to load users: '.$e->getMessage());
+                ->with('error', 'Impossible de charger les utilisateurs: '.$e->getMessage());
         }
 
     }
@@ -227,8 +227,6 @@ class StatisticsController extends Controller
             $requests->first()['is_first'] = true;
         }
 
-        // if($requests[])
-
         return view('admin.statistics.users_history', [
             'user' => $user,
             'requests' => $requests,
@@ -258,8 +256,8 @@ class StatisticsController extends Controller
 
                         return [
                             'id' => $request->id,
-                            'created_at' => $request->created_at,
-                            'created_diff' => $latestInfo?->created_at->format('d/m/Y H:i'),
+                            'created_at' => $latestInfo->created_at,
+                            'created_diff' => "il y'a " . str_replace([' hours ago', 'hour ago',' day ago'], ['h','h','j'], $latestInfo?->created_at->diffForHumans()),
                             'response_date' => $responseDate,
                             'book_title' => $request->book->title ?? 'N/A',
                             'status' => $latestInfo?->status ?? 'pending',
@@ -292,7 +290,7 @@ class StatisticsController extends Controller
                 $query->where('status', 'borrowed');
             })
             ->orderByDesc('created_at')
-            ->paginate(10)
+            ->paginate(2)
             ->through(function ($request) {
                 $borrowInfo = $request->requestInfo
                     ->where('status', 'borrowed')

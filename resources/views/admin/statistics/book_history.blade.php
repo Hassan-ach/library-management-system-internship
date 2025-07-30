@@ -55,11 +55,11 @@
                     </tbody>
                 </table>
             </div>
-            
-            <div class="d-flex justify-content-center mt-3">
-                {{ $borrowings->links() }}
+            <div >
+                {{ $borrowings->withQueryString()->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 @endsection

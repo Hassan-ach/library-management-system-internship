@@ -5,6 +5,25 @@ use App\Enums\UserRole;
 
 @extends('admin.dashboard')
 
+@section('css')
+<style>
+    .scrollable-table-container {
+        max-height: 45%;  /* Adjust height as needed */
+        overflow-y: auto;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        margin-bottom: 20px;
+    }
+    .sticky-header th {
+        position: sticky;
+        top: 0;
+        background: #343a40; /* Matches thead-dark */
+        color: white;
+        z-index: 10;
+    }
+</style>
+@endsection
+
 @section('content')
 <div class="container">
     @if(Session::has('error'))
@@ -86,56 +105,58 @@ use App\Enums\UserRole;
         </div>
     </div>
 
-<!-- In your table rows -->
-<table class="table table-striped table-hover">
-    <thead class="bg-primary text-black">
-        <tr>
-            <th class="text-black">ID</th>
-            <th class="text-black">Date demande</th>
-            <th class="text-black">Titre</th>
-            <th class="text-black">Statut</th>
-            <th class="text-black">Traité à</th>
-            <th class="text-black">Traité par</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach($requests as $request)
-            @php
-                $status = $request['status'] ?? null;
-                $bgColor = get_request_status_badge($status);
-                $badgeText = get_request_status_text($status);
-            @endphp
+
+<div class="scrollable-table-container">
+    <table class="table table-striped table-hover">
+        <thead class="thead-light sticky-header">
             <tr>
-                <td class="align-middle">{{ $request['id'] }}</td>
-                <td class="align-middle">
-                    <div class="d-flex flex-column">
-                        <span>{{ $request['created_at']->format('Y-m-d H:i') }}</span>
-                        <small class="text-muted">{{ $request['created_diff'] }}</small>
-                    </div>
-                </td>
-                <td class="align-middle">
-                    <span class="fw-medium">{{ $request['book_title'] }}</span>
-                </td>
-                <td class="align-middle">
-                    <span class="badge bg-{{ $bgColor }}"> {{$badgeText}} </span>
-                </td>
-                <td class="align-middle">
-                    @if($request['processed_at'])
-                    <div class="d-flex flex-column">
-                        <span>{{ $request['processed_at']->format('Y-m-d H:i') }}</span>
-                        <small class="text-muted">{{ $request['processed_diff'] }}</small>
-                    </div>
-                    @else
-                    <span class="text-muted">N/A</span>
-                    @endif
-                </td>
-                <td>
-                    {{$request['processed_by']}}
-                </td>
+                <th class="text-black">ID</th>
+                <th class="text-black">Date demande</th>
+                <th class="text-black">Titre</th>
+                <th class="text-black">Statut</th>
+                <th class="text-black">Traité à</th>
+                <th class="text-black">Traité par</th>
             </tr>
-        @endforeach
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach($requests as $request)
+                @php
+                    $status = $request['status'] ?? null;
+                    $bgColor = get_request_status_badge($status);
+                    $badgeText = get_request_status_text($status);
+                @endphp
+                <tr>
+                    <td class="align-middle">{{ $request['id'] }}</td>
+                    <td class="align-middle">
+                        <div class="d-flex flex-column">
+                            <span>{{ $request['created_at']->format('Y-m-d H:i') }}</span>
+                            <small class="text-muted">{{ $request['created_diff'] }}</small>
+                        </div>
+                    </td>
+                    <td class="align-middle">
+                        <span class="fw-medium">{{ $request['book_title'] }}</span>
+                    </td>
+                    <td class="align-middle">
+                        <span class="badge bg-{{ $bgColor }}"> {{$badgeText}} </span>
+                    </td>
+                    <td class="align-middle">
+                        @if($request['processed_at'])
+                        <div class="d-flex flex-column">
+                            <span>{{ $request['processed_at']->format('Y-m-d H:i') }}</span>
+                            <small class="text-muted">{{ $request['processed_diff'] }}</small>
+                        </div>
+                        @else
+                        <span class="text-muted">N/A</span>
+                        @endif
+                    </td>
+                    <td>
+                        {{$request['processed_by']}}
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
 
 <!-- Pagination -->
 <div >

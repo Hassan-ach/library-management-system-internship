@@ -114,16 +114,9 @@
 
                                         <dt class="col-sm-4">Statut du compte:</dt>
                                         <dd class="col-sm-8">
-                                            @php
-                                                $status = $user->is_active ?? 'active';
-                                                $badgeClass = '';
-                                                switch ($status) {
-                                                    case true: $badgeClass = 'badge-success'; $status = 'active'; break;
-                                                    case false: $badgeClass = 'badge-secondary'; $status = 'active'; break;
-                                                    default: $badgeClass = 'badge-secondary'; break;
-                                                }
-                                            @endphp
-                                            <span class="badge {{ $badgeClass }}">{{ ucfirst($status) }}</span>
+                                            <span class="badge {{ $user->is_active ? 'bg-success' : 'bg-danger' }}">
+                                                {{ $user->is_active ? 'Actif' : 'Inactif' }}
+                                            </span>
                                         </dd>
                                         
                                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">

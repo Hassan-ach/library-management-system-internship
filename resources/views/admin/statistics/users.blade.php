@@ -36,7 +36,7 @@ use App\Enums\RequestStatus;
                 <div class="container col-11">
                     <form action="{{ route('admin.statistics.users.search') }}" method="GET" class="row g-3">
                         <div class="col-md-4">
-                            <label for="search" class="form-label">Théremes de recherches</label>
+                            <label for="search" class="form-label">critères de recherches</label>
                             <input type="text" class="form-control" id="search" name="search"
                                 placeholder="Chercher par id, nom, email, etc..." value="{{ request('search') }}">
                         </div>
@@ -84,11 +84,11 @@ use App\Enums\RequestStatus;
 
         @if(request()->hasAny(['search', 'role', 'status']))
             <div class="alert alert-info mb-3">
-                Showing results for:
-                @if(request('search')) <strong>Search:</strong> {{ request('search') }} @endif
-                @if(request('role')) <strong>Role:</strong> {{ ucfirst(request('role')) }} @endif
-                @if(request('status')) <strong>Status:</strong> {{ ucfirst(request('status')) }} @endif
-                <a href="{{ route('admin.statistics.users') }}" class="float-end">Show all</a>
+                Afficher les resultats pour:
+                @if(request('search')) <strong> {{ request('search') }} </strong> @endif
+                @if(request('role')) <strong> {{ ucfirst(request('role')) }} </strong>@endif
+                @if(request('status')) <strong> {{ ucfirst(request('status')) }} </strong>@endif
+                <a href="{{ route('admin.statistics.users') }}" class="float-end">Afficher tout</a>
             </div>
         @endif
         {{-- Search and filter --}}
@@ -134,7 +134,8 @@ use App\Enums\RequestStatus;
                                         @endphp
 
                                         <span class="badge bg-{{ $bgColor }}"> {{$badgeText}} </span>
-                                        ({{ $latestInfo->created_at->diffForHumans() }})
+                                        <small>({{ "il y'a " . str_replace([' hours ago', 'hour ago'], 'h', $latestInfo?->created_at->diffForHumans()) }}) </small>
+                                        
                                     @else
                                         <span class="badge bg-secondary">pas d'activié</span>
                                     @endif
@@ -142,7 +143,7 @@ use App\Enums\RequestStatus;
                                 <td>{{$latestRequest->book?->title ?? 'N/A'}}</td>
                                 <td style="text-align: center;">
                                     <span class="badge {{ $user->is_active ? 'bg-success' : 'bg-danger' }}">
-                                        {{ $user->is_active ? 'Active' : 'Inactive' }}
+                                        {{ $user->is_active ? 'Actif' : 'Inactif' }}
                                     </span>
                                 </td>
                                 <td style="text-align: center;">

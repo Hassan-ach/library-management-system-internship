@@ -31,9 +31,9 @@
             <div class="container col-11">
                 <form action="{{ route('admin.statistics.books.search') }}" method="GET" class="row g-3">
                 <div class="col-md-8">
-                    <label for="search" class="form-label">Terme de recherche</label>
+                    <label for="search" class="form-label">critères de recherches</label>
                     <input type="text" class="form-control" id="search" name="search"
-                        placeholder="Rechercher par titre, ISBN, etc." value="{{ request('search') }}">
+                        placeholder="Rechercher par titre, ISBN, etc..." value="{{ request('search') }}">
                 </div>
                 <div class="col-md-4 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary w-100">
@@ -91,7 +91,7 @@
     </div>
     <div class="mt-3">
         <a href="{{ route('admin.statistics.books.export') }}" class="btn btn-success mr-2">
-            <i class="fas fa-file-excel mr-2"></i> Export
+            <i class="fas fa-file-excel mr-2"></i> Exporter
         </a>
     </div>
     {{ $books->withQueryString()->links('pagination::bootstrap-5') }}

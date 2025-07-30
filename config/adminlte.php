@@ -349,6 +349,7 @@ return [
                 [
                     'text' => 'Les livres',
                     'url' => 'admin/statistics/books',
+                    'active' => ['admin/statistics/books*'],
                 ],
             ],
         ],
