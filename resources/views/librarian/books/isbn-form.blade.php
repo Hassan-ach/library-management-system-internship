@@ -6,6 +6,10 @@
     <h1 class="m-0 text-dark">Ajouter un livre par ISBN</h1>
 @stop
 
+@section('js')
+    @parent
+@stop
+
 @section('content')
     <div class="row">
         <div class="col-md-8 offset-md-2"> {{-- Centering the card --}}

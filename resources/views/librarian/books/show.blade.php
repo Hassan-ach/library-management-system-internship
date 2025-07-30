@@ -5,22 +5,12 @@
 @section('content_header')
     <h1 class="m-0 text-dark">Détails du livre</h1>
 @stop
-
+@section('js')
+    @parent
+@stop
 @section('content')
     <div class="row">
         <div class="col-12">
-            {{-- Display success/error messages --}}
-            @if(session('success'))
-                <x-adminlte-alert theme="success" title="Succès">
-                    {{ session('success') }}
-                </x-adminlte-alert>
-            @endif
-            @if(session('error'))
-                <x-adminlte-alert theme="danger" title="Erreur">
-                    {{ session('error') }}
-                </x-adminlte-alert>
-            @endif
-
             <x-adminlte-card title="Informations sur le livre" theme="primary" icon="fas fa-book-reader" >
                 <div class="card-body" style="//border: black solid 1px,">
                     <div class="row">

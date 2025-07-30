@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Tous les livres')
+@section('title', $header ?? 'Tous les livres')
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
-        <h1>Tous les livres</h1>
+        <h1>{{  $header ?? 'Tous les livres'}}</h1>
 
         <form action="{{ route('librarian.books.search') }}" method="GET" class="ml-auto" style="width: 30%; max-width:350px;">
             <div class="input-group">
@@ -21,17 +21,6 @@
 
 @section('content')
     <div class="container-fluid">
-           {{-- Display success/error messages --}}
-        @if(session('success'))
-            <x-adminlte-alert theme="success" title="Succès">
-                {{ session('success') }}
-            </x-adminlte-alert>
-        @endif
-        @if(session('error'))
-            <x-adminlte-alert theme="danger" title="Erreur">
-                {{ session('error') }}
-            </x-adminlte-alert>
-        @endif
         @if( $books)
             <div class="row">
                 @forelse ($books as $book)
@@ -140,8 +129,8 @@
 @stop
 
 @section('js')
+@parent
 <script>
-
     $('#deleteModal').on('show.bs.modal', function (event) {
 
         var button = $(event.relatedTarget);

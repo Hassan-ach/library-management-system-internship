@@ -10,24 +10,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12">
-            {{-- Afficher les messages de session --}}
-            @if(session('success'))
-                <x-adminlte-alert theme="success" title="Succès">
-                    {{ session('success') }}
-                </x-adminlte-alert>
-            @endif
-            @if(session('error'))
-                <x-adminlte-alert theme="danger" title="Erreur">
-                    {{ session('error') }}
-                </x-adminlte-alert>
-            @endif
-            @if(session('info')) {{-- Ajout pour les messages d'info --}}
-                <x-adminlte-alert theme="info" title="Information">
-                    {{ session('info') }}
-                </x-adminlte-alert>
-            @endif
-
+        <div class="col-12">    
             <x-adminlte-card title="Informations sur la Demande" theme="primary" icon="fas fa-info-circle">
                 <div class="row">
                     <div class="col-md-6">
