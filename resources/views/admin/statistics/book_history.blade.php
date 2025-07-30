@@ -21,31 +21,31 @@
                 <table class="table table-hover">
                     <thead class="thead-light">
                         <tr>
-                            <th>1Utilisateur</th>
-                            <th>2Date de sortie</th>
-                            <th>3Bibliothécaire (emprunt)</th>
-                            <th>4Retourné</th>
-                            <th>5Date de retour</th>
-                            <th>6Bibliothécaire (retour)</th>
-                            <th>7Durée d'emprint</th>
+                            <th>Utilisateur</th>
+                            <th>Date de sortie</th>
+                            <th>Bibliothécaire (emprunt)</th>
+                            <th>Retourné</th>
+                            <th>Date de retour</th>
+                            <th>Bibliothécaire (retour)</th>
+                            <th>Durée d'emprint</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($borrowings as $borrowing)
                         <tr class="{{ $borrowing['is_returned'] ? 'table-success' : 'table-warning' }}">
-                            <td>1{{ $borrowing['user_name'] }}</td>
-                            <td>2{{ $borrowing['borrow_date'] }}</td>
-                            <td>3{{ $borrowing['librarian_borrowed'] }}</td>
-                            <td>4
+                            <td>{{ $borrowing['user_name'] }}</td>
+                            <td>{{ $borrowing['borrow_date'] }}</td>
+                            <td>{{ $borrowing['librarian_borrowed'] }}</td>
+                            <td>
                                 @if($borrowing['is_returned'])
                                     <span class="badge bg-success">Retourné</span>
                                 @else
                                     <span class="badge bg-warning text-dark">Emprunté</span>
                                 @endif
                             </td>
-                            <td>5{{ $borrowing['return_date'] ?? '-' }}</td>
-                            <td>6{{ $borrowing['librarian_returned'] ?? '-' }}</td>
-                            <td>7{{ $borrowing['duration'] }}</td>
+                            <td>{{ $borrowing['return_date'] ?? '-' }}</td>
+                            <td>{{ $borrowing['librarian_returned'] ?? '-' }}</td>
+                            <td>{{ $borrowing['duration'] }}</td>
                         </tr>
                         @empty
                         <tr>
