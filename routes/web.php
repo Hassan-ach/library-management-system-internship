@@ -73,7 +73,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/requests/{id}', [LibrarianRequestController::class, 'show'])->name('requests.show');
         Route::get('/requests/{reqId}/details', [LibrarianRequestController::class, 'showDetails'])->name('requests.details');
         Route::post('/requests/{id}', [LibrarianRequestController::class, 'process'])->name('requests.process');
-        Route::get('/students/{id}', [StudentStatisticsController::class, 'index'])->name('students.statistics');
+        Route::get('/students/{student}', [StudentStatisticsController::class, 'index'])->name('students.statistics');
 
         // display a list of all books
         Route::get('/books', [LibrarianBookController::class, 'index'])->name('books.index');
