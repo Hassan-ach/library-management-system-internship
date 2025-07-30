@@ -7,7 +7,13 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Edit {{$user->role}}: {{ $user->first_name }} {{ $user->last_name }}</h4>
+                        @if ($user->role->value === 'student')
+                            <h4>Modifier étudiant : {{ $user->first_name }} {{ $user->last_name }}</h4>
+                        @elseif ($user->role->value === 'admin')
+                            <h4>Modifier admin : {{ $user->first_name }} {{ $user->last_name }}</h4>
+                        @elseif ($user->role->value === 'librarian')
+                            <h4>Modifier bibliothécaire : {{ $user->first_name }} {{ $user->last_name }}</h4>
+                        @endif
                     </div>
                     <div class="card-body">
                         @if(session('success'))
@@ -28,7 +34,7 @@
                             
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <label for="first_name" class="form-label">First Name</label>
+                                    <label for="first_name" class="form-label">Prénom</label>
                                     <input type="text" class="form-control @error('first_name') is-invalid @enderror" 
                                            id="first_name" name="first_name" 
                                            value="{{ old('first_name', $user->first_name) }}">
@@ -38,7 +44,7 @@
                                 </div>
                                 
                                 <div class="col-md-6">
-                                    <label for="last_name" class="form-label">Last Name</label>
+                                    <label for="last_name" class="form-label">Nom</label>
                                     <input type="text" class="form-control @error('last_name') is-invalid @enderror" 
                                            id="last_name" name="last_name" 
                                            value="{{ old('last_name', $user->last_name) }}">
@@ -63,12 +69,12 @@
                                 <input type="hidden" name="is_active" value="0">
                                 <input type="checkbox" class="form-check-input" id="is_active" name="is_active" value="1"
                                     {{ old('is_active', $user->is_active) ? 'checked' : '' }}>
-                                <label class="form-check-label" for="is_active">Active User</label>
+                                <label class="form-check-label" for="is_active">Utilisateur actif</label>
                             </div>
                             
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                <a href="{{ route('admin.users.all') }}" class="btn btn-secondary me-md-2">Cancel</a>
-                                <button type="submit" class="btn btn-primary">Update User</button>
+                                <a href="{{ route('admin.users.all') }}" class="btn btn-secondary me-md-2">Annulé</a>
+                                <button type="submit" class="btn btn-primary">Mise à jour</button>
                             </div>
                         </form>
                     </div>

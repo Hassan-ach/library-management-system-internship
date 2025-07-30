@@ -24,35 +24,35 @@
 
 @section('content')
 <div class="container mb-4">
-    <h1>Users</h1>
+    <h1>Étudiants</h1>
         
     {{-- Search and filter --}}
     <div class="card mb-4">
         <div class="card-header">
-            <h5 class="mb-0">Search Users</h5>
+            <h5 class="mb-0">Chercher des étudiants</h5>
         </div>
         <div class="card-body">
             <form action="{{ route('admin.users.search') }}" method="GET" class="row g-3">
                 <div class="col-md-4">
-                    <label for="search" class="form-label">Search Term</label>
+                    <label for="search" class="form-label">Théremes de recherches</label>
                     <input type="text" class="form-control" id="search" name="search" 
-                        placeholder="Search by name, email, etc." value="{{ request('search') }}">
+                        placeholder="Chercher par id, nom, email, etc..." value="{{ request('search') }}">
                 </div>
                 <div class="col-md-4">
-                    <label for="role" class="form-label">Role</label>
+                    <label for="role" class="form-label">Rôle</label>
                     <select class="form-select" id="role" name="role" style="cursor: pointer;">
-                        <option value="">All Roles</option>
-                        <option value="student" {{ request('role') == 'student' ? 'selected' : '' }}>Student</option>
+                        <option value="">Tous les rôles</option>
+                        <option value="student" {{ request('role') == 'student' ? 'selected' : '' }}>Étudiant</option>
                         <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                        <option value="librarian" {{ request('role') == 'librarian' ? 'selected' : '' }}>Librarian</option>
+                        <option value="librarian" {{ request('role') == 'librarian' ? 'selected' : '' }}>Bibliothecaires</option>
                     </select>
                 </div>
                 <div class="col-md-4">
-                    <label for="status" class="form-label">Status</label>
+                    <label for="status" class="form-label">Statut</label>
                     <select class="form-select" id="status" name="status" style="cursor: pointer;">
                         <option value="">All Statuses</option>
-                        <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
-                        <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                        <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Actif</option>
+                        <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactif</option>
                     </select>
                 </div>
                 <div class="col-md-6 d-flex align-items-end">
@@ -72,7 +72,7 @@
     {{-- Create user --}}
     <div class="col-md-6 d-flex align-items-end mb-3">
         <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#createUserModal">
-            <i class="fa-solid fa-user-plus me-2"></i> Create user
+            <i class="fa-solid fa-user-plus me-2"></i> Créer un utilisateur
         </a>
     </div>
 
@@ -93,13 +93,13 @@
             <thead class="sticky-header">
                 <tr>
                     <th>Id</th>
-                    <th>Firstname</th>
-                    <th>Lastname</th>
+                    <th>Prénom</th>
+                    <th>Nom</th>
                     <th>Email</th>
-                    <th>Role</th>
-                    <th>Status</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
+                    <th>Rôle</th>
+                    <th style="text-align: center;">Statut</th>
+                    <th style="text-align: center;">Modifier</th>
+                    <th style="text-align: center;">Supprimer</th>
                 </tr>
             </thead>
             <tbody>
@@ -110,19 +110,19 @@
                         <td>{{ $user->last_name }}</td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->role->value }}</td>
-                        <td>
+                        <td style="text-align: center;">
                             <span class="badge {{ $user->is_active ? 'bg-success' : 'bg-danger' }}">
                                 {{ $user->is_active ? 'Active' : 'Inactive' }}
                             </span>
                         </td>
-                        <td>
+                        <td style="text-align: center;">
                             <a href="{{ route('admin.users.update', $user->id) }}" 
                                class="btn btn-warning btn-sm" 
                                title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
                         </td>
-                        <td>
+                        <td style="text-align: center;">
                             <form action="{{ route('admin.users.delete', $user->id) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')

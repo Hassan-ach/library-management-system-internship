@@ -54,7 +54,7 @@
                                         
                                         <div class="row mb-3">
                                             <div class="col-md-6">
-                                                <label for="first_name" class="form-label">First Name</label>
+                                                <label for="first_name" class="form-label">Prénom</label>
                                                 <input type="text" class="form-control @error('first_name') is-invalid @enderror" 
                                                     id="first_name" name="first_name" 
                                                     value="{{ old('first_name', $user->first_name) }}">
@@ -64,7 +64,7 @@
                                             </div>
                                             
                                             <div class="col-md-6">
-                                                <label for="last_name" class="form-label">Last Name</label>
+                                                <label for="last_name" class="form-label">Nom</label>
                                                 <input type="text" class="form-control @error('last_name') is-invalid @enderror" 
                                                     id="last_name" name="last_name" 
                                                     value="{{ old('last_name', $user->last_name) }}">
@@ -86,7 +86,7 @@
 
                                         <!-- Current Password (only required when changing password) -->
                                         <div class="mb-3">
-                                            <label for="current_password" class="form-label">Current Password (only if changing password)</label>
+                                            <label for="current_password" class="form-label">Mot de passe actuel (seulement si vous voulez le changez)</label>
                                             <input type="password" class="form-control @error('current_password') is-invalid @enderror" 
                                                 id="current_password" name="current_password">
                                             @error('current_password')
@@ -96,7 +96,7 @@
 
                                         <!-- New Password (optional) -->
                                         <div class="mb-3">
-                                            <label for="password" class="form-label">New Password (leave blank to keep current)</label>
+                                            <label for="password" class="form-label">noveau mot de passe</label>
                                             <input type="password" class="form-control @error('password') is-invalid @enderror" 
                                                 id="password" name="password">
                                             <div class="form-text">If changing, must be at least 8 characters with numbers and mixed case</div>
@@ -107,7 +107,7 @@
 
                                         <!-- Confirm New Password (only required if password is provided) -->
                                         <div class="mb-3">
-                                            <label for="password_confirmation" class="form-label">Confirm New Password</label>
+                                            <label for="password_confirmation" class="form-label">Confirmer mot de passe</label>
                                             <input type="password" class="form-control" 
                                                 id="password_confirmation" name="password_confirmation">
                                         </div>
