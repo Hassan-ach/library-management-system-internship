@@ -121,7 +121,7 @@
                             <div class="mb-3 p-3 border-left border-{{ $statusClass }}">
                                 <div class="d-flex justify-content-between">
                                     <span class="badge badge-{{ $statusClass }}">
-                                        {{ ucfirst($info->status->value) }}
+                                        {{ ucfirst(get_request_status_text($info->status)) }}
                                     </span>
                                     <small class="text-muted">
                                         {{ $info->created_at->format('d/m/Y H:i') }}

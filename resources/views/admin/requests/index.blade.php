@@ -1,4 +1,4 @@
-@extends('admin.dashboard')
+@extends('layouts.app') {{-- Corrected: Should extend your main application layout --}}
 
 @section('title', 'Gestion des demandes d\'emprunt')
 
@@ -29,7 +29,7 @@
                             <select id="statusFilter" class="form-control select2">
                                 <option value="">Toutes les demandes</option>
                                 @foreach($statuses as $status)
-                                    <option value="{{ $status->value }}">{{ ucfirst($status->value) }}</option>
+                                    <option value="{{ $status->value }}" {{ request('status') == $status->value ? 'selected' : '' }}>{{ ucfirst($status->value) }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -48,60 +48,20 @@
                                         <th>Date de demande</th>
                                         <th>Statut</th>
                                         <th>Date d'échéance</th>
-                                        <th >Actions</th>
                                     </tr>
                                 </thead>
-                        {{-- Dans resources/views/librarian/requests/index.blade.php --}}
                                 <tbody style="cursor: pointer;">
                                     @foreach($requests as $request)
-                                        <tr data-request-id="{{ $request->id }}"> {{-- Ajout de data-request-id --}}
+                                        <tr data-request-id="{{ $request->id }}">
                                             <td>{{ $request->id }}</td>
                                             <td>{{ $request->book?->title ?? 'Livre inconnu' }}</td>
                                             <td>{{ $request->user->first_name.' '.$request->user->last_name ?? 'Utilisateur inconnu' }}</td>
                                             <td>{{ $request->created_at->format('d/m/Y H:i') }}</td>
                                             <td>
-                                                @php
-                                                    $status = $request->latestRequestInfo->status->value ?? 'N/A';
-                                                    $badgeClass = '';
-                                                    switch ($status) {
-                                                        case 'pending': $badgeClass = 'badge-warning'; break;
-                                                        case 'approved': $badgeClass = 'badge-info'; break;
-                                                        case 'borrowed': $badgeClass = 'badge-primary'; break;
-                                                        case 'returned': $badgeClass = 'badge-success'; break;
-                                                        case 'rejected': $badgeClass = 'badge-danger'; break;
-                                                        case 'cancelled': $badgeClass = 'badge-secondary'; break;
-                                                        case 'overdue': $badgeClass = 'badge-danger'; break;
-                                                        default: $badgeClass = 'badge-secondary'; break;
-                                                    }
-                                                @endphp
-                                                <span class="badge {{ $badgeClass }}">{{ ucfirst($status) }}</span>
-                                            </td>
+                                            <x-status-badge :status="$request->latestRequestInfo->status->value" />
+                                       </td>
                                             <td>
-                                                    {{ $request->return_date() ? $request->return_date()->format('d/m/Y') : 'N/A' }}
-                                            </td>
-                                            <td> {{-- Colonne Actions --}}
-                                                {{-- Button to trigger the details modal --}}
-                                                <button type="button" class="btn btn-xs btn-info view-request-details-btn"
-                                                        data-toggle="modal" data-target="#librarianRequestDetailsModal"
-                                                        data-request-id="{{ $request->id }}"
-                                                        title="Voir les détails">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
-                                                {{-- Status Change Dropdown (direct action) --}}
-                                                <form action="{{ route('librarian.requests.process', $request->id) }}" method="POST" class="d-inline status-update-form">
-                                                    @csrf
-                                                    <select name="status" class="form-control form-control-sm d-inline-block w-auto status-dropdown"
-                                                            data-current-status="{{ $status }}">
-                                                        <option value="">Changer statut</option>
-                                                        @foreach($statuses as $s)
-                                                            <option value="{{ $s->value }}" {{ $status === $s->value ? 'selected' : '' }}>
-                                                                {{ ucfirst($s->value) }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                    {{-- Hidden button to trigger submission, or submit via JS on change --}}
-                                                    <button type="submit" class="d-none"></button>
-                                                </form>
+                                                {{ $request->return_date() ? $request->return_date()->format('d/m/Y') : 'N/A' }}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -109,25 +69,26 @@
                             </table>
                         </div>
                         <div class="d-flex justify-content-center mt-3">
-                            {{ $requests->links('pagination::bootstrap-4') }}
+                            {{ $requests->appends(request()->query())->links('pagination::bootstrap-4') }}
                         </div>
                     @endif
                 </div>
             </x-adminlte-card>
         </div>
     </div>
-
-    {{-- Include the Librarian Request Details Modal Component --}}
-    @include('admin.requests.modal.request-details-modal')
 @stop
 
 @section('js')
     @parent
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.4.8/sweetalert2.min.js"></script>
+
     <script>
         $(document).ready(function() {
+            // Initialize Select2 for the filter dropdown
+            $('.select2').select2({
+                placeholder: "Sélectionner un statut",
+                allowClear: true
+            });
+
             // Initialize DataTables
             var requestsTable = $('#requestsTable').DataTable({
                 "paging": true,
@@ -137,60 +98,31 @@
                 "info": true,
                 "autoWidth": false,
                 "responsive": true,
-                "columnDefs": [
-                    { "orderable": false, "targets": [6] } // Disable ordering on Actions column
-                ]
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/French.json"
+                },
+                // Removed columnDefs as there's no specific column to disable ordering on anymore
             });
 
-            // Filter requests by status
+            // Filter requests by status using DataTables API
             $('#statusFilter').on('change', function() {
                 var status = $(this).val();
-                requestsTable.column(4).search(status).draw(); // Column 4 is 'Statut'
-            });
-
-            // Handle status change dropdown submission
-            $('.status-dropdown').on('change', function() {
-                var selectedStatus = $(this).val();
-                var currentStatus = $(this).data('current-status');
-                if (selectedStatus && selectedStatus !== currentStatus) {
-                    var form = $(this).closest('form');
-                    Swal.fire({
-                        title: 'Confirm status change?',
-                        text: `Change request status to "${selectedStatus}"?`,
-                        icon: 'question',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, change!',
-                        cancelButtonText: 'Cancel'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            form.submit(); // Submit the form
-                        } else {
-                            // Revert dropdown to original value if cancelled
-                            $(this).val(currentStatus);
-                        }
-                    });
-                }
+                // Column 4 is 'Statut' (0-indexed)
+                requestsTable.column(4).search(status).draw();
             });
 
             // Handle row click to go to request details page
             $('#requestsTable tbody').on('click', 'tr', function(event) {
-                 // Check if click is in the 'Actions' column (index 6)
-                 var clickedCellIndex = $(event.target).closest('td').index();
-
-                 // Do nothing if click is in Actions column
-                 if (clickedCellIndex === 6) {
-                     return;
-                 }
-
-                 // Otherwise, navigate to the request details page
+                 // No need to check clickedCellIndex anymore as there are no action buttons
                  var requestId = $(this).data('request-id');
                  if (requestId) {
-                     var showUrl = '/admin/requests/' + requestId;
-                     window.location.href = showUrl;
+                     window.location.href = '{{ url('admin/requests') }}/' + requestId;
                  }
              });
         });
     </script>
+@stop
+
+@section('css')
+    @parent
 @stop
