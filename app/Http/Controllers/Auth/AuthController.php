@@ -24,7 +24,7 @@ class AuthController extends Controller
 
         $req->session()->regenerate();
 
-        return redirect()->intended('/')->with('message', 'Connecté avec succès.'); // Translated
+        return redirect()->intended('/')->with(['info' => 'Connecté avec succès.']); // Translated
     }
 
     public function logout(Request $request)
@@ -33,6 +33,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login')->with('message', 'Déconnecté avec succès.'); // Translated
+        return redirect('/login')->with(['info' => 'Déconnecté avec succès.']); // Translated
     }
 }
