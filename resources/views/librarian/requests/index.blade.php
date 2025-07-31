@@ -17,7 +17,7 @@
                             <select id="statusFilter" class="form-control select2">
                                 <option value="">Toutes les demandes</option>
                                 @foreach($statuses as $status)
-                                    <option value="{{ $status->value }}">{{ ucfirst($status->value) }}</option>
+                                    <option value="{{ $status->value }}">{{ ucfirst(get_request_status_text(App\Enums\RequestStatus::from($status->value))) }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -69,7 +69,7 @@
                         <option value="">Changer statut</option>
                         @foreach($statuses as $s)
                             <option value="{{ $s->value }}" {{ $status === $s->value ? 'selected' : '' }}>
-                                {{ ucfirst($s->value) }}
+                                {{ ucfirst(get_request_status_text(App\Enums\RequestStatus::from($s->value))) }}
                             </option>
                         @endforeach
                     </select>
@@ -129,14 +129,14 @@
                 if (selectedStatus && selectedStatus !== currentStatus) {
                     var form = $(this).closest('form');
                     Swal.fire({
-                        title: 'Confirm status change?',
-                        text: `Change request status to "${selectedStatus}"?`,
+                        title: 'Confirmation',
+                        text: `Changer le statue vers "${selectedStatus}" ?`,
                         icon: 'question',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, change!',
-                        cancelButtonText: 'Cancel'
+                        confirmButtonText: 'Oui, changer',
+                        cancelButtonText: 'Annuler'
                     }).then((result) => {
                         if (result.isConfirmed) {
                             form.submit(); // Submit the form

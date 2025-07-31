@@ -52,11 +52,6 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Gate::define('processe_req', function (User $user, Student $student, RequestStatus $status) {
-            // Basic checks - user must be active librarian
-            if (! $user->is_active || $user->role != UserRole::LIBRARIAN) {
-                return false;
-            }
-
             // Only check borrowed books limit for APPROVED status
             if (in_array($status, [RequestStatus::APPROVED])) {
                 return $student->get_totale_borrowed_books() < Setting::find(1)?->NOMBRE_EMPRUNTS_MAX;
@@ -67,13 +62,13 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Gate::define('student', function (User $user) {
-            return $user->role === UserRole::STUDENT;
+            return $user->is_active && $user->role === UserRole::STUDENT;
         });
         Gate::define('librarian', function (User $user) {
-            return $user->role === UserRole::LIBRARIAN;
+            return $user->is_active && $user->role === UserRole::LIBRARIAN;
         });
         Gate::define('admin', function (User $user) {
-            return $user->role === UserRole::ADMIN;
+            return $user->is_active && $user->role === UserRole::ADMIN;
         });
 
     }
