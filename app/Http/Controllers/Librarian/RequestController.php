@@ -19,7 +19,14 @@ class RequestController extends Controller
     {
 
         try {
-            // 1. Fetch the request with related book
+            // 1. Authorization check
+            if (! Gate::allows('librarian')) { // Verify permission name
+                return back()->with([
+                    'error' => 'Vous n\'êtes pas autorisé à traiter cette demande.',
+                ]);
+            }
+
+            // 2. Fetch the request with related book
             /** @var BookRequest $bookRequest */
             $bookRequest = BookRequest::with('book', 'user')->findOrFail($reqId);
 
@@ -29,28 +36,20 @@ class RequestController extends Controller
             ]);
             $newStatusEnum = RequestStatus::from($validatedData['status']); // Convert to Enum
 
-            // 3. Authorization check
-            $student = Student::findOrFail($bookRequest?->user?->id);
-            if (! Gate::allows('processe_req', [$student, $newStatusEnum])) { // Verify permission name
-                return back()->with([
-                    'error' => 'Vous n\'êtes pas autorisé à traiter cette demande.',
-                ]);
-            }
-
             $newStatusValue = $newStatusEnum->value;
-
-            // 4. Get the current status
+            
+            // 3. Get the current status
             $currentStatusEnum = $bookRequest->latestRequestInfo?->status;
             $currentStatusValue = $currentStatusEnum?->value;
 
-            // 5. Prevent setting the same status
+            // 4. Prevent setting the same status
             if ($currentStatusValue && $currentStatusValue === $newStatusValue) {
                 return back()->with([
-                    'info' => 'La demande est déjà dans l\'état : '.ucfirst($newStatusValue),
+                    'info' => 'La demande est déjà dans l\'état : '.ucfirst(get_request_status_text(RequestStatus::from($newStatusValue))),
                 ]);
             }
 
-            // 6. Define allowed status transitions
+            // 5. Define allowed status transitions
             $allowedTransitions = [
                 RequestStatus::PENDING->value => [
                     RequestStatus::APPROVED->value,
@@ -69,14 +68,23 @@ class RequestController extends Controller
                 ],
             ];
 
-            // 7. Check if the requested transition is allowed
+            // 6. Check if the requested transition is allowed
             $isTransitionAllowed = isset($allowedTransitions[$currentStatusValue]) &&
                                    in_array($newStatusValue, $allowedTransitions[$currentStatusValue]);
 
-            // Handle transitions from terminal states or disallowed transitions
+            // 7. Handle transitions from terminal states or disallowed transitions
             if (! $isTransitionAllowed) {
                 return back()->with([
-                    'error' => "Transition d'état invalide de '$currentStatusValue' vers '$newStatusValue'.",
+                    'error' => "Transition d'état invalide de ". get_request_status_text(RequestStatus::from($currentStatusValue)) . " vers " .get_request_status_text(RequestStatus::from($newStatusValue))
+                ]);
+            }
+            
+
+            // 8. Student check 
+            $student = Student::findOrFail($bookRequest?->user?->id);
+            if (! Gate::allows('processe_req', [$student, $newStatusEnum])) { // Verify permission name
+                return back()->with([
+                    'error' => 'Cet étudiant n\'est pas autorisé à emprunter de livres.',
                 ]);
             }
 
@@ -101,7 +109,7 @@ class RequestController extends Controller
 
             // 10. Success response
             return back()->with([
-                'success' => 'Statut mis à jour avec succès vers '.ucfirst($newStatusValue),
+                'success' => 'Statut mis à jour avec succès vers '.ucfirst(get_request_status_text(RequestStatus::from($newStatusValue))),
             ]);
 
         } catch (ModelNotFoundException $e) {
