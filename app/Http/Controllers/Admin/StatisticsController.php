@@ -294,12 +294,18 @@ class StatisticsController extends Controller
                     ->sortByDesc('created_at')
                     ->first();
 
+                $librarian_returned = 'non retourner';
+
+                if($returnInfo){
+                    $librarian_returned = $returnInfo->user->first_name.' '.$returnInfo->user->lastname;
+                }
+
                 return [
                     'user_name' => $request->user->first_name.' '.$request->user->last_name,
                     'borrow_date' => $borrowInfo->created_at->format('Y-m-d H:i'),
                     'librarian_borrowed' => $borrowInfo->user->first_name.' '.$borrowInfo->user->first_name ?? "n'est pas emprunté",
                     'return_date' => $returnInfo ? $returnInfo->created_at->format('Y-m-d H:i') : null,
-                    'librarian_returned' => $returnInfo->user->first_name.' '.$returnInfo->user->lastname ?? 'non retourner',
+                    'librarian_returned' => $librarian_returned,
                     'is_returned' => ! is_null($returnInfo),
                     'duration' => $returnInfo
                         ? $borrowInfo->created_at->diffForHumans($returnInfo->created_at, true)
