@@ -323,17 +323,17 @@ return [
             'can' => 'admin',
         ],
         [
-            'text' => 'Gestion des utilisateurs',
-            'url' => 'admin/users/index',
-            'icon' => 'fas fa-fw fa-users',
-            'active' => ['admin/users/*'],
-            'can' => 'admin',
-        ],
-        [
             'text' => 'Demandes d\'emprunt',
             'url' => 'admin/requests',
             'icon' => 'fas fa-fw fa-clipboard-list',
             'active' => ['admin/requests*'],
+            'can' => 'admin',
+        ],
+        [
+            'text' => 'Gestion des utilisateurs',
+            'url' => 'admin/users/index',
+            'icon' => 'fas fa-fw fa-users',
+            'active' => ['admin/users/*'],
             'can' => 'admin',
         ],
         [
