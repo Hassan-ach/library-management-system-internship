@@ -760,7 +760,7 @@
 
                 <div class="text-right">
                     <button type="submit" class="btn btn-success " style='width:10%'>
-                        <i class="fas fa-save pr-2"></i> Submit
+                        <i class="fas fa-save pr-2"></i> Enregistrer
                     </button>
                 </div>
             </div>

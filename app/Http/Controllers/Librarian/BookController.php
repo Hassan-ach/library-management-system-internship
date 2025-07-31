@@ -125,10 +125,10 @@ class BookController extends Controller
                 'title' => 'required | string',
                 'isbn' => 'required | string | unique:books', /* the validation process should be stopped if isbn not valide */
                 'image_url' => 'nullable | url',
-                'description' => 'string',
                 'publication_date' => 'date',
                 'number_of_pages' => 'integer',
                 'total_copies' => 'required | integer',
+                'description' => 'string',
                 'tags' => 'required',
                 'tags.old' => 'array ',
                 'tags.new' => 'array',
@@ -146,13 +146,15 @@ class BookController extends Controller
             // handle the validated data using services class
             $this->services->createBook($validated);
 
-            // return a View showed that the book was created
-            // should change to books.show if successe and return back if fail
             return redirect('librarian/books')->with(['success' => 'Livre ajouté avec succès !']);
 
         } catch (ValidationException $e) {
             // return $e;
-            return back()->with(['error'=>'les informations que vous avez saisi ne sont pas valides']);
+            $non_valid_field = array_keys($e->errors())[0];
+            if( $non_valid_field === 'isbn' && $e->errors()['isbn'][0] === "The isbn has already been taken."){
+                return back()->withInput()->with(['error'=>'L\'ISBN que vous avez saisi est déjà attribué à un autre livre']);
+            }
+            return back()->withInput()->with(['error'=>'les informations que vous avez saisi ne sont pas valides ( '.$non_valid_field.' )']);
         } catch (\Throwable $th) {
             return back()->with(['error'=> 'Une erreur s\'est produite lors de l\'ajout du livre']);
         }
@@ -195,7 +197,9 @@ class BookController extends Controller
 
         } catch (ValidationException $e) {
             // return $e;
-            return back()->with(['error'=>'les informations que vous avez saisi ne sont pas valides']);
+            $non_valid_field = array_keys($e->errors())[0];
+            return back()->with(['error'=>'les informations que vous avez saisi ne sont pas valides ( '.$non_valid_field.' )']);
+
         } catch (\Throwable $th) {
             return back()->with(['error'=> 'Une erreur s\'est produite lors de la mise à jour des informations']);
         }
@@ -207,9 +211,7 @@ class BookController extends Controller
             $this->services->deleteBook($book->id);
 
             return redirect('librarian/books')->with(['success' => 'Livre supprimé avec succès']);
-        } catch (ValidationException $e) {
-            // return $e;
-            return back()->with(['error'=>'les informations que vous avez saisi ne sont pas valides']);
+
         } catch (\Throwable $th) {
             return back()->with(['error'=>'Une erreur s\'est produite lors de la suppression du livre.']);
         }
