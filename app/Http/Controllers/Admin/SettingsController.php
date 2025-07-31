@@ -10,20 +10,32 @@ class SettingsController extends Controller
 {
     public function edit()
     {
-        $settings = Setting::getSettings();
-        return view('admin.settings.index', compact('settings'));
+        try{
+            $settings = Setting::getSettings();
+            return view('admin.settings.index', compact('settings'));
+        }catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Erreur de charger les paramètres: '.$e->getMessage())
+                ->withInput();
+        }
     }
 
     public function update(Request $request)
     {
-        $validated = $request->validate([
-            'DUREE_EMPRUNT_MAX' => 'required|integer|min:1',
-            'NOMBRE_EMPRUNTS_MAX' => 'required|integer|min:1',
-            'DUREE_RESERVATION' => 'required|integer|min:1'
-        ]);
+        try{
+            $validated = $request->validate([
+                'DUREE_EMPRUNT_MAX' => 'required|integer|min:1',
+                'NOMBRE_EMPRUNTS_MAX' => 'required|integer|min:1',
+                'DUREE_RESERVATION' => 'required|integer|min:1'
+            ]);
 
-        Setting::getSettings()->update($validated);
+            Setting::getSettings()->update($validated);
 
-        return back()->with('success', 'Paramètres mis à jour');
+            return back()->with('success', 'Paramètres mis à jour');
+        }catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Erreur de charger les paramètres: '.$e->getMessage())
+                ->withInput();
+        }
     }
 }

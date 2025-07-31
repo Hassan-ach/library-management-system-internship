@@ -17,15 +17,15 @@ class UserController extends Controller
     // <<<<<<<<<<<< Read user(s) method
     public function index(Request $request)
     {
-        // try {
+        try {
             $users = User::latest()->paginate(20);
 
             return view('/admin/users/index', compact('users'));
-        // }
-        //  catch (\Exception $e) {
-        //     return redirect()->route('admin.users.all')
-        //         ->with('error', 'Unable to load users: '.$e->getMessage());
-        // }
+        }
+         catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Impossible de charger les utilisateurs: '.$e->getMessage());
+        }
     }
 
     // <<<<<<<<<<<<<<<<<<<< search user
@@ -65,7 +65,7 @@ class UserController extends Controller
         return view('admin.users.index', compact('users'));
         }catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'enable to load users: '.$e->getMessage());
+                ->with('error', 'impossible de charger les utilisateurs: '.$e->getMessage());
         }
     }
     // >>>>>>>>>>>>>>>>>>>> search user
@@ -102,7 +102,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error creating user: '.$e->getMessage());
+                ->with('error', 'Erreur lors de la création de l\'utilisateur: '.$e->getMessage());
         }
     }
 
@@ -115,7 +115,7 @@ class UserController extends Controller
             return view('admin.users.update', compact('user')); // Pass user to view
         } catch (\Exception $e) {
             return redirect()->route('admin.users.all')
-                ->with('error', 'User not found: '.$e->getMessage());
+                ->with('error', 'Utilisateur non trouvé: '.$e->getMessage());
         }
     }
     // Edit Users method
@@ -178,7 +178,7 @@ class UserController extends Controller
 
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Error updating user: '.$e->getMessage())
+                ->with('error', 'Erreur lors de la mise à jour de l\'utilisateur: '.$e->getMessage())
                 ->withInput();
         }
     }
@@ -209,7 +209,7 @@ class UserController extends Controller
                 
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Error deleting user: '.$e->getMessage());
+                ->with('error', 'Erreur lors de la suppression de l\'utilisateur: '.$e->getMessage());
         }
     }
 }
