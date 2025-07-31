@@ -759,8 +759,8 @@
                 <input name="_method" type="hidden" value="{{ $method ?? 'POST'}}">
 
                 <div class="text-right">
-                    <button type="submit" class="btn btn-success " style='width:10%'>
-                        <i class="fas fa-save pr-2"></i> Enregistrer
+                    <button type="submit" class="btn btn-success pl-2 pr-2 mb-2">
+                        <i class="fas fa-save pr-2" ></i> Enregistrer
                     </button>
                 </div>
             </div>
