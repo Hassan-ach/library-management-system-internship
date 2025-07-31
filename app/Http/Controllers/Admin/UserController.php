@@ -129,7 +129,6 @@ class UserController extends Controller
             'last_name' => 'sometimes|string|max:255',
             'email' => 'sometimes|email|unique:users,email,'.$user->id,
             'is_active' => 'sometimes|boolean',
-            'role' => 'sometimes|string|in:student,admin,librarian',
         ];
         
         try {
