@@ -65,7 +65,7 @@
                 <form action="{{ route('librarian.requests.process', $request->id) }}" method="POST" class="d-inline status-update-form">
                     @csrf
                     <select name="status" class="form-control form-control-sm d-inline-block w-auto status-dropdown"
-                            data-current-status="{{ $status }}">
+                            data-current-status="{{ $request->latestRequestInfo->status->value }}">
                         <option value="">Changer statut</option>
                         @foreach($statuses as $s)
                             <option value="{{ $s->value }}" {{ $status === $s->value ? 'selected' : '' }}>
