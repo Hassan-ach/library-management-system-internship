@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\UserRole;
-use App\Exports\UsersExport;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
-use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -20,9 +18,8 @@ class UserController extends Controller
         try {
             $users = User::latest()->paginate(20);
 
-            return view('/admin/users/index', compact('users'));
-        }
-         catch (\Exception $e) {
+            return view('admin.users.index', compact('users'));
+        } catch (\Exception $e) {
             return redirect()->back()
                 ->with('error', 'Impossible de charger les utilisateurs: '.$e->getMessage());
         }
@@ -41,29 +38,29 @@ class UserController extends Controller
 
         try {
             $users = User::query()
-                ->when(!empty($search), function ($query) use ($search) {
+                ->when(! empty($search), function ($query) use ($search) {
                     return $query->where(function ($q) use ($search) {
                         $q->where('first_name', 'like', "%{$search}%")
-                        ->orWhere('last_name', 'like', "%{$search}%")
-                        ->orWhere('email', 'like', "%{$search}%")
-                        ->orWhere('id', 'like', "%{$search}%");
+                            ->orWhere('last_name', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%")
+                            ->orWhere('id', 'like', "%{$search}%");
                     });
                 })
-                ->when(!empty($role), function ($query) use ($role) {
+                ->when(! empty($role), function ($query) use ($role) {
                     return $query->where('role', $role);
                 })
-            ->when($status, function ($query, $status) {
-                return $query->where('is_active', $status == 'active');
-            })
-            ->orderBy('id')
-            ->paginate(20);
+                ->when($status, function ($query, $status) {
+                    return $query->where('is_active', $status == 'active');
+                })
+                ->orderBy('id')
+                ->paginate(20);
 
-            if(!$users->count()) {
+            if (! $users->count()) {
                 return redirect()->back()->with('info', 'No users found matching your criteria.');
             }
 
-        return view('admin.users.index', compact('users'));
-        }catch (\Exception $e) {
+            return view('admin.users.index', compact('users'));
+        } catch (\Exception $e) {
             return redirect()->back()
                 ->with('error', 'impossible de charger les utilisateurs: '.$e->getMessage());
         }
@@ -82,7 +79,7 @@ class UserController extends Controller
                 'first_name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
                 'email' => 'required|email|unique:users,email',
-                'password' => ['required', Password::min(8)->mixedCase()->numbers()],
+                'password' => ['required', Password::min(8)],
                 'is_active' => 'sometimes|boolean',
                 'role' => 'required|string|in:student,admin,librarian',
             ]);
@@ -108,10 +105,11 @@ class UserController extends Controller
 
     // >>>>>>>>>>>>>>>>>>>> Create user(s) method
 
-
-    public function update_page($id){
+    public function update_page($id)
+    {
         try {
             $user = User::findOrFail($id); // This fetches the user
+
             return view('admin.users.update', compact('user')); // Pass user to view
         } catch (\Exception $e) {
             return redirect()->route('admin.users.all')
@@ -123,15 +121,15 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        
-            $rules = [
+
+        $rules = [
             'first_name' => 'sometimes|string|max:255',
             'last_name' => 'sometimes|string|max:255',
             'email' => 'sometimes|email|unique:users,email,'.$user->id,
             'is_active' => 'sometimes|boolean',
             'role' => 'sometimes|string|in:student,admin,librarian',
         ];
-        
+
         try {
 
             // Add password validation rules only if password change is attempted
@@ -145,7 +143,7 @@ class UserController extends Controller
 
             // Validate current password if password change is requested
             if ($request->filled('password') || $request->filled('current_password')) {
-                if (!Hash::check($request->current_password, $user->password)) {
+                if (! Hash::check($request->current_password, $user->password)) {
                     return redirect()->back()
                         ->withErrors(['current_password' => 'Le mot de passe actuel est incorrect.'])
                         ->withInput();
@@ -153,9 +151,9 @@ class UserController extends Controller
             }
 
             // Update only if the field exists in request and is different
-            $updatableFields = ['first_name', 'last_name', 'email','is_active'];
+            $updatableFields = ['first_name', 'last_name', 'email', 'is_active'];
             $changesMade = false;
-            
+
             foreach ($updatableFields as $field) {
                 if ($request->has($field)) {
                     $user->$field = $request->$field;
@@ -170,6 +168,7 @@ class UserController extends Controller
 
             if ($changesMade) {
                 $user->save();
+
                 return redirect()->route('admin.users.all')
                     ->with('success', 'User updated successfully');
             }
@@ -182,7 +181,6 @@ class UserController extends Controller
                 ->withInput();
         }
     }
-
 
     public function delete($id) // Change parameter to $id for consistency with route
     {
@@ -203,10 +201,10 @@ class UserController extends Controller
 
         try {
             $userToDelete->delete();
-            
+
             return redirect()->route('admin.users.all')
                 ->with('success', "User #{$id} deleted successfully");
-                
+
         } catch (\Exception $e) {
             return redirect()->back()
                 ->with('error', 'Erreur lors de la suppression de l\'utilisateur: '.$e->getMessage());

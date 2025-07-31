@@ -14,4 +14,3 @@
 @endphp
 
 <span class="badge {{ $badgeClass }}">{{ ucfirst(get_request_status_text(App\Enums\RequestStatus::from($status))) }}</span>
-

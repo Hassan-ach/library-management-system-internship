@@ -17,7 +17,7 @@
                             <select id="statusFilter" class="form-control select2">
                                 <option value="">Toutes les demandes</option>
                                 @foreach($statuses as $status)
-                                    <option value="{{ $status->value }}">{{ ucfirst(get_request_status_text(App\Enums\RequestStatus::from($status->value))) }}</option>
+                                    <option value="{{ ucfirst(get_request_status_text(App\Enums\RequestStatus::from($status->value))) }}">{{ ucfirst(get_request_status_text(App\Enums\RequestStatus::from($status->value))) }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -119,6 +119,7 @@
             // Filter requests by status
             $('#statusFilter').on('change', function() {
                 var status = $(this).val();
+                console.log(status)
                 requestsTable.column(4).search(status).draw(); // Column 4 is 'Statut'
             });
 

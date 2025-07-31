@@ -24,23 +24,23 @@ class UserSeeder extends Seeder
             'is_active' => true,
             'role' => UserRole::ADMIN,
         ]);
-        User::create([
-            'id' => 2,
-            'first_name' => 'system',
-            'last_name' => 'librarian',
-            'email' => 'system@librarian.com',
-            'password' => Hash::make('password'),
-            'is_active' => true,
-            'role' => UserRole::LIBRARIAN,
-        ]);
-        User::create([
-            'id' => 3,
-            'first_name' => 'system',
-            'last_name' => 'student',
-            'email' => 'system@student.com',
-            'password' => Hash::make('password'),
-            'is_active' => true,
-            'role' => UserRole::STUDENT,
-        ]);
+        // User::create([
+        //     'id' => 2,
+        //     'first_name' => 'system',
+        //     'last_name' => 'librarian',
+        //     'email' => 'system@librarian.com',
+        //     'password' => Hash::make('password'),
+        //     'is_active' => true,
+        //     'role' => UserRole::LIBRARIAN,
+        // ]);
+        // User::create([
+        //     'id' => 3,
+        //     'first_name' => 'system',
+        //     'last_name' => 'student',
+        //     'email' => 'system@student.com',
+        //     'password' => Hash::make('password'),
+        //     'is_active' => true,
+        //     'role' => UserRole::STUDENT,
+        // ]);
     }
 }
