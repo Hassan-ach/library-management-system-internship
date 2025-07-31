@@ -87,71 +87,35 @@ public function search(Request $request)
     return view('admin.statistics.users', compact('users'));
 }
 
-    public function search_librarian(Request $request)
-{
-    try {
-        $search = $request->input('search');
-        $status = $request->input('status');
-        $activity = $request->input('activity');
+        public function search_librarian(Request $request)
+    {
+        try{
+            $search = $request->input('search');
+            $status = $request->input('status');
 
-        $users = Librarian::query()
-            ->when($search, function ($query, $search) {
-                return $query->where(function ($q) use ($search) {
-                    $q->where('first_name', 'like', "%{$search}%")
+            $users = Librarian::query()
+                ->when($search, function ($query, $search) {
+                    return $query->where(function ($q) use ($search) {
+                        $q->where('first_name', 'like', "%{$search}%")
                         ->orWhere('last_name', 'like', "%{$search}%")
                         ->orWhere('email', 'like', "%{$search}%")
                         ->orWhere('id', 'like', "%{$search}%");
-                });
-            })
-            ->when($status, function ($query, $status) {
-                return $query->where('is_active', $status == 'active');
-            })
-            ->when($activity, function ($query, $activity) {
-                if ($activity === 'no_activity') {
-                    // Librarians who have never processed any requests
-                    return $query->whereDoesntHave('processedRequests');
-                } else {
-                    // Librarians who have been involved in requests with this last activity status
-                    return $query->whereExists(function ($subQuery) use ($activity) {
-                        $subQuery->select(\DB::raw(1))
-                            ->from('book_requests')
-                            ->whereExists(function ($requestInfoQuery) use ($activity) {
-                                $requestInfoQuery->select(\DB::raw(1))
-                                    ->from('request_infos')
-                                    ->whereColumn('request_id', 'book_requests.id')
-                                    ->where('status', RequestStatus::from($activity))
-                                    ->whereRaw('id = (SELECT MAX(id) FROM request_infos WHERE request_id = book_requests.id)');
-                            })
-                            ->where(function ($librarianQuery) {
-                                // Either the librarian processed this request OR it's related to their work context
-                                $librarianQuery->whereExists(function ($processedQuery) {
-                                    $processedQuery->select(\DB::raw(1))
-                                        ->from('request_infos')
-                                        ->whereColumn('request_id', 'book_requests.id')
-                                        ->whereColumn('user_id', 'users.id');
-                                })
-                                ->orWhereExists(function ($relatedQuery) {
-                                    // Or show all librarians for context (you can adjust this logic)
-                                    $relatedQuery->select(\DB::raw(1))
-                                        ->from('request_infos')
-                                        ->whereColumn('request_id', 'book_requests.id');
-                                });
-                            });
                     });
+                })
+                ->when($status, function ($query, $status) {
+                    return $query->where('is_active', $status == 'active');
+                })
+                ->orderBy('id')
+                ->paginate(5);
+
+                if(!$users->count()) {
+                    return redirect()->back()->with('info', 'Aucun utilisateur trouvé correspondant à vos critères.');
                 }
-            })
-            ->orderBy('id')
-            ->paginate(5);
-
-        if (! $users->count()) {
-            return redirect()->back()->with('info', 'Aucun utilisateur trouvé correspondant à vos critères.');
-        }
-
-        return view('admin.statistics.librarian', compact('users'));
-    } catch (\Exception $e) {
-        return redirect()->back()
-            ->with('error', 'Erreur lors du chargement des données des bibliothécaires: '.$e->getMessage());
-    }
+            return view('admin.statistics.librarian', compact('users'));
+            }catch (\Exception $e) {
+                return redirect()->back()
+                    ->with('error', 'Erreur lors du chargement des données des bibliothécaires: ' . $e->getMessage());
+            }
 }
 
     public function books_stat(Request $request)
