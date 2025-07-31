@@ -28,7 +28,7 @@ class StatisticsController extends Controller
                     ->limit(1);
             }])
                 ->latest()
-                ->paginate(22);
+                ->paginate(20);
 
             return view('admin.statistics.users', ['users' => $students]);
         } catch (\Exception $e) {
@@ -250,7 +250,7 @@ public function librarian_history(Librarian $user)
     $requestInfos = \App\Models\RequestInfo::with(['bookRequest.book', 'bookRequest.user', 'user'])
         ->where('user_id', $user->id)
         ->orderBy('created_at', 'desc')
-        ->paginate(15)
+        ->paginate(6)
         ->through(function ($requestInfo) {
             $request = $requestInfo->bookRequest;
             

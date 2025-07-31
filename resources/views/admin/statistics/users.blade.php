@@ -52,8 +52,7 @@ use App\Enums\RequestStatus;
                                             @case(App\Enums\RequestStatus::APPROVED) Approuvé @break
                                             @case(App\Enums\RequestStatus::REJECTED) Rejeté @break
                                             @case(App\Enums\RequestStatus::OVERDUE) En retard @break
-                                            @case(App\Enums\RequestStatus::RETURNED) Retourné @break
-                                            @case(App\Enums\RequestStatus::CANCELED) Annulé @break
+                                            @case(App\Enums\RequestStatus::RETURNED) Rendu @break
                                         @endswitch
                                     </option>
                                 @endforeach
