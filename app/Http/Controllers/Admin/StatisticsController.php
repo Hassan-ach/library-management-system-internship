@@ -195,46 +195,16 @@ public function search(Request $request)
         );
     }
 
-    public function user_history(Student $user)
+ public function user_history(Student $user)
 {
-    // Get all RequestInfo records for this student's book requests
-    $requestInfos = \App\Models\RequestInfo::with(['bookRequest.book', 'bookRequest.user', 'user'])
-        ->whereHas('bookRequest', function ($query) use ($user) {
-            $query->where('user_id', $user->id);
-        })
+    $requestInfos = RequestInfo::with(['bookRequest.book', 'bookRequest.user', 'user'])
+        ->whereHas('bookRequest', fn($q) => $q->where('user_id', $user->id))
         ->orderBy('created_at', 'desc')
         ->paginate(5)
-        ->through(function ($requestInfo) {
-            $request = $requestInfo->bookRequest;
-            
-            $librarian = 'En attente de traitement';
-            $isPending = $requestInfo->status === 'pending';
-            $processed_at = null;
+        ->through(fn($requestInfo) => $this->formatRequestInfo($requestInfo));
 
-            if (! $isPending && $requestInfo->user && $requestInfo->user->role->value === UserRole::LIBRARIAN->value) {
-                $librarian = $requestInfo->user->first_name.' '.$requestInfo->user->last_name;
-                $processed_at = $requestInfo->created_at;
-            }
-
-            return [
-                'id' => $request->id,
-                'request_info_id' => $requestInfo->id,
-                'created_at' => $request->created_at, // Original request date
-                'book_title' => $request->book->title ?? 'N/A',
-                'status' => $requestInfo->status,
-                'processed_at' => $processed_at,
-                'processed_by' => $librarian,
-                'created_diff' => "il y'a ".str_replace([' hours ago', 'hour ago'], 'h', $requestInfo->created_at->diffForHumans()),
-                'processed_diff' => $requestInfo->created_at ? $requestInfo->created_at->diffForHumans() : null,
-                'action_date' => $requestInfo->created_at, // When this status change occurred
-                'action_date_formatted' => $requestInfo->created_at->format('d/m/Y H:i'),
-                'original_request_date' => $request->created_at->format('d/m/Y H:i'),
-                'is_first' => false,
-            ];
-        });
-
-    // Mark the first request for special display
-    if ($requestInfos->count() > 0) {
+    // Marquer la première demande
+    if ($requestInfos->isNotEmpty()) {
         $requestInfos->first()['is_first'] = true;
     }
 
@@ -243,6 +213,37 @@ public function search(Request $request)
         'requests' => $requestInfos,
         'totalRequests' => $requestInfos->total(),
     ]);
+}
+
+private function formatRequestInfo($requestInfo)
+{
+    $request = $requestInfo->bookRequest;
+    $isPending = $requestInfo->status === 'pending';
+    
+    // Déterminer le bibliothécaire
+    $librarian = 'En attente de traitement';
+    $processed_at = null;
+    
+    if (!$isPending && $requestInfo->user?->role->value === UserRole::LIBRARIAN->value) {
+        $librarian = $requestInfo->user->first_name . ' ' . $requestInfo->user->last_name;
+        $processed_at = $requestInfo->created_at;
+    }
+
+    return [
+        'id' => $request->id,
+        'request_info_id' => $requestInfo->id,
+        'created_at' => $request->created_at,
+        'book_title' => $request->book->title ?? 'N/A',
+        'status' => $requestInfo->status,
+        'processed_at' => $processed_at,
+        'processed_by' => $librarian,
+        'created_diff' => "il y'a " . str_replace([' hours ago', 'hour ago'], 'h', $requestInfo->created_at->diffForHumans()),
+        'processed_diff' => $requestInfo->created_at?->diffForHumans(),
+        'action_date' => $requestInfo->created_at,
+        'action_date_formatted' => $requestInfo->created_at->format('d/m/Y H:i'),
+        'original_request_date' => $request->created_at->format('d/m/Y H:i'),
+        'is_first' => false,
+    ];
 }
 
 public function librarian_history(Librarian $user)
