@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\BookRequest;
 use App\Models\Librarian;
+use App\Models\RequestInfo;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class StatisticsController extends Controller
                     ->limit(1);
             }])
                 ->latest()
-                ->paginate(22);
+                ->paginate(20);
 
             return view('admin.statistics.users', ['users' => $students]);
         } catch (\Exception $e) {
@@ -37,8 +38,10 @@ class StatisticsController extends Controller
         }
     }
 
-    public function search(Request $request)
-    {
+    
+public function search(Request $request)
+{
+    try{
         $search = $request->input('search');
         $status = $request->input('status');
         $activity = $request->input('activity');
@@ -57,15 +60,22 @@ class StatisticsController extends Controller
                         ->orWhere('id', 'like', "%{$search}%");
                 });
             })
-            ->when($status, function ($query, $status) {
-                return $query->where('is_active', $status == 'active');
+            ->when($activity === null, function ($query) {
+                $query->doesntHave('bookRequests');
             })
-            ->when($activity, function ($query, $activity) {
-                return $query->whereHas('bookRequests.latestRequestInfo', function ($q) use ($activity) {
-                    $q->where('status', RequestStatus::from($activity));
+            ->when($activity !== null, function ($query) use ($activity) {
+                $query->whereHas('bookRequests', function ($bookRequestQuery) use ($activity) {
+                    $bookRequestQuery->whereHas('requestInfo', function ($requestInfoQuery) use ($activity) {
+                        $requestInfoQuery->where('status', RequestStatus::from($activity))
+                            ->whereRaw('id = (
+                                SELECT MAX(ri.id) 
+                                FROM request_infos ri 
+                                WHERE ri.request_id = book_requests.id
+                            )');
+                    });
                 });
             })
-            ->orderBy('id')
+            ->latest()
             ->paginate(20);
 
         if (! $users->count()) {
@@ -73,11 +83,15 @@ class StatisticsController extends Controller
         }
 
         return view('admin.statistics.users', compact('users'));
+    }catch (\Exception $e) {
+        return redirect()->back()
+            ->with('error', 'Erreur lors du chargement des données des étudiants : '.$e->getMessage());
     }
+}
 
-    public function search_librarian(Request $request)
+        public function search_librarian(Request $request)
     {
-        try {
+        try{
             $search = $request->input('search');
             $status = $request->input('status');
 
@@ -85,9 +99,9 @@ class StatisticsController extends Controller
                 ->when($search, function ($query, $search) {
                     return $query->where(function ($q) use ($search) {
                         $q->where('first_name', 'like', "%{$search}%")
-                            ->orWhere('last_name', 'like', "%{$search}%")
-                            ->orWhere('email', 'like', "%{$search}%")
-                            ->orWhere('id', 'like', "%{$search}%");
+                        ->orWhere('last_name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('id', 'like', "%{$search}%");
                     });
                 })
                 ->when($status, function ($query, $status) {
@@ -96,16 +110,15 @@ class StatisticsController extends Controller
                 ->orderBy('id')
                 ->paginate(5);
 
-            if (! $users->count()) {
-                return redirect()->back()->with('info', 'Aucun utilisateur trouvé correspondant à vos critères.');
-            }
-
+                if(!$users->count()) {
+                    return redirect()->back()->with('info', 'Aucun utilisateur trouvé correspondant à vos critères.');
+                }
             return view('admin.statistics.librarian', compact('users'));
-        } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Erreur lors du chargement des données des bibliothécaires: '.$e->getMessage());
-        }
-    }
+            }catch (\Exception $e) {
+                return redirect()->back()
+                    ->with('error', 'Erreur lors du chargement des données des bibliothécaires: ' . $e->getMessage());
+            }
+}
 
     public function books_stat(Request $request)
     {
@@ -183,95 +196,94 @@ class StatisticsController extends Controller
         );
     }
 
-    public function user_history(Student $user)
-    {
-        $requests = BookRequest::with(['book', 'RequestInfo'])
-            ->where('user_id', $user->id)
-            ->latest()
-            ->paginate(5) // Changed to paginate
-            ->through(function ($request) {
-                $latestInfo = $request->RequestInfo->sortByDesc('created_at')->first();
+ public function user_history(Student $user)
+{
+    $requestInfos = RequestInfo::with(['bookRequest.book', 'bookRequest.user', 'user'])
+        ->whereHas('bookRequest', fn($q) => $q->where('user_id', $user->id))
+        ->orderBy('created_at', 'desc')
+        ->paginate(5)
+        ->through(fn($requestInfo) => $this->formatRequestInfo($requestInfo));
 
-                $librarian = 'En attente de traitement';
-                $isPending = $latestInfo?->status === 'pending';
-                $processed_at = null;
-
-                if (! $isPending && $latestInfo?->user && $latestInfo->user->role->value === UserRole::LIBRARIAN->value) {
-                    $librarian = $latestInfo->user->first_name.' '.$latestInfo->user->last_name;
-                    $processed_at = $latestInfo?->created_at ?? null;
-                }
-
-                return [
-                    'id' => $request->id,
-                    'created_at' => $request->created_at,
-                    'book_title' => $request->book->title ?? 'N/A',
-                    'status' => $latestInfo->status,
-                    'processed_at' => $processed_at,
-                    'processed_by' => $librarian,
-                    'created_diff' => "il y'a ".str_replace([' hours ago', 'hour ago'], 'h', $latestInfo?->created_at->diffForHumans()),
-                    'processed_diff' => $latestInfo->processed_at ? $latestInfo->processed_at->diffForHumans() : null,
-                    'is_first' => false, // We'll set this for the first item
-                ];
-            });
-
-        // Mark the first request for special display
-        if ($requests->count() > 0) {
-            $requests->first()['is_first'] = true;
-        }
-
-        return view('admin.statistics.users_history', [
-            'user' => $user,
-            'requests' => $requests,
-            'totalRequests' => $requests->total(),
-        ]);
+    // Marquer la première demande
+    if ($requestInfos->isNotEmpty()) {
+        $requestInfos->first()['is_first'] = true;
     }
 
-    public function librarian_history(Librarian $user)
-    {
-        $requests = BookRequest::with(['book', 'RequestInfo.user', 'user'])
-            ->whereHas('requestInfo', function ($q) use ($user) {
-                $q->where('user_id', $user->id); // Filter by librarian's actions
-            })
-            ->latest()
-            ->paginate(15)
-            ->through(function ($request) {
-                $latestInfo = $request->RequestInfo->sortByDesc('created_at')->first();
+    return view('admin.statistics.users_history', [
+        'user' => $user,
+        'requests' => $requestInfos,
+        'totalRequests' => $requestInfos->total(),
+    ]);
+}
 
-                // Gestion du bibliothécaire
-                $librarian = 'Pending processing';
-                $responseDate = null;
-
-                if ($latestInfo && $latestInfo->status !== 'pending' && $latestInfo->user && $latestInfo->user->role === UserRole::LIBRARIAN->value) {
-                    $librarian = $latestInfo->user->first_name.' '.$latestInfo->user->last_name;
-                    $responseDate = $latestInfo?->created_at ?? null;
-                }
-
-                return [
-                    'id' => $request->id,
-                    'created_at' => $latestInfo->created_at,
-                    'created_diff' => "il y'a ".str_replace([' hours ago', 'hour ago', ' day ago'], ['h', 'h', 'j'], $latestInfo?->created_at->diffForHumans()),
-                    'response_date' => $responseDate,
-                    'book_title' => $request->book->title ?? 'N/A',
-                    'status' => $latestInfo?->status ?? 'pending',
-                    'requested_at' => $request->created_at->format('d/m/Y H:i'),
-                    'requested_by' => $request->user->first_name.' '.$request->user->last_name,
-                    'librarian' => $librarian,
-                ];
-            });
-
-        // Mark the first request for special display
-        if ($requests->count() > 0) {
-            $requests->first()['is_first'] = true;
-        }
-
-        // if($requests[])
-
-        return view('admin.statistics.librarian_history', [
-            'user' => $user,
-            'requests' => $requests,
-            'totalRequests' => $requests->total(),
-        ]);
+private function formatRequestInfo($requestInfo)
+{
+    $request = $requestInfo->bookRequest;
+    $isPending = $requestInfo->status === 'pending';
+    
+    // Déterminer le bibliothécaire
+    $librarian = 'En attente de traitement';
+    $processed_at = null;
+    
+    if (!$isPending && $requestInfo->user?->role->value === UserRole::LIBRARIAN->value) {
+        $librarian = $requestInfo->user->first_name . ' ' . $requestInfo->user->last_name;
+        $processed_at = $requestInfo->created_at;
     }
+
+    return [
+        'id' => $request->id,
+        'request_info_id' => $requestInfo->id,
+        'created_at' => $request->created_at,
+        'book_title' => $request->book->title ?? 'N/A',
+        'status' => $requestInfo->status,
+        'processed_at' => $processed_at,
+        'processed_by' => $librarian,
+        'created_diff' => "il y'a " . str_replace([' hours ago', 'hour ago'], 'h', $requestInfo->created_at->diffForHumans()),
+        'processed_diff' => $requestInfo->created_at?->diffForHumans(),
+        'action_date' => $requestInfo->created_at,
+        'action_date_formatted' => $requestInfo->created_at->format('d/m/Y H:i'),
+        'original_request_date' => $request->created_at->format('d/m/Y H:i'),
+        'is_first' => false,
+    ];
+}
+
+public function librarian_history(Librarian $user)
+{
+    // Get all RequestInfo records created by this librarian
+    $requestInfos = \App\Models\RequestInfo::with(['bookRequest.book', 'bookRequest.user', 'user'])
+        ->where('user_id', $user->id)
+        ->orderBy('created_at', 'desc')
+        ->paginate(6)
+        ->through(function ($requestInfo) {
+            $request = $requestInfo->bookRequest;
+            
+            return [
+                'id' => $request->id,
+                'request_info_id' => $requestInfo->id,
+                'created_at' => $requestInfo->created_at,
+                'created_diff' => "il y'a ".str_replace([' hours ago', 'hour ago', ' day ago'], ['h', 'h', 'j'], $requestInfo->created_at->diffForHumans()),
+                'response_date' => $requestInfo->created_at,
+                'book_title' => $request->book->title ?? 'N/A',
+                'status' => $requestInfo->status,
+                'requested_at' => $request->created_at->format('d/m/Y H:i'),
+                'requested_by' => $request->user->first_name.' '.$request->user->last_name,
+                'librarian' => $requestInfo->user->first_name.' '.$requestInfo->user->last_name,
+                'action_date' => $requestInfo->created_at->format('d/m/Y H:i'),
+                'is_first' => false,
+            ];
+        });
+
+    // Mark the first request for special display
+    if ($requestInfos->count() > 0) {
+        $requestInfos->first()['is_first'] = true;
+    }
+
+    return view('admin.statistics.librarian_history', [
+        'user' => $user,
+        'requests' => $requestInfos,
+        'totalRequests' => $requestInfos->total(),
+    ]);
+}
 
     // app/Http/Controllers/BookController.php
     public function history(Book $book)

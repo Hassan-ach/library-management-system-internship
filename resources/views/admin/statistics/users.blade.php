@@ -35,10 +35,28 @@ use App\Enums\RequestStatus;
             <div class="card-body">
                 <div class="container col-11">
                     <form action="{{ route('admin.statistics.users.search') }}" method="GET" class="row g-3">
-                        <div class="col-md-8">
+                        <div class="col-md-4">
                             <label for="search" class="form-label">critères de recherches</label>
                             <input type="text" class="form-control" id="search" name="search"
                                 placeholder="Chercher par id, nom, email, etc..." value="{{ request('search') }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="activity" class="form-label">Dernière activité</label>
+                            <select class="form-select" id="activity" name="activity" style="cursor: pointer;">
+                                <option value="">Tous les statuts</option>
+                                @foreach(App\Enums\RequestStatus::cases() as $activity)
+                                    <option value="{{ $activity->value }}" {{ request('activity') == $activity->value ? 'selected' : '' }}>
+                                        @switch($activity)
+                                            @case(App\Enums\RequestStatus::PENDING) En attente @break
+                                            @case(App\Enums\RequestStatus::BORROWED) Emprunté @break
+                                            @case(App\Enums\RequestStatus::APPROVED) Approuvé @break
+                                            @case(App\Enums\RequestStatus::REJECTED) Rejeté @break
+                                            @case(App\Enums\RequestStatus::OVERDUE) En retard @break
+                                            @case(App\Enums\RequestStatus::RETURNED) Rendu @break
+                                        @endswitch
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-md-4">
                             <label for="status" class="form-label">Statut</label>

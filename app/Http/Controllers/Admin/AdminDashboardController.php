@@ -45,9 +45,7 @@ class AdminDashboardController extends Controller
                     'available_books', 'request_statistics',
                     'pending_requests_data']));
             }catch (\Throwable $th) {
-            // return $th;
-            // return view('auth.login')->with('error', 'Une erreur s\'est produit lors de chargement de Tableau de board');
-            return $th;
+            return view('auth.login')->with('error', 'Une erreur s\'est produit lors de chargement de Tableau de board');
         }
     }
 
@@ -60,7 +58,7 @@ class AdminDashboardController extends Controller
             return view('admin.profile', compact('user'));
         } catch (\Exception $e) {
             return redirect()->route('admin.dashboard')
-                ->with('error', 'User not found: '.$e->getMessage());
+                ->with('error', $e->getMessage());
         }
 
     }
