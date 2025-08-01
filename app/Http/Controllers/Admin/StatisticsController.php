@@ -40,51 +40,52 @@ class StatisticsController extends Controller
     
 public function search(Request $request)
 {
-    $search = $request->input('search');
-    $status = $request->input('status');
-    $activity = $request->input('activity');
+    try{
+        $search = $request->input('search');
+        $status = $request->input('status');
+        $activity = $request->input('activity');
 
-    $users = Student::query()
-        ->with(['bookRequests' => function ($query) {
-            $query->with(['latestRequestInfo', 'book'])
-                ->latest()
-                ->limit(1);
-        }])
-        ->when($search, function ($query, $search) {
-            return $query->where(function ($q) use ($search) {
-                $q->where('first_name', 'like', "%{$search}%")
-                    ->orWhere('last_name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('id', 'like', "%{$search}%");
-            });
-        })
-        ->when($status, function ($query, $status) {
-            return $query->where('is_active', $status == 'active');
-        })
-        ->when($activity, function ($query, $activity) {
-            if ($activity === 'no_activity') {
-                return $query->doesntHave('bookRequests');
-            } else {
-                return $query->whereHas('bookRequests', function ($q) use ($activity) {
-                    $q->whereHas('RequestInfo', function ($subQ) use ($activity) {
-                        $subQ->where('status', RequestStatus::from($activity))
-                            ->whereIn('id', function ($latestQuery) {
-                                $latestQuery->select(\DB::raw('MAX(id)'))
-                                    ->from('request_infos')
-                                    ->whereColumn('request_id', 'book_requests.id');
-                            });
+        $users = Student::query()
+            ->with(['bookRequests' => function ($query) {
+                $query->with(['latestRequestInfo', 'book'])
+                    ->latest()
+                    ->limit(1);
+            }])
+            ->when($search, function ($query, $search) {
+                return $query->where(function ($q) use ($search) {
+                    $q->where('first_name', 'like', "%{$search}%")
+                        ->orWhere('last_name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('id', 'like', "%{$search}%");
+                });
+            })
+            ->when($activity === null, function ($query) {
+                $query->doesntHave('bookRequests');
+            })
+            ->when($activity !== null, function ($query) use ($activity) {
+                $query->whereHas('bookRequests', function ($bookRequestQuery) use ($activity) {
+                    $bookRequestQuery->whereHas('requestInfo', function ($requestInfoQuery) use ($activity) {
+                        $requestInfoQuery->where('status', RequestStatus::from($activity))
+                            ->whereRaw('id = (
+                                SELECT MAX(ri.id) 
+                                FROM request_infos ri 
+                                WHERE ri.request_id = book_requests.id
+                            )');
                     });
                 });
-            }
-        })
-        ->orderBy('id')
-        ->paginate(20);
+            })
+            ->latest()
+            ->paginate(20);
 
-    if (! $users->count()) {
-        return redirect()->back()->with('info', 'Aucun utilisateur trouvé correspondant à vos critères.');
+        if (! $users->count()) {
+            return redirect()->back()->with('info', 'Aucun utilisateur trouvé correspondant à vos critères.');
+        }
+
+        return view('admin.statistics.users', compact('users'));
+    }catch (\Exception $e) {
+        return redirect()->back()
+            ->with('error', 'Erreur lors du chargement des données des étudiants : '.$e->getMessage());
     }
-
-    return view('admin.statistics.users', compact('users'));
 }
 
         public function search_librarian(Request $request)
