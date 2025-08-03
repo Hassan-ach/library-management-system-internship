@@ -111,7 +111,15 @@
                         <td>{{ $user->first_name }}</td>
                         <td>{{ $user->last_name }}</td>
                         <td>{{ $user->email }}</td>
-                        <td>{{ $user->role->value }}</td>
+                        <td>
+                            @if ($user->role->value === 'student')
+                                <p class="mb-0">étudiant</p>
+                            @elseif ($user->role->value === 'admin')
+                                <p class="mb-0">admin</p>
+                            @elseif ($user->role->value === 'librarian')
+                                <p class="mb-0">bibliothécaire</p>
+                            @endif
+                        </td>
                         <td style="text-align: center;">
                             <span class="badge {{ $user->is_active ? 'bg-success' : 'bg-danger' }}">
                                 {{ $user->is_active ? 'Active' : 'Inactive' }}
