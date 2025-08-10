@@ -82,10 +82,10 @@
     @if(request()->hasAny(['search', 'role', 'status']))
         <div class="alert alert-info mb-3">
             Showing results for:
-            @if(request('search')) <strong>Search:</strong> {{ request('search') }} @endif
-            @if(request('role')) <strong>Role:</strong> {{ ucfirst(request('role')) }} @endif
-            @if(request('status')) <strong>Status:</strong> {{ ucfirst(request('status')) }} @endif
-            <a href="{{ route('admin.users.all') }}" class="float-end">Show all</a>
+            @if(request('search')) <strong>Recherche:</strong> {{ request('search') }} @endif
+            @if(request('role')) <strong>Rôle:</strong> {{ ucfirst(request('role')) }} @endif
+            @if(request('status')) <strong>Statut:</strong> {{ ucfirst(request('status')) }} @endif
+            <a href="{{ route('admin.users.all') }}" class="float-end">Afficher tout</a>
         </div>
     @endif
 
