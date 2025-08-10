@@ -230,7 +230,7 @@ private function formatRequestInfo($requestInfo)
         'status' => $requestInfo->status,
         'processed_at' => $processed_at,
         'processed_by' => $librarian,
-        'created_diff' => "il y'a " . str_replace([' hours ago', 'hour ago', 'ago'], ['h','h',''], $requestInfo->created_at->diffForHumans()),
+        'created_diff' => "il y'a " . str_replace([' hours ago', 'hour ago', 'ago','week'], ['h','h','','semaine'], $requestInfo->created_at->diffForHumans()),
         'processed_diff' => $requestInfo->created_at?->diffForHumans(),
         'action_date' => $requestInfo->created_at,
         'action_date_formatted' => $requestInfo->created_at->format('d/m/Y H:i'),
