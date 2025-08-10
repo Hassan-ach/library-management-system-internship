@@ -253,7 +253,7 @@ public function librarian_history(Librarian $user)
                 'id' => $request->id,
                 'request_info_id' => $requestInfo->id,
                 'created_at' => $requestInfo->created_at,
-                'created_diff' => "il y'a ".str_replace([' hours ago', 'hour ago', ' day ago','ago'], ['h', 'h', 'j',''], $requestInfo->created_at->diffForHumans()),
+                'created_diff' => "il y'a ".str_replace([' hours ago', 'hour ago', ' day ago','ago','week'], ['h', 'h', 'j','','semaine'], $requestInfo->created_at->diffForHumans()),
                 'response_date' => $requestInfo->created_at,
                 'book_title' => $request->book->title ?? 'N/A',
                 'status' => $requestInfo->status,

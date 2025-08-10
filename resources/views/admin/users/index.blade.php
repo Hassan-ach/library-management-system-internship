@@ -51,7 +51,7 @@
                     <div class="col-md-4">
                         <label for="status" class="form-label">Statut</label>
                         <select class="form-select" id="status" name="status" style="cursor: pointer;">
-                            <option value="">All Statuses</option>
+                            <option value="">Tout les statuts</option>
                             <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Actif</option>
                             <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactif</option>
                         </select>
