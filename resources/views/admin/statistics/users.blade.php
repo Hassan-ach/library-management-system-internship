@@ -123,7 +123,15 @@ use App\Enums\RequestStatus;
                                 <td>{{ $user->first_name }}</td>
                                 <td>{{ $user->last_name }}</td>
                                 <td>{{ $user->email }}</td>
-                                <td>{{ $user->role->value }}</td>
+                                <td>
+                                    @if ($user->role->value === 'student')
+                                        <p class="mb-0">étudiant</p>
+                                    @elseif ($user->role->value === 'admin')
+                                        <p class="mb-0">admin</p>
+                                    @elseif ($user->role->value === 'librarian')
+                                        <p class="mb-0">bibliothécaire</p>
+                                    @endif
+                                </td>
                                 <td>
                                     @if($latestInfo)
                                         @php
@@ -133,7 +141,7 @@ use App\Enums\RequestStatus;
                                         @endphp
 
                                         <span class="badge bg-{{ $bgColor }}"> {{$badgeText}} </span>
-                                        <small>({{ "il y'a " . str_replace([' hours ago', 'hour ago'], 'h', $latestInfo?->created_at->diffForHumans()) }}) </small>
+                                        <small>({{ "il y'a " . str_replace([' hours ago', 'hour ago', ' day ago','ago','week'], ['h', 'h', 'j','','semaine'], $latestInfo?->created_at->diffForHumans()) }}) </small>
                                         
                                     @else
                                         <span class="badge bg-secondary">pas d'activié</span>
